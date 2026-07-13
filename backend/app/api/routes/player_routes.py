@@ -6,6 +6,7 @@ from app.schemas.player_game_log_schema import PlayerGameLogResponse
 from app.schemas.player_schema import PlayerCreate, PlayerResponse
 from app.schemas.player_season_stats_schema import PlayerSeasonStatsResponse
 from app.schemas.shot_chart_schema import ShotChartResponse
+from app.schemas.similar_player_schema import SimilarPlayerResponse
 from app.services.player_service import (
     create_player,
     get_all_players,
@@ -14,6 +15,7 @@ from app.services.player_service import (
     get_player_season_stats,
     get_player_shots,
 )
+from app.services.embedding_service import get_similar_players
 
 router = APIRouter()
 
@@ -66,3 +68,18 @@ def read_player_shots(player_id: int, db: Session = Depends(get_db)):
             status_code=status.HTTP_404_NOT_FOUND, detail="Player not found"
         )
     return get_player_shots(db, player_id)
+
+
+@router.get("/players/{player_id}/similar", response_model=list[SimilarPlayerResponse])
+def read_similar_players(
+    player_id: int,
+    season: str | None = None,
+    limit: int = 5,
+    db: Session = Depends(get_db),
+):
+    player = get_player_by_id(db, player_id)
+    if not player:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Player not found"
+        )
+    return get_similar_players(db, player_id, season, limit)
