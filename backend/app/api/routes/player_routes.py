@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.db import get_db
+from app.schemas.player_directory_schema import PlayerDirectoryRowResponse
 from app.schemas.player_game_log_schema import PlayerGameLogResponse
 from app.schemas.player_schema import PlayerCreate, PlayerResponse
 from app.schemas.player_season_stats_schema import PlayerSeasonStatsResponse
@@ -11,6 +12,7 @@ from app.services.player_service import (
     create_player,
     get_all_players,
     get_player_by_id,
+    get_players_directory,
     get_player_game_logs,
     get_player_season_stats,
     get_player_shots,
@@ -23,6 +25,14 @@ router = APIRouter()
 @router.get("/players", response_model=list[PlayerResponse])
 def read_players(db: Session = Depends(get_db)):
     return get_all_players(db)
+
+
+@router.get("/players/directory", response_model=list[PlayerDirectoryRowResponse])
+def read_players_directory(
+    season: str | None = None,
+    db: Session = Depends(get_db),
+):
+    return get_players_directory(db, season)
 
 
 @router.get("/players/{player_id}", response_model=PlayerResponse)

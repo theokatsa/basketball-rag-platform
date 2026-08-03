@@ -9,6 +9,39 @@ def get_all_players(db: Session):
     return db.query(Player).all()
 
 
+def get_players_directory(db: Session, season: str | None = None):
+    sql = text(
+        """
+        select p.id as player_id,
+               p.full_name,
+               p.is_active,
+               s.season,
+               t.abbreviation as club,
+               s.games_played,
+               s.points,
+               s.rebounds,
+               s.assists
+        from players p
+        left join lateral (
+            select ps.season,
+                   ps.team_id,
+                   ps.games_played,
+                   ps.points,
+                   ps.rebounds,
+                   ps.assists
+            from player_season_stats ps
+            where ps.player_id = p.id
+              and (:season is null or ps.season = :season)
+            order by ps.season desc
+            limit 1
+        ) s on true
+        left join teams t on t.id = s.team_id
+        order by p.full_name
+        """
+    )
+    return db.execute(sql, {"season": season}).mappings().all()
+
+
 def get_player_by_id(db: Session, player_id: int):
     return db.query(Player).filter(Player.id == player_id).first()
 
