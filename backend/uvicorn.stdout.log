@@ -1,0 +1,10 @@
+INFO:     127.0.0.1:58964 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58964 - "GET /players/directory HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64367 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64367 - "GET /players/directory HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64369 - "GET /players/directory HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50939 - "GET /players/directory HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50940 - "GET /search/positions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54130 - "GET /search/positions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50942 - "GET /search/reference-players?q=Giannis&limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54129 - "GET /players/directory HTTP/1.1" 200 OK
