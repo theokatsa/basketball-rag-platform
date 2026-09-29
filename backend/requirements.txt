@@ -1,5 +1,8 @@
 nba_api
 pandas
+fastapi
+uvicorn
+pydantic
 sqlalchemy
 psycopg2-binary
 python-dotenv

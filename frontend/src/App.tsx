@@ -36,6 +36,21 @@ type PositionOption = {
   position: string;
 };
 
+type RagSource = {
+  player_id: number;
+  full_name: string;
+  season: string;
+  source_text: string;
+  similarity: number;
+};
+
+type AskResponse = {
+  answer: string;
+  provider: string;
+  model: string;
+  sources: RagSource[];
+};
+
 const PAGE_SIZE = 25;
 
 function App() {
@@ -60,6 +75,11 @@ function App() {
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const [searchResults, setSearchResults] = useState<SimilarPlayerResult[]>([]);
+  const [ragQuestion, setRagQuestion] = useState('Which young players have a playing style similar to Giannis?');
+  const [ragSeason, setRagSeason] = useState('');
+  const [asking, setAsking] = useState(false);
+  const [ragError, setRagError] = useState<string | null>(null);
+  const [ragResponse, setRagResponse] = useState<AskResponse | null>(null);
 
   useEffect(() => {
     const loadPlayers = async () => {
@@ -227,17 +247,83 @@ function App() {
     }
   };
 
+  const handleAsk = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const question = ragQuestion.trim();
+    if (!question) return;
+    setAsking(true);
+    setRagError(null);
+    setRagResponse(null);
+    try {
+      const response = await fetch('/api/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question, season: ragSeason.trim() || null, limit: 6 }),
+      });
+      if (!response.ok) {
+        const body = (await response.json().catch(() => null)) as { detail?: string } | null;
+        throw new Error(body?.detail || 'Unable to generate an answer.');
+      }
+      setRagResponse((await response.json()) as AskResponse);
+    } catch (err) {
+      setRagError(err instanceof Error ? err.message : 'Unknown RAG error.');
+    } finally {
+      setAsking(false);
+    }
+  };
+
   return (
     <div className="app-shell">
       <div className="background-grid" aria-hidden="true" />
 
       <header className="hero">
-        <p className="eyebrow">Week 7 · Hybrid Search</p>
+        <p className="eyebrow">Week 8 · Grounded RAG</p>
         <h1>Scouting Console</h1>
         <p className="hero-copy">
           Browse player data and combine vector similarity with SQL filters in one workflow.
         </p>
       </header>
+
+      <section className="panel rag-panel">
+        <div className="panel-header">
+          <div>
+            <h2>Ask the scouting assistant</h2>
+            <p>Natural-language retrieval with database-grounded answers</p>
+          </div>
+          {ragResponse && <span className="provider-badge">{ragResponse.provider} · {ragResponse.model}</span>}
+        </div>
+        <form className="rag-form" onSubmit={handleAsk}>
+          <textarea className="control-input rag-question" value={ragQuestion}
+            onChange={(event) => setRagQuestion(event.target.value)} rows={3}
+            placeholder="Ask about player styles, strengths, or comparisons…" />
+          <div className="rag-actions">
+            <input className="control-input" value={ragSeason}
+              onChange={(event) => setRagSeason(event.target.value)} placeholder="Optional season (2024-25)" />
+            <button type="submit" className="submit-button" disabled={asking || !ragQuestion.trim()}>
+              {asking ? 'Retrieving evidence…' : 'Ask with RAG'}
+            </button>
+          </div>
+        </form>
+        {ragError && <p className="status error">{ragError}</p>}
+        {ragResponse && (
+          <div className="rag-output">
+            <p className="rag-answer">{ragResponse.answer}</p>
+            <details className="evidence-box">
+              <summary>{ragResponse.sources.length} retrieved evidence sources</summary>
+              <div className="evidence-grid">
+                {ragResponse.sources.map((source) => (
+                  <article key={`${source.player_id}-${source.season}`} className="evidence-card">
+                    <div className="result-head"><strong>{source.full_name}</strong>
+                      <span className="score">{(source.similarity * 100).toFixed(1)}%</span></div>
+                    <small>{source.season}</small>
+                    <p>{source.source_text}</p>
+                  </article>
+                ))}
+              </div>
+            </details>
+          </div>
+        )}
+      </section>
 
       <main className="layout-grid">
         <section className="panel panel-directory">

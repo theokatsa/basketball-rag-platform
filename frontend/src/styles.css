@@ -103,6 +103,19 @@ h1 {
   gap: 1rem;
 }
 
+.rag-panel { position: relative; z-index: 1; margin-top: 1rem; background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(225,245,243,.86)); }
+.rag-form, .rag-output { display: grid; gap: .65rem; }
+.rag-question { resize: vertical; min-height: 84px; line-height: 1.5; }
+.rag-actions { display: grid; grid-template-columns: minmax(180px,300px) auto; justify-content: space-between; gap: .7rem; }
+.rag-actions .submit-button { margin: 0; }
+.provider-badge { border-radius: 999px; padding: .3rem .65rem; background: rgba(13,127,132,.16); color: #0a6267; font-size: .78rem; font-weight: 700; }
+.rag-output { margin-top: .9rem; gap: .8rem; }
+.rag-answer { border-left: 4px solid var(--teal); padding: .75rem .9rem; background: rgba(255,255,255,.78); border-radius: 0 12px 12px 0; line-height: 1.65; white-space: pre-wrap; }
+.evidence-box summary { cursor: pointer; color: var(--teal); font-weight: 700; }
+.evidence-grid { margin-top: .65rem; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .55rem; }
+.evidence-card { border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.88); padding: .7rem; }
+.evidence-card p { margin-top: .4rem; color: var(--muted); font-size: .82rem; line-height: 1.4; }
+
 .panel {
   border: 1px solid var(--line);
   border-radius: 20px;
@@ -417,7 +430,9 @@ h3 {
 
   .toolbar,
   .grid-2,
-  .grid-3 {
+  .grid-3,
+  .rag-actions,
+  .evidence-grid {
     grid-template-columns: 1fr;
   }
 
