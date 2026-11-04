@@ -69,6 +69,12 @@ def search_reference_players(
             where pe.player_id = p.id
               and (:season is null or pe.season = :season)
         )
+                    and exists (
+                        select 1
+                        from player_season_stats ps
+                        where ps.player_id = p.id
+                            and (:season is null or ps.season = :season)
+                    )
           and (:query is null or p.full_name ilike :query)
         order by p.full_name
         limit :limit
@@ -158,6 +164,12 @@ def search_similar_players(
           and (:min_age is null or pp.age >= :min_age)
           and (:max_age is null or pp.age <= :max_age)
           and (:position is null or pp.position ilike :position)
+                    and exists (
+                        select 1
+                        from player_season_stats ps
+                        where ps.player_id = pe.player_id
+                            and (:season is null or ps.season = pe.season)
+                    )
         order by pe.embedding <=> base.embedding
         limit :limit
         """

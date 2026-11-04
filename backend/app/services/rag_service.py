@@ -23,6 +23,12 @@ def retrieve_context(db: Session, question: str, season: str | None, limit: int)
         from player_embeddings pe
         join players p on p.id = pe.player_id
         where (:season is null or pe.season = :season)
+                    and exists (
+                        select 1
+                        from player_season_stats ps
+                        where ps.player_id = pe.player_id
+                            and ps.season = pe.season
+                    )
         order by pe.embedding <=> cast(:embedding as vector)
         limit :limit
         """

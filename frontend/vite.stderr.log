@@ -1,0 +1,15 @@
+9:05:59 μ.μ. [vite] http proxy error: /players/directory
+Error: connect ECONNREFUSED 127.0.0.1:8002
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1636:16)
+9:05:59 μ.μ. [vite] http proxy error: /search/positions
+Error: connect ECONNREFUSED 127.0.0.1:8002
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1636:16)
+9:05:59 μ.μ. [vite] http proxy error: /search/reference-players?q=Giannis&limit=8
+Error: connect ECONNREFUSED 127.0.0.1:8002
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1636:16)
+9:05:59 μ.μ. [vite] http proxy error: /players/directory
+Error: connect ECONNREFUSED 127.0.0.1:8002
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1636:16)
+9:05:59 μ.μ. [vite] http proxy error: /search/positions
+Error: connect ECONNREFUSED 127.0.0.1:8002
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1636:16)

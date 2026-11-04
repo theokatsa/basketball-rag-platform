@@ -10,7 +10,7 @@
 
 ## 1. Executive summary
 
-The project is a working full-stack NBA sports-analytics platform. It stores structured basketball data in PostgreSQL, produces textual player profiles, represents those profiles as embeddings, and performs vector-based and hybrid similarity search. A new RAG layer has also been implemented: a user can ask a free-text basketball question, relevant player profiles are retrieved with pgvector, and a local Ollama model produces an answer constrained by that retrieved evidence.
+The project is a working full-stack NBA sports-analytics platform. It stores structured basketball data in PostgreSQL, produces textual player profiles, represents those profiles as embeddings, and performs vector-based and hybrid similarity search. A new RAG layer has also been implemented: a user can ask a free-text basketball question, relevant player profiles are retrieved with pgvector, and an OpenRouter-hosted model produces an answer constrained by that retrieved evidence.
 
 The system is now beyond a simple CRUD or dashboard application. It includes the principal technical stages required by the thesis:
 
@@ -35,7 +35,7 @@ NBA API
   -> FastAPI backend
        - analytical REST endpoints
        - hybrid player similarity search
-       - RAG retrieval and answer generation
+   and an OpenRouter-hosted model produces an answer constrained by that retrieved evidence.
   -> React / Vite frontend
        - player directory
        - hybrid scouting search
@@ -51,8 +51,7 @@ NBA API
 | Database | PostgreSQL hosted in Supabase | Structured data and vector storage |
 | Vector search | pgvector cosine distance | Similar-player and semantic retrieval |
 | Embeddings | `all-MiniLM-L6-v2` via Sentence Transformers | 384-dimensional normalized player-profile and query vectors |
-| Generator | Ollama with `gemma3:4b` | Local answer generation for the RAG layer |
-| Optional generator | OpenAI Responses API adapter | Reversible cloud-provider option |
+| Generator | OpenRouter chat completions API | Configurable answer generation for the RAG layer |
 | Frontend | React 18, TypeScript, Vite | Interactive scouting application |
 | Data source | `nba_api` | NBA teams, players, statistics, logs, and shot data |
 
@@ -74,7 +73,7 @@ The backend contains SQLAlchemy models for the following entities:
 | `player_embeddings` | Player profile source text and vector embedding by season |
 
 The player embedding storage is designed for `vector` values in PostgreSQL. The application uses cosine distance (`<=>`) for nearest-neighbour retrieval and converts it to similarity with `1 - distance`.
-
+   The hosted model is used for generation only. It does not replace the existing vector database or embedding model.
 ### 3.2 Ingestion and preparation scripts
 
 The following scripts support the data pipeline:
@@ -84,8 +83,8 @@ The following scripts support the data pipeline:
 | `ingest_teams.py` | Loads NBA teams |
 | `ingest_players.py` | Loads NBA player records |
 | `ingest_player_season_stats.py` | Loads player season statistics |
-| `ingest_player_game_logs.py` | Loads game records and player game logs |
-| `ingest_shot_charts.py` | Loads player shot-chart data |
+  | `LLM_PROVIDER=openrouter` | OpenRouter `/chat/completions` endpoint |
+  | `LLM_PROVIDER=openai` | OpenAI Responses API |
 | `get_player_profiles.py` | Retrieves and stores player profile information |
 | `backfill_player_profile_descriptions.py` | Generates missing descriptive player text |
 | `ingest_player_embeddings.py` | Embeds profiles and upserts vectors into PostgreSQL |
@@ -158,8 +157,8 @@ Response shape:
 ```json
 {
   "answer": "...",
-  "provider": "ollama",
-  "model": "gemma3:4b",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
   "sources": [
     {
       "player_id": 0,
@@ -189,7 +188,7 @@ Important implementation decisions:
 - The query embedder uses the same `all-MiniLM-L6-v2` model as the existing indexed player profiles. This is required for valid vector comparison and avoids re-indexing the database.
 - The generator is instructed to answer only from retrieved database evidence, to avoid inventing statistics, and to state when evidence is insufficient.
 - The API returns the actual source records and similarity scores. This makes the result inspectable and supports the explainability requirement of a RAG thesis.
-- The local model is used for generation only. It does not replace the existing vector database or embedding model.
+- The hosted model is used for generation only. It does not replace the existing vector database or embedding model.
 
 ### 5.3 Provider abstraction and reversibility
 
@@ -199,23 +198,22 @@ Supported configurations:
 
 | Configuration | Provider |
 | --- | --- |
-| `LLM_PROVIDER=ollama` | Local Ollama `/api/chat` endpoint |
-| `LLM_PROVIDER=openai` | OpenAI Responses API |
+| `LLM_PROVIDER=openrouter` | OpenRouter `/chat/completions` endpoint |
 
 Switching provider does not change the retrieval query, prompt construction, response schema, frontend, or database. It requires only environment configuration:
 
 ```env
-LLM_PROVIDER=openai
-OPENAI_API_KEY=your-key
-OPENAI_MODEL=gpt-5.6-luna
+LLM_PROVIDER=openrouter
+OPENROUTER_API_KEY=your-key
+OPENROUTER_MODEL=openai/gpt-4o-mini
 ```
 
 The default local configuration is:
 
 ```env
-LLM_PROVIDER=ollama
-OLLAMA_BASE_URL=http://127.0.0.1:11434
-OLLAMA_MODEL=gemma3:4b
+LLM_PROVIDER=openrouter
+OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
+OPENROUTER_MODEL=openai/gpt-4o-mini
 ```
 
 ### 5.4 Current RAG validation
@@ -225,10 +223,10 @@ The system was validated end to end using a question about players combining sco
 1. FastAPI received the request.
 2. The question was embedded into a 384-dimensional vector.
 3. PostgreSQL returned the top three matching player-profile sources.
-4. Ollama generated an answer grounded in those sources.
-5. The API returned `provider=ollama`, `model=gemma3:4b`, the generated answer, and three evidence records.
+4. OpenRouter generated an answer grounded in those sources.
+5. The API returned `provider=openrouter`, the configured model, the generated answer, and three evidence records.
 
-The first local generation required approximately three minutes on the available machine. This indicates the local model is CPU-bound. The feature is functional, but latency needs measurement and optimization before presenting it as a production-quality interactive system.
+Provider latency and cost still need measurement before presenting the feature as a production-quality interactive system.
 
 ## 6. Implemented frontend
 
@@ -272,7 +270,7 @@ The frontend uses Vite proxying so requests to `/api/...` are forwarded to FastA
 | Frontend production build | Passed using `npm run build` |
 | Query embedding size | Verified as 384 dimensions |
 | Direct semantic retrieval | Verified against PostgreSQL / pgvector |
-| End-to-end RAG query | Passed with Ollama and returned evidence sources |
+| End-to-end RAG query | Passed with OpenRouter and returned evidence sources |
 
 ## 8. Work still required
 

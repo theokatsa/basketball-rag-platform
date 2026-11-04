@@ -6,6 +6,7 @@ from app.schemas.player_directory_schema import PlayerDirectoryRowResponse
 from app.schemas.player_game_log_schema import PlayerGameLogResponse
 from app.schemas.player_schema import PlayerCreate, PlayerResponse
 from app.schemas.player_season_stats_schema import PlayerSeasonStatsResponse
+from app.schemas.player_profile_schema import PlayerProfileResponse
 from app.schemas.shot_chart_schema import ShotChartResponse
 from app.schemas.similar_player_schema import SimilarPlayerResponse
 from app.services.player_service import (
@@ -14,6 +15,7 @@ from app.services.player_service import (
     get_player_by_id,
     get_players_directory,
     get_player_game_logs,
+    get_player_profile,
     get_player_season_stats,
     get_player_shots,
 )
@@ -58,6 +60,16 @@ def read_player_season_stats(player_id: int, db: Session = Depends(get_db)):
             status_code=status.HTTP_404_NOT_FOUND, detail="Player not found"
         )
     return get_player_season_stats(db, player_id)
+
+
+@router.get("/players/{player_id}/profile", response_model=PlayerProfileResponse)
+def read_player_profile(player_id: int, db: Session = Depends(get_db)):
+    profile = get_player_profile(db, player_id)
+    if not profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Player profile not found"
+        )
+    return profile
 
 
 @router.get("/players/{player_id}/game-logs", response_model=list[PlayerGameLogResponse])
