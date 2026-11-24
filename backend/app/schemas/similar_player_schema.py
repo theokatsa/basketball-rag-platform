@@ -12,6 +12,7 @@ class SimilarPlayerResponse(BaseModel):
     age: int | None = None
     position: str | None = None
     is_active: bool
+    shared_traits: list[str] = []
 
 
 class SimilarPlayerSearchRequest(BaseModel):

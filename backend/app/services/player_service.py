@@ -30,7 +30,9 @@ def get_players_directory(db: Session, season: str | None = None):
                s.turnovers,
                s.field_goal_pct * 100 as field_goal_pct,
                s.three_point_pct * 100 as three_point_pct,
-               s.free_throw_pct * 100 as free_throw_pct
+               s.free_throw_pct * 100 as free_throw_pct,
+               prof.position,
+               prof.age
         from players p
         left join lateral (
              select ps.player_id,
@@ -54,6 +56,7 @@ def get_players_directory(db: Session, season: str | None = None):
             limit 1
         ) s on true
         left join teams t on t.id = s.team_id
+        left join player_profiles prof on prof.player_id = p.id
         where s.player_id is not null
         order by p.full_name
         """
@@ -132,8 +135,19 @@ def get_player_profile(db: Session, player_id: int):
 
 
 def get_player_game_logs(db: Session, player_id: int):
+    # shot_charts.matchup is stored as "HOME vs AWAY"; the player's own team comes
+    # from the shot's team_id. Filtering on nba_player_id uses the existing index.
     sql = text(
         """
+        with player_games as (
+            select sc.nba_game_id,
+                   max(sc.matchup) as matchup,
+                   max(t.abbreviation) as team
+            from shot_charts sc
+            join teams t on t.id = sc.team_id
+            where sc.nba_player_id = (select nba_player_id from players where id = :player_id)
+            group by sc.nba_game_id
+        )
         select pgl.player_id,
                pgl.game_id,
                pgl.season,
@@ -152,14 +166,159 @@ def get_player_game_logs(db: Session, player_id: int):
                pgl.free_throws_attempted,
                pgl.plus_minus,
                g.nba_game_id,
-               g.game_date::text as game_date
+               g.game_date::text as game_date,
+               case when split_part(pg.matchup, ' vs ', 1) = pg.team
+                    then split_part(pg.matchup, ' vs ', 2)
+                    else split_part(pg.matchup, ' vs ', 1) end as opponent,
+               split_part(pg.matchup, ' vs ', 1) = pg.team as is_home
         from player_game_logs pgl
         left join games g on g.id = pgl.game_id
+        left join player_games pg on pg.nba_game_id = g.nba_game_id
         where pgl.player_id = :player_id
         order by g.game_date desc nulls last
         """
     )
     return db.execute(sql, {"player_id": player_id}).mappings().all()
+
+
+def get_player_totals(db: Session):
+    """Summed game logs per player for the most recent season."""
+    sql = text(
+        """
+        select player_id,
+               count(*) as games_played,
+               round(sum(split_part(minutes, ':', 1)::numeric
+                   + coalesce(nullif(split_part(minutes, ':', 2), '')::numeric, 0) / 60))::int as minutes,
+               sum(points) as points,
+               sum(rebounds) as rebounds,
+               sum(assists) as assists,
+               sum(steals) as steals,
+               sum(blocks) as blocks,
+               sum(turnovers) as turnovers,
+               sum(field_goals_made) as field_goals_made,
+               sum(field_goals_attempted) as field_goals_attempted,
+               sum(three_pointers_made) as three_pointers_made,
+               sum(three_pointers_attempted) as three_pointers_attempted,
+               sum(free_throws_made) as free_throws_made,
+               sum(free_throws_attempted) as free_throws_attempted,
+               coalesce(sum(plus_minus), 0)::int as plus_minus
+        from player_game_logs
+        where season = (select max(season) from player_game_logs)
+        group by player_id
+        """
+    )
+    return db.execute(sql).mappings().all()
+
+
+def get_player_shot_zones(db: Session):
+    """Attempts and makes per player and court zone, for the latest season."""
+    sql = text(
+        """
+        select player_id, shot_zone_basic, shot_zone_area,
+               count(*) as attempts, sum(shot_made::int) as made
+        from shot_charts
+        where season = (select max(season) from shot_charts) and player_id is not null
+        group by player_id, shot_zone_basic, shot_zone_area
+        """
+    )
+    return db.execute(sql).mappings().all()
+
+
+def get_team_shot_zones(db: Session):
+    sql = text(
+        """
+        select t.nba_team_id as team_id, sc.shot_zone_basic, sc.shot_zone_area,
+               count(*) as attempts, sum(sc.shot_made::int) as made
+        from shot_charts sc
+        join teams t on t.id = sc.team_id
+        where sc.season = (select max(season) from shot_charts)
+        group by t.nba_team_id, sc.shot_zone_basic, sc.shot_zone_area
+        """
+    )
+    return db.execute(sql).mappings().all()
+
+
+def get_player_form(db: Session, games: int):
+    """Average over each player's last N games against their earlier games."""
+    sql = text(
+        """
+        with ordered as (
+            select pgl.*, row_number() over (partition by pgl.player_id order by g.game_date desc) as n,
+                   split_part(pgl.minutes, ':', 1)::numeric as mins
+            from player_game_logs pgl
+            join games g on g.id = pgl.game_id
+            where pgl.season = (select max(season) from player_game_logs)
+        )
+        select player_id,
+               count(*) as games_played,
+               avg(points) filter (where n <= :n)::float as recent_points,
+               avg(rebounds) filter (where n <= :n)::float as recent_rebounds,
+               avg(assists) filter (where n <= :n)::float as recent_assists,
+               avg(mins) filter (where n <= :n)::float as recent_minutes,
+               avg(points) filter (where n > :n)::float as earlier_points,
+               avg(rebounds) filter (where n > :n)::float as earlier_rebounds,
+               avg(assists) filter (where n > :n)::float as earlier_assists,
+               avg(mins) filter (where n > :n)::float as earlier_minutes,
+               (array_agg(points order by n desc) filter (where n <= :n)) as recent_games
+        from ordered
+        group by player_id
+        having count(*) >= :n * 2
+        """
+    )
+    return db.execute(sql, {"n": games}).mappings().all()
+
+
+def get_best_games(db: Session, limit: int):
+    """Best single games of the latest season by Game Score (Hollinger).
+
+    Offensive/defensive rebound splits and fouls are not stored, so rebounds count 0.45.
+    """
+    sql = text(
+        """
+        with scored as (
+            select pgl.*, g.nba_game_id, g.game_date,
+                   points + 0.4 * field_goals_made - 0.7 * field_goals_attempted
+                   - 0.4 * (free_throws_attempted - free_throws_made)
+                   + 0.45 * rebounds + steals + 0.7 * assists + 0.7 * blocks - turnovers as game_score
+            from player_game_logs pgl
+            join games g on g.id = pgl.game_id
+            where pgl.season = (select max(season) from player_game_logs)
+            order by game_score desc
+            limit :limit
+        )
+        select s.player_id, s.game_date::text as game_date, s.points, s.rebounds, s.assists,
+               s.steals, s.blocks, s.field_goals_made, s.field_goals_attempted,
+               s.game_score::float as game_score,
+               case when split_part(m.matchup, ' vs ', 1) = m.team
+                    then split_part(m.matchup, ' vs ', 2)
+                    else split_part(m.matchup, ' vs ', 1) end as opponent,
+               split_part(m.matchup, ' vs ', 1) = m.team as is_home
+        from scored s
+        join players p on p.id = s.player_id
+        left join lateral (
+            select sc.matchup, t.abbreviation as team
+            from shot_charts sc
+            join teams t on t.id = sc.team_id
+            where sc.nba_player_id = p.nba_player_id and sc.nba_game_id = s.nba_game_id
+            limit 1
+        ) m on true
+        order by s.game_score desc
+        """
+    )
+    return db.execute(sql, {"limit": limit}).mappings().all()
+
+
+def get_league_shot_zones(db: Session):
+    sql = text(
+        """
+        select shot_zone_basic, shot_zone_area,
+               count(*) as attempts,
+               sum(shot_made::int) as made
+        from shot_charts
+        group by shot_zone_basic, shot_zone_area
+        """
+    )
+    return db.execute(sql).mappings().all()
 
 
 def get_player_shots(db: Session, player_id: int):

@@ -59,7 +59,7 @@ def build_description(row):
     return profile
 
 
-def fetch_profiles(season: str | None):
+def fetch_profiles(season: str | None, rebuild: bool = False):
     sql = text(
         """
         select pp.id,
@@ -106,13 +106,17 @@ def fetch_profiles(season: str | None):
             limit 1
         ) ps on true
         where (:season is null or pp.season = :season)
-          and (pp.description is null or pp.description = '')
+          and (
+              pp.description is null
+              or pp.description = ''
+              or (:rebuild and ps.games_played is not null)
+          )
         order by p.full_name
         """
     )
 
     with engine.begin() as conn:
-        return [dict(row) for row in conn.execute(sql, {"season": season}).mappings().all()]
+        return [dict(row) for row in conn.execute(sql, {"season": season, "rebuild": rebuild}).mappings().all()]
 
 
 def update_descriptions(rows):
@@ -137,9 +141,14 @@ def update_descriptions(rows):
 def main():
     parser = argparse.ArgumentParser(description="Backfill missing player profile descriptions from existing database data")
     parser.add_argument("--season", default=None, help="Optional season filter, e.g. 2024-25")
+    parser.add_argument(
+        "--rebuild",
+        action="store_true",
+        help="Also regenerate existing descriptions of players with season stats",
+    )
     args = parser.parse_args()
 
-    rows = fetch_profiles(args.season)
+    rows = fetch_profiles(args.season, args.rebuild)
     updated = update_descriptions(rows)
 
     print(f"Backfilled {updated} player profile descriptions.")

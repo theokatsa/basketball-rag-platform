@@ -21,3 +21,5 @@ class PlayerDirectoryRowResponse(BaseModel):
     field_goal_pct: float | None
     three_point_pct: float | None
     free_throw_pct: float | None
+    position: str | None = None
+    age: int | None = None

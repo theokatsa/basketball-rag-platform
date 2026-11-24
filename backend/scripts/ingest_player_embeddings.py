@@ -1,79 +1,67 @@
-import os
+import argparse
+import sys
+from pathlib import Path
 
-from dotenv import load_dotenv
-from sqlalchemy import create_engine, text
+from sqlalchemy import text
 
+from db_utils import engine
 from embedding_utils import build_embedding
 
-load_dotenv()
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from app.services.stat_vectors import describe, load_season  # noqa: E402
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+UPSERT = text(
+    """
+    insert into player_embeddings (player_id, season, embedding, source_text)
+    values (:player_id, :season, cast(:embedding as vector), :source_text)
+    on conflict (player_id, season)
+    do update set embedding = excluded.embedding, source_text = excluded.source_text
+    """
+)
 
-if not DATABASE_URL:
-    raise RuntimeError("DATABASE_URL is missing from .env")
 
-engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+def ingest_player_embeddings(season: str | None = None, only_changed: bool = False):
+    """Embed one description per player and statistical season.
 
-
-def ingest_player_embeddings(season: str | None = None):
-    select_sql = text(
-        """
-        select pp.player_id,
-               pp.season,
-               pp.description,
-               p.full_name
-        from player_profiles pp
-        join players p on p.id = pp.player_id
-                where (:season is null or pp.season = :season)
-                    and pp.description is not null
-        order by p.full_name
-        """
-    )
-
-    upsert_sql = text(
-        """
-        insert into player_embeddings (
-            player_id,
-            season,
-            embedding,
-            source_text
-        )
-        values (
-            :player_id,
-            :season,
-            cast(:embedding as vector),
-            :source_text
-        )
-        on conflict (player_id, season)
-        do update set
-            embedding = excluded.embedding,
-            source_text = excluded.source_text
-        """
-    )
-
+    The season key matches player_season_stats ("2024-25"), so retrieval can join on it.
+    """
     with engine.begin() as conn:
         conn.execute(text("set local statement_timeout = 0"))
-        rows = conn.execute(select_sql, {"season": season}).mappings().all()
-
-        processed = 0
-        for row in rows:
-            source_text = row["description"]
-            embedding = build_embedding(source_text)
-
-            conn.execute(
-                upsert_sql,
-                {
-                    "player_id": row["player_id"],
-                    "season": row["season"],
-                    "embedding": embedding,
-                    "source_text": source_text,
-                },
+        seasons = [season] if season else list(
+            conn.execute(text("select distinct season from player_season_stats order by 1")).scalars()
+        )
+        for current in seasons:
+            vectors = load_season(conn, current)
+            if vectors is None:
+                print(f"No season statistics for {current}.")
+                continue
+            existing = dict(
+                conn.execute(
+                    text("select player_id, source_text from player_embeddings where season = :s"),
+                    {"s": current},
+                ).tuples().all()
             )
-            processed += 1
-
-    season_label = season if season is not None else "all seasons"
-    print(f"Upserted {processed} player embeddings for {season_label}.")
+            processed = 0
+            for player_id in vectors.index:
+                source_text = describe(vectors, player_id)
+                if only_changed and existing.get(player_id) == source_text:
+                    continue
+                conn.execute(
+                    UPSERT,
+                    {
+                        "player_id": player_id,
+                        "season": current,
+                        "embedding": build_embedding(source_text),
+                        "source_text": source_text,
+                    },
+                )
+                processed += 1
+            print(f"Upserted {processed} player embeddings for {current}.")
 
 
 if __name__ == "__main__":
-    ingest_player_embeddings()
+    parser = argparse.ArgumentParser(description="Embed player season descriptions")
+    parser.add_argument("--season", default=None, help="One season, e.g. 2024-25 (default: all)")
+    parser.add_argument("--only-changed", action="store_true", help="Skip rows that are already up to date")
+    args = parser.parse_args()
+    ingest_player_embeddings(args.season, args.only_changed)

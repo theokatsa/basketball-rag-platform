@@ -77,9 +77,6 @@ def _build_profile_description(
     summary_bits = []
     if stats.get("games_played") is not None:
         summary_bits.append(f"played {int(stats['games_played'])} games")
-    if stats.get("games_played") is not None:
-        games_played = int(stats["games_played"])
-        summary_bits.append(f"played {games_played} games")
     if stats.get("points") is not None:
         summary_bits.append(f"averaged {stats['points']:.1f} points")
     if stats.get("rebounds") is not None:

@@ -1,55 +1,34 @@
+import unicodedata
+
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-from app.services.player_service import get_player_by_id
+from app.services.stat_vectors import SeasonVectors, describe, load_season
+
+
+def normalize_name(value: str) -> str:
+    """Lower-case and strip accents, so "Jokic" finds "Jokić"."""
+    decomposed = unicodedata.normalize("NFKD", value)
+    return "".join(c for c in decomposed if not unicodedata.combining(c)).lower().strip()
 
 
 def _resolve_reference_player(
-    db: Session,
-    player_id: int | None,
-    player_name: str | None,
-    season: str | None,
-):
+    vectors: SeasonVectors, player_id: int | None, player_name: str | None
+) -> int | None:
     if player_id is not None:
-        player = get_player_by_id(db, player_id)
-        if not player:
-            return None
-
-        return {
-            "player_id": player.id,
-            "full_name": player.full_name,
-        }
-
-    if not player_name:
+        return player_id if player_id in vectors.index else None
+    needle = normalize_name(player_name or "")
+    if not needle:
+        return None
+    matches = [row for row in vectors.rows if needle in normalize_name(row["full_name"])]
+    if not matches:
         return None
 
-    ref_player_sql = text(
-        """
-        select p.id as player_id,
-               p.full_name
-        from players p
-        join player_embeddings pe on pe.player_id = p.id
-        where (:season is null or pe.season = :season)
-          and p.full_name ilike :player_name
-        order by case
-            when lower(p.full_name) = lower(:player_name_exact) then 0
-            when lower(p.full_name) like lower(:player_name_prefix) then 1
-            else 2
-        end,
-        length(p.full_name)
-        limit 1
-        """
-    )
+    def rank(row):
+        name = normalize_name(row["full_name"])
+        return (name != needle, not name.startswith(needle), -(row["points"] or 0))
 
-    return db.execute(
-        ref_player_sql,
-        {
-            "season": season,
-            "player_name": f"%{player_name}%",
-            "player_name_exact": player_name,
-            "player_name_prefix": f"{player_name}%",
-        },
-    ).mappings().first()
+    return min(matches, key=rank)["player_id"]
 
 
 def search_reference_players(
@@ -58,38 +37,15 @@ def search_reference_players(
     season: str | None = None,
     limit: int = 10,
 ):
-    reference_sql = text(
-        """
-        select p.id as player_id,
-               p.full_name
-        from players p
-        where exists (
-            select 1
-            from player_embeddings pe
-            where pe.player_id = p.id
-              and (:season is null or pe.season = :season)
-        )
-                    and exists (
-                        select 1
-                        from player_season_stats ps
-                        where ps.player_id = p.id
-                            and (:season is null or ps.season = :season)
-                    )
-          and (:query is null or p.full_name ilike :query)
-        order by p.full_name
-        limit :limit
-        """
-    )
-
-    term = query.strip() if query else ""
-    return db.execute(
-        reference_sql,
-        {
-            "season": season,
-            "query": f"%{term}%" if term else None,
-            "limit": limit,
-        },
-    ).mappings().all()
+    vectors = load_season(db, season)
+    if vectors is None:
+        return []
+    needle = normalize_name(query or "")
+    matches = [row for row in vectors.rows if needle in normalize_name(row["full_name"])]
+    matches.sort(key=lambda row: -(row["points"] or 0))
+    return [
+        {"player_id": row["player_id"], "full_name": row["full_name"]} for row in matches[:limit]
+    ]
 
 
 def get_search_positions(db: Session):
@@ -105,24 +61,6 @@ def get_search_positions(db: Session):
     return db.execute(positions_sql).mappings().all()
 
 
-def _get_base_embedding(db: Session, reference_player_id: int, season: str | None = None):
-    base_embedding_sql = text(
-        """
-        select embedding
-        from player_embeddings
-        where player_id = :player_id
-          and (:season is null or season = :season)
-        order by created_at desc
-        limit 1
-        """
-    )
-
-    return db.execute(
-        base_embedding_sql,
-        {"player_id": reference_player_id, "season": season},
-    ).scalar()
-
-
 def search_similar_players(
     db: Session,
     player_id: int | None = None,
@@ -134,60 +72,40 @@ def search_similar_players(
     position: str | None = None,
     is_active: bool | None = None,
 ):
-    reference_player = _resolve_reference_player(db, player_id, player_name, season)
-    if not reference_player:
+    vectors = load_season(db, season)
+    if vectors is None:
+        return None
+    reference_id = _resolve_reference_player(vectors, player_id, player_name)
+    if reference_id is None:
         return None
 
-    reference_player_id = int(reference_player["player_id"])
-
-    base_embedding = _get_base_embedding(db, reference_player_id, season)
-    if base_embedding is None:
-        return None
-
-    query_sql = text(
-        """
-        select pe.player_id,
-               p.full_name,
-               pe.season,
-               pe.source_text,
-               pp.age,
-               pp.position,
-               p.is_active,
-               1 - (pe.embedding <=> base.embedding) as similarity
-        from player_embeddings pe
-        cross join (select cast(:base_embedding as vector) as embedding) base
-        join players p on p.id = pe.player_id
-        left join player_profiles pp on pp.player_id = pe.player_id
-        where (:season is null or pe.season = :season)
-          and pe.player_id != :reference_player_id
-          and (:is_active is null or p.is_active = :is_active)
-          and (:min_age is null or pp.age >= :min_age)
-          and (:max_age is null or pp.age <= :max_age)
-          and (:position is null or pp.position ilike :position)
-                    and exists (
-                        select 1
-                        from player_season_stats ps
-                        where ps.player_id = pe.player_id
-                            and (:season is null or ps.season = pe.season)
-                    )
-        order by pe.embedding <=> base.embedding
-        limit :limit
-        """
-    )
-
-    return db.execute(
-        query_sql,
-        {
-            "reference_player_id": reference_player_id,
-            "season": season,
-            "limit": limit,
-            "base_embedding": base_embedding,
-            "is_active": is_active,
-            "min_age": min_age,
-            "max_age": max_age,
-            "position": f"%{position.strip()}%" if position else None,
-        },
-    ).mappings().all()
+    wanted_position = position.strip().lower() if position else None
+    results = []
+    for row, similarity in vectors.neighbours(reference_id):
+        if is_active is not None and row["is_active"] != is_active:
+            continue
+        if min_age is not None and (row["age"] is None or row["age"] < min_age):
+            continue
+        if max_age is not None and (row["age"] is None or row["age"] > max_age):
+            continue
+        if wanted_position and wanted_position not in (row["position"] or "").lower():
+            continue
+        results.append(
+            {
+                "player_id": row["player_id"],
+                "full_name": row["full_name"],
+                "season": row["season"],
+                "source_text": describe(vectors, row["player_id"]),
+                "similarity": similarity,
+                "age": row["age"],
+                "position": row["position"],
+                "is_active": row["is_active"],
+                "shared_traits": vectors.shared_traits(reference_id, row["player_id"]),
+            }
+        )
+        if len(results) == limit:
+            break
+    return results
 
 
 def get_similar_players(db: Session, player_id: int, season: str | None = None, limit: int = 5):
@@ -196,4 +114,4 @@ def get_similar_players(db: Session, player_id: int, season: str | None = None, 
         player_id=player_id,
         season=season,
         limit=limit,
-    )
+    ) or []

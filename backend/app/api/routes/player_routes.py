@@ -1,9 +1,17 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.db import get_db
 from app.schemas.player_directory_schema import PlayerDirectoryRowResponse
-from app.schemas.player_game_log_schema import PlayerGameLogResponse
+from app.schemas.player_game_log_schema import (
+    BestGameResponse,
+    LeagueShotZoneResponse,
+    PlayerFormResponse,
+    PlayerGameLogResponse,
+    PlayerShotZoneResponse,
+    PlayerTotalsResponse,
+    TeamShotZoneResponse,
+)
 from app.schemas.player_schema import PlayerCreate, PlayerResponse
 from app.schemas.player_season_stats_schema import PlayerSeasonStatsResponse
 from app.schemas.player_profile_schema import PlayerProfileResponse
@@ -12,12 +20,18 @@ from app.schemas.similar_player_schema import SimilarPlayerResponse
 from app.services.player_service import (
     create_player,
     get_all_players,
+    get_best_games,
+    get_player_form,
+    get_player_shot_zones,
+    get_team_shot_zones,
+    get_league_shot_zones,
     get_player_by_id,
     get_players_directory,
     get_player_game_logs,
     get_player_profile,
     get_player_season_stats,
     get_player_shots,
+    get_player_totals,
 )
 from app.services.embedding_service import get_similar_players
 
@@ -35,6 +49,36 @@ def read_players_directory(
     db: Session = Depends(get_db),
 ):
     return get_players_directory(db, season)
+
+
+@router.get("/players/totals", response_model=list[PlayerTotalsResponse])
+def read_player_totals(db: Session = Depends(get_db)):
+    return get_player_totals(db)
+
+
+@router.get("/players/league-shot-zones", response_model=list[LeagueShotZoneResponse])
+def read_league_shot_zones(db: Session = Depends(get_db)):
+    return get_league_shot_zones(db)
+
+
+@router.get("/players/shot-zones", response_model=list[PlayerShotZoneResponse])
+def read_player_shot_zones(db: Session = Depends(get_db)):
+    return get_player_shot_zones(db)
+
+
+@router.get("/players/team-shot-zones", response_model=list[TeamShotZoneResponse])
+def read_team_shot_zones(db: Session = Depends(get_db)):
+    return get_team_shot_zones(db)
+
+
+@router.get("/players/form", response_model=list[PlayerFormResponse])
+def read_player_form(games: int = Query(10, ge=3, le=20), db: Session = Depends(get_db)):
+    return get_player_form(db, games)
+
+
+@router.get("/players/best-games", response_model=list[BestGameResponse])
+def read_best_games(limit: int = Query(8, ge=1, le=50), db: Session = Depends(get_db)):
+    return get_best_games(db, limit)
 
 
 @router.get("/players/{player_id}", response_model=PlayerResponse)

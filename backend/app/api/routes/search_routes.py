@@ -60,7 +60,7 @@ def search_similar_players_route(
     if results is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="No embedding found for the requested player.",
+            detail="No season statistics found for the requested player.",
         )
 
     return results
