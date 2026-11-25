@@ -1,82 +1,173 @@
 import { useMemo, useState } from 'react';
 import { useApp } from '../AppContext';
-import { LoadError, Loading, PageHead, PlayerCell, Segmented } from '../components/Common';
-import { pct, signed, toZoneMap, useLeagueZones, ZoneCourt, zoneDiff, ZONES } from '../components/CourtZones';
+import { Avatar } from '../components/Avatar';
+import { LoadError, Loading, PageHead, PlayerCell, Segmented, TeamLogo } from '../components/Common';
+import { isThreeZone, pct, signed, toZoneMap, useLeagueZones, ZoneCourt, ZoneList, zoneLabel, ZONES } from '../components/CourtZones';
 import type { ZoneMap } from '../components/CourtZones';
-import { PlayerPicker } from '../components/PlayerPicker';
-import type { PlayerShotZone } from '../types';
+import { Dropdown, TeamSelect } from '../components/Dropdown';
+import { Pagination, usePaged } from '../components/Pagination';
+import { playsPosition, POSITIONS } from '../stats';
+import type { Defenders, Matchup, PlayerZoneRow } from '../types';
 import { useApi } from '../useApi';
 import { usePersisted } from '../usePersisted';
 
-const MINIMUM: Record<string, number> = { rim: 150, paint: 100, 'corner-L': 30, 'corner-R': 30, 'three-LC': 80, 'three-C': 60, 'three-RC': 80 };
-const minimumFor = (key: string) => MINIMUM[key] ?? 25;
+const MINIMUM: Record<string, number> = { rim: 120, 'lane-low': 60, 'lane-high': 40, top: 40, 'slot-L': 60, 'slot-R': 60, 'wing-L': 40, 'wing-R': 40, deep: 25 };
+const minimumFor = (key: string) => MINIMUM[key] ?? 20;
+/** Attempts at the league average mixed into every player, so 12 for 20 does not outrank 120 for 220. */
+const priorFor = (key: string) => (key === 'rim' || key === 'lane-low' ? 60 : 40);
 
-export function ShotLab() {
-  const { byId, loading, error } = useApp();
-  const { data, error: dataError } = useApi<PlayerShotZone[]>('/players/shot-zones');
+type Sort = 'adjusted' | 'raw' | 'made' | 'added';
+
+function Leaders() {
+  const { byId } = useApp();
+  const [opponent, setOpponent] = usePersisted('lab-opp', '');
+  const { data, error } = useApi<PlayerZoneRow[]>(`/shots/zones${opponent ? `?opponent=${opponent}` : ''}`);
   const league = useLeagueZones();
-  const [tab, setTab] = usePersisted<'leaders' | 'versus'>('lab-tab', 'leaders');
-  const [zone, setZone] = usePersisted('lab-zone', 'three-C');
-  const [pair, setPair] = usePersisted<(number | null)[]>('lab-pair', [null, null]);
+  const [zone, setZone] = usePersisted('lab-area', 'ft');
+  const [sort, setSort] = usePersisted<Sort>('lab-sort', 'adjusted');
+  const [position, setPosition] = usePersisted('lab-pos', '');
   const [hover, setHover] = useState<string | null>(null);
-  const players = useMemo(() => {
-    const grouped = new Map<number, PlayerShotZone[]>();
-    for (const row of data ?? []) { const list = grouped.get(row.player_id); if (list) list.push(row); else grouped.set(row.player_id, [row]); }
-    return new Map<number, ZoneMap>([...grouped].map(([id, rows]) => [id, toZoneMap(rows)]));
-  }, [data]);
-  const ranked = useMemo(() => [...players].flatMap(([id, map]) => {
-    const p = byId.get(id), s = map.get(zone);
-    return p && s && s.att >= minimumFor(zone) ? [{ p, s, v: s.made / s.att }] : [];
-  }).sort((a, b) => b.v - a.v), [players, byId, zone]);
-  if (error || dataError) return <LoadError message={(error ?? dataError)!} />;
   const base = league?.get(zone);
-  const label = ZONES.find((z) => z.key === zone)?.label ?? '';
+  const average = base ? base.made / base.att : 0;
+  const worth = isThreeZone(zone) ? 3 : 2;
+  const minimum = opponent ? Math.max(4, Math.round(minimumFor(zone) / 12)) : minimumFor(zone);
+  const ranked = useMemo(() => (data ?? []).filter((r) => r.zone === zone && r.attempts >= minimum).flatMap((r) => {
+    const p = byId.get(r.player_id);
+    if (!p || !playsPosition(p, position)) return [];
+    const adjusted = (r.made + priorFor(zone) * average) / (r.attempts + priorFor(zone));
+    return [{ p, r, raw: r.made / r.attempts, adjusted, added: (r.made - r.attempts * average) * worth }];
+  }).sort((a, b) => (sort === 'raw' ? b.raw - a.raw : sort === 'made' ? b.r.made - a.r.made : sort === 'added' ? b.added - a.added : b.adjusted - a.adjusted)), [data, byId, zone, position, sort, minimum, average, worth]);
+  const paged = usePaged(ranked, 10, [zone, sort, position, opponent].join('|'));
+  if (error) return <LoadError message={error} />;
+  if (!league) return <Loading height="34rem" />;
   return (
-    <>
-      <PageHead title="Shot Lab" intro="Who shoots best from where."><Segmented label="View" value={tab} options={[['leaders', 'Best by zone'], ['versus', 'Side by side']]} onChange={setTab} /></PageHead>
-      {!data || !league || loading ? <Loading height="34rem" /> : tab === 'leaders' ? (
-        <section className="panel">
-          <div className="shot-chart">
-            <div><ZoneCourt picker label="Pick a court zone" zones={league} league={league} hover={hover} selected={zone} onHover={setHover} onSelect={setZone} /><p className="radar-note">Click a zone. Numbers on the court are league averages.</p></div>
-            <div>
-              <div className="panel-header"><div><h2>{label}</h2><p>At least {minimumFor(zone)} attempts. League average {base ? pct(base.made, base.att) : '–'}</p></div><select className="control-input compact-select" aria-label="Zone" value={zone} onChange={(e) => setZone(e.target.value)}>{ZONES.map((z) => <option key={z.key} value={z.key}>{z.label}</option>)}</select></div>
-              <ol className="rank-list lab-list">{ranked.slice(0, 10).map(({ p, s, v }, i) => <li key={p.player_id}><span className="rank-no">{i + 1}</span><PlayerCell player={p} note={`${s.made}/${s.att}`} /><span className="zone-diff up">{base ? signed((v - base.made / base.att) * 100) : ''}</span><b>{pct(s.made, s.att)}</b></li>)}</ol>
+    <section className="panel">
+      <div className="shot-chart">
+        <div>
+          <ZoneCourt picker label="Pick a court zone" zones={league} league={league} hover={hover} selected={zone} onHover={setHover} onSelect={setZone} />
+          <p className="radar-note">Click a zone. Numbers on the court are league averages. The zones come from shot coordinates and cover the whole half court.</p>
+        </div>
+        <div>
+          <div className="panel-header"><div><h2>{zoneLabel(zone)}</h2><p>At least {minimum} attempts. League average {base ? pct(base.made, base.att) : '–'}, {(average * worth).toFixed(2)} points per shot</p></div></div>
+          <div className="filter-bar lab-tools">
+            <Dropdown label="Zone" value={zone} options={ZONES.map((z) => ({ value: z.key, label: z.label, group: z.group }))} onChange={setZone} />
+            <TeamSelect value={opponent} onChange={setOpponent} by="abbr" all="Against everyone" label="Against" />
+            <Segmented label="Position" value={position} options={[['', 'All'], ...POSITIONS.map((p) => [p, `${p}s`] as [string, string])]} onChange={setPosition} />
+            <Segmented label="Rank by" value={sort} options={[['adjusted', 'Adjusted %'], ['raw', 'FG%'], ['made', 'Made'], ['added', 'Points added']]} onChange={setSort} />
+          </div>
+          {!data ? <Loading /> : (
+            <div className="lab-table">
+              <div className="lab-head"><span /><span>Player</span><span>Made</span><span>FG%</span><span title="Pulled toward the league average when there are few attempts">Adjusted</span><span title="Points beyond what an average shooter scores on the same shots">Pts added</span></div>
+              {paged.items.map(({ p, r, raw, adjusted, added }, i) => <div className="lab-line" key={p.player_id}><span className="rank-no">{paged.offset + i + 1}</span><PlayerCell player={p} /><span>{r.made}/{r.attempts}</span><span>{(raw * 100).toFixed(1)}%</span><b>{(adjusted * 100).toFixed(1)}%</b><span className={added > 0 ? 'zone-diff up' : 'zone-diff down'}>{signed(added)}</span></div>)}
               {!ranked.length && <p className="status">Nobody has enough attempts here.</p>}
             </div>
-          </div>
-        </section>
-      ) : (
+          )}
+          <Pagination page={paged.page} pageCount={paged.pageCount} onPage={paged.onPage} label="Shooter pages" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/** A big button that opens the player list. */
+export function ChoosePlayer({ id, label, exclude = [], onPick }: { id: number | null; label: string; exclude?: number[]; onPick: (id: number) => void }) {
+  const { byId, browse } = useApp();
+  const p = id != null ? byId.get(id) : undefined;
+  return (
+    <button type="button" className={`choose-player ${p ? 'set' : ''}`} onClick={() => browse({ title: label, max: 1, exclude, onDone: ([picked]) => onPick(picked) })}>
+      {p ? <><Avatar key={p.nba_player_id} name={p.full_name} nbaPlayerId={p.nba_player_id} className="recent-photo" /><span><b>{p.full_name}</b><small>{p.club_full_name}, {p.position}</small></span><TeamLogo teamId={p.club_team_id} size={36} /><em>Change</em></> : <><span className="choose-plus" aria-hidden="true">+</span><span><b>{label}</b><small>Browse by team, position or statistic</small></span></>}
+    </button>
+  );
+}
+
+function Versus() {
+  const [pair, setPair] = usePersisted<(number | null)[]>('lab-pair', [null, null]);
+  const [opponent, setOpponent] = usePersisted('lab-versus-opp', '');
+  const { data, error } = useApi<PlayerZoneRow[]>(`/shots/zones${opponent ? `?opponent=${opponent}` : ''}`);
+  const league = useLeagueZones();
+  const [hover, setHover] = useState<string | null>(null);
+  const maps = useMemo(() => pair.map((id) => (id != null && data ? toZoneMap(data.filter((r) => r.player_id === id)) : undefined)), [pair, data]);
+  if (error) return <LoadError message={error} />;
+  const summary = (map: ZoneMap) => {
+    let att = 0, made = 0, points = 0, expected = 0;
+    for (const z of ZONES) {
+      const s = map.get(z.key), b = league?.get(z.key), value = z.group === 'Three' ? 3 : 2;
+      if (!s) continue;
+      att += s.att; made += s.made; points += s.made * value;
+      if (b) expected += s.att * (b.made / b.att) * value;
+    }
+    return att ? { att, made, pps: points / att, xpps: expected / att } : null;
+  };
+  return (
+    <>
+      <div className="filter-bar"><TeamSelect value={opponent} onChange={setOpponent} by="abbr" all="Against everyone" label="Against" /><span className="count-label">Bold zones are where that player is the better shooter (10 attempts each)</span></div>
+      <div className="two-col">
+        {[0, 1].map((slot) => {
+          const map = maps[slot], s = map && summary(map);
+          return (
+            <section className="panel" key={slot}>
+              <ChoosePlayer id={pair[slot]} label={`Choose player ${slot + 1}`} exclude={pair[1 - slot] != null ? [pair[1 - slot]!] : []} onPick={(pid) => setPair(pair.map((v, i) => (i === slot ? pid : v)))} />
+              {pair[slot] != null && (!map || !league ? <Loading /> : !s ? <p className="status">No shots recorded here.</p> : (
+                <>
+                  <div className="shot-summary four"><div><strong>{pct(s.made, s.att)}</strong><span>FG {s.made}/{s.att}</span></div><div><strong>{s.pps.toFixed(2)}</strong><span>Points per shot</span></div><div><strong>{s.xpps.toFixed(2)}</strong><span title="What an average shooter would score on the same shots">Shot quality</span></div><div><strong>{signed(s.pps - s.xpps, 2)}</strong><span>Shot making</span></div></div>
+                  <ZoneCourt label="Shooting by zone" zones={map} league={league} hover={hover} onHover={setHover} />
+                  <ZoneList zones={map} league={league} hover={hover} onHover={setHover} other={maps[1 - slot]} />
+                </>
+              ))}
+            </section>
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
+function MatchupTable({ rows, expected }: { rows: Matchup[]; expected: boolean }) {
+  const { byId } = useApp();
+  const [sort, setSort] = useState<'possessions' | 'low' | 'high'>('possessions');
+  const [minimum, setMinimum] = useState('25');
+  const list = useMemo(() => rows.filter((m) => m.possessions >= Number(minimum)).sort((a, b) => (sort === 'low' ? a.edge - b.edge : sort === 'high' ? b.edge - a.edge : b.possessions - a.possessions)), [rows, sort, minimum]);
+  const paged = usePaged(list, 10, `${sort}${minimum}${rows.length}`);
+  return (
+    <>
+      <div className="filter-bar">
+        <Segmented label="Order" value={sort} options={[['possessions', 'Most faced'], ['low', 'Fewest points'], ['high', 'Most points']]} onChange={setSort} />
+        <Segmented label="Minimum possessions" value={minimum} options={[['10', '10+ poss.'], ['25', '25+'], ['50', '50+']]} onChange={setMinimum} />
+      </div>
+      <div className="lab-table">
+        <div className="lab-head"><span /><span>Player</span><span>Poss.</span><span>FG</span><span>Per 100</span><span title="Against the scorer's own average; small samples count less">Diff.</span></div>
+        {paged.items.map((m, i) => { const p = byId.get(m.other_id); return p && <div className="lab-line" key={m.other_id}><span className="rank-no">{paged.offset + i + 1}</span><PlayerCell player={p} /><span>{m.possessions.toFixed(0)}</span><span>{m.fgm}/{m.fga}</span><b title={expected ? `Usually ${m.expected.toFixed(0)}` : undefined}>{m.per100.toFixed(0)}</b><span className={m.edge > 0 ? 'zone-diff up' : 'zone-diff down'}>{signed(m.edge)}</span></div>; })}
+        {!list.length && <p className="status">No matchups with this many possessions.</p>}
+      </div>
+      <Pagination page={paged.page} pageCount={paged.pageCount} onPage={paged.onPage} label="Matchup pages" />
+    </>
+  );
+}
+
+function DefenderTab() {
+  const [id, setId] = usePersisted<number | null>('lab-defender', null);
+  const { data, error } = useApi<Defenders>(id != null ? `/insights/players/${id}/defenders` : null);
+  return (
+    <>
+      <section className="panel"><ChoosePlayer id={id} label="Choose a player" onPick={setId} />{data?.baseline != null && <p className="radar-note">Scores {data.baseline.toFixed(1)} points per 100 possessions of tracked matchups over the season. A matchup is the time one defender guards this player, as recorded by the NBA.</p>}</section>
+      {error ? <LoadError message={error} /> : id == null ? <div className="empty-state"><p>Pick a player to see who guards them, and how it goes.</p></div> : !data ? <Loading height="24rem" /> : (
         <div className="two-col">
-          {[0, 1].map((slot) => {
-            const id = pair[slot], other = pair[1 - slot];
-            const player = id != null ? byId.get(id) : undefined;
-            const map = id != null ? players.get(id) : undefined;
-            const otherMap = other != null ? players.get(other) : undefined;
-            return (
-              <section className="panel" key={slot}>
-                <PlayerPicker label={`Player ${slot + 1}`} placeholder={player ? 'Change player' : `Choose player ${slot + 1}`} exclude={other != null ? [other] : []} onPick={(pid) => setPair(pair.map((v, i) => (i === slot ? pid : v)))} />
-                {!player ? <div className="empty-state"><p>Pick a player to compare.</p></div> : (
-                  <>
-                    <div className="versus-name"><PlayerCell player={player} /></div>
-                    {!map ? <p className="status">No shots recorded.</p> : (
-                      <>
-                        <ZoneCourt label={`${player.full_name} by zone`} zones={map} league={league} hover={hover} onHover={setHover} />
-                        <div className="zone-list versus-list">
-                          {ZONES.map((z) => {
-                            const s = map.get(z.key), o = otherMap?.get(z.key), d = zoneDiff(s, league.get(z.key));
-                            const wins = s && o && s.att >= 5 && o.att >= 5 && s.made / s.att > o.made / o.att;
-                            return <div className={`zone-row ${hover === z.key ? 'lit' : ''} ${wins ? 'wins' : ''}`} key={z.key} onMouseEnter={() => setHover(z.key)} onMouseLeave={() => setHover(null)}><span className="zone-name">{z.label}</span><span className="zone-att">{s ? `${s.made}/${s.att}` : '0'}</span><span className="zone-pct">{s ? pct(s.made, s.att) : '–'}</span><span className={`zone-diff ${d == null ? '' : d > 0 ? 'up' : 'down'}`}>{d == null ? '–' : signed(d)}</span></div>;
-                          })}
-                        </div>
-                      </>
-                    )}
-                  </>
-                )}
-              </section>
-            );
-          })}
+          <section className="panel"><div className="panel-header"><div><h2>Guarded by</h2><p>Points scored while this defender was on them</p></div></div><MatchupTable rows={data.guarded_by} expected={false} /></section>
+          <section className="panel"><div className="panel-header"><div><h2>When defending</h2><p>Points allowed to each scorer, against that scorer’s average</p></div></div><MatchupTable rows={data.guarded} expected /></section>
         </div>
       )}
+    </>
+  );
+}
+
+export function ShotLab() {
+  const { loading, error } = useApp();
+  const [tab, setTab] = usePersisted<'leaders' | 'versus' | 'defenders'>('lab-tab', 'leaders');
+  if (error) return <LoadError message={error} />;
+  return (
+    <>
+      <PageHead title="Shot Lab" intro="Who shoots best from where, and against which defenders."><Segmented label="View" value={tab} options={[['leaders', 'Best by zone'], ['versus', 'Side by side'], ['defenders', 'Defenders']]} onChange={setTab} /></PageHead>
+      {loading ? <Loading height="34rem" /> : tab === 'leaders' ? <Leaders /> : tab === 'versus' ? <Versus /> : <DefenderTab />}
     </>
   );
 }

@@ -17,10 +17,10 @@ from app.schemas.player_season_stats_schema import PlayerSeasonStatsResponse
 from app.schemas.player_profile_schema import PlayerProfileResponse
 from app.schemas.shot_chart_schema import ShotChartResponse
 from app.schemas.similar_player_schema import SimilarPlayerResponse
+from app.services.game_service import best_games
 from app.services.player_service import (
     create_player,
     get_all_players,
-    get_best_games,
     get_player_form,
     get_player_shot_zones,
     get_team_shot_zones,
@@ -78,7 +78,7 @@ def read_player_form(games: int = Query(10, ge=3, le=20), db: Session = Depends(
 
 @router.get("/players/best-games", response_model=list[BestGameResponse])
 def read_best_games(limit: int = Query(8, ge=1, le=50), db: Session = Depends(get_db)):
-    return get_best_games(db, limit)
+    return best_games(db, limit)
 
 
 @router.get("/players/{player_id}", response_model=PlayerResponse)

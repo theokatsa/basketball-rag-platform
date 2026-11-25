@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 class PlayerGameLogResponse(BaseModel):
     player_id: int
-    game_id: int
+    game_id: int | None
     season: str
     minutes: str
     points: int
@@ -23,6 +23,13 @@ class PlayerGameLogResponse(BaseModel):
     game_date: str | None
     opponent: str | None = None
     is_home: bool | None = None
+    oreb: int
+    dreb: int
+    pf: int
+    won: bool
+    team_points: int
+    opponent_points: int
+    opponent_id: int
 
 
 class PlayerTotalsResponse(BaseModel):
@@ -42,6 +49,26 @@ class PlayerTotalsResponse(BaseModel):
     free_throws_made: int
     free_throws_attempted: int
     plus_minus: int
+    oreb: int
+    dreb: int
+    pf: int
+    double_doubles: int
+    triple_doubles: int
+    season_age: int | None = None
+    off_rating: float | None = None
+    def_rating: float | None = None
+    net_rating: float | None = None
+    ast_pct: float | None = None
+    ast_to: float | None = None
+    oreb_pct: float | None = None
+    dreb_pct: float | None = None
+    efg_pct: float | None = None
+    usg_pct: float | None = None
+    pace: float | None = None
+    pie: float | None = None
+    defended_fga: float | None = None
+    defended_fg_pct: float | None = None
+    defended_fg_diff: float | None = None
 
 
 class LeagueShotZoneResponse(BaseModel):
@@ -75,7 +102,15 @@ class PlayerFormResponse(BaseModel):
 
 class BestGameResponse(BaseModel):
     player_id: int
+    game_id: str
     game_date: str | None
+    team_id: int
+    opponent_id: int
+    opponent: str
+    is_home: bool
+    won: bool
+    team_points: int
+    opponent_points: int
     points: int
     rebounds: int
     assists: int
@@ -84,5 +119,3 @@ class BestGameResponse(BaseModel):
     field_goals_made: int
     field_goals_attempted: int
     game_score: float
-    opponent: str | None
-    is_home: bool | None

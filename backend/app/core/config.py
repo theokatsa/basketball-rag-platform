@@ -17,3 +17,7 @@ if not DATABASE_URL:
 
 if LLM_PROVIDER != "openrouter":
     raise RuntimeError("LLM_PROVIDER must be 'openrouter'")
+
+
+# Set COOKIE_SECURE=true when the site is served over HTTPS.
+COOKIE_SECURE = os.getenv("COOKIE_SECURE", "false").strip().lower() == "true"

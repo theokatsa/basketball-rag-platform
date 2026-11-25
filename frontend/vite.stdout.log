@@ -3,64 +3,10 @@
 > vite
 
 
-  [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m1660[22m[2m[0m ms[22m
+  [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m4985[22m[2m[0m ms[22m
 
   [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
   [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.56.1:[1m5173[22m/[39m
   [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.121.1:[1m5173[22m/[39m
   [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.126.1:[1m5173[22m/[39m
-  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.68.100:[1m5173[22m/[39m
-[2m4:47:11 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
-[2m4:48:17 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/styles.css[22m
-[2m5:16:06 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
-[2m5:16:06 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/RadarChart.tsx[22m
-[2m5:16:06 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/components/PlayerLink.tsx, /src/components/Compare.tsx, /src/components/Directory.tsx, /src/components/PlayerDetail.tsx[22m
-[2m5:16:06 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
-[2m5:16:06 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PlayerDetail.tsx[22m
-[2m5:16:06 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Compare.tsx[22m
-[2m5:16:07 μ.μ.[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/components/RadarChart.tsx[22m Could not Fast Refresh ("averageStrength" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
-[2m5:16:07 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Compare.tsx, /src/components/PlayerDetail.tsx[22m
-[2m5:16:12 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
-[2m5:16:40 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Directory.tsx[22m
-[2m5:17:13 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/ShotChart.tsx[22m
-[2m5:17:33 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PlayerDetail.tsx[22m
-[2m5:19:17 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/styles.css[22m
-[2m5:33:47 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/components/Directory.tsx[22m
-[2m5:33:47 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Directory.tsx[22m
-[2m5:33:47 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/components/PlayerLink.tsx, /src/components/Compare.tsx, /src/components/Directory.tsx, /src/components/PlayerDetail.tsx, /src/components/RadarChart.tsx, /src/components/GameLogs.tsx[22m
-[2m5:33:47 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
-[2m5:33:47 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/components/Directory.tsx[22m
-[2m5:33:48 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PlayerLink.tsx[22m
-[2m5:33:48 μ.μ.[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/components/RadarChart.tsx[22m Could not Fast Refresh ("averageStrength" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
-[2m5:33:48 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Compare.tsx, /src/components/PlayerDetail.tsx[22m
-[2m5:37:10 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/ShotChart.tsx[22m
-[2m5:37:11 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PlayerDetail.tsx[22m
-[2m5:37:13 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/GameLogs.tsx[22m
-[2m5:37:13 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Compare.tsx[22m
-[2m5:37:13 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
-[2m5:37:13 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Shortlist.tsx[22m
-[2m5:39:42 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/styles.css[22m
-[2m5:40:55 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/styles.css[22m
-[2m5:40:55 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Directory.tsx[22m
-[2m5:42:00 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/styles.css[22m
-[2m6:05:13 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/ShotChart.tsx[22m
-[2m6:05:13 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/components/Directory.tsx[22m
-[2m6:05:13 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/ShotChart.tsx[22m
-[2m6:05:13 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/components/Directory.tsx[22m
-[2m6:05:13 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/components/Compare.tsx, /src/components/Directory.tsx, /src/components/PlayerDetail.tsx, /src/components/RadarChart.tsx, /src/components/GameLogs.tsx, /src/components/Avatar.tsx, /src/components/ShotChart.tsx[22m
-[2m6:05:15 μ.μ.[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/components/RadarChart.tsx[22m Could not Fast Refresh ("averageStrength" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
-[2m6:05:15 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Compare.tsx, /src/components/PlayerDetail.tsx[22m
-[2m6:11:27 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
-[2m6:11:28 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PlayerDetail.tsx[22m
-[2m6:12:57 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/styles.css[22m
-[2m6:14:29 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PlayerPicker.tsx[22m
-[2m6:19:06 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Explorer.tsx[22m
-[2m6:19:06 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/CourtZones.tsx[22m
-[2m6:19:06 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/ShotLab.tsx[22m
-[2m6:19:06 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Lineup.tsx[22m
-[2m6:19:06 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Explorer.tsx[22m
-[2m6:19:06 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Report.tsx[22m
-[2m6:19:06 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/styles.css[22m
-[2m6:19:06 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Home.tsx[22m
-[2m6:19:06 μ.μ.[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/components/CourtZones.tsx[22m Could not Fast Refresh ("ZONES" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
-[2m6:19:06 μ.μ.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/ShotChart.tsx, /src/pages/Report.tsx, /src/pages/Teams.tsx, /src/pages/ShotLab.tsx[22m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.68.102:[1m5173[22m/[39m

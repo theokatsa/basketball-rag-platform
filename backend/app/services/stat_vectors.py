@@ -44,11 +44,10 @@ _SQL = text(
     """
     with attempts as (
         select player_id, season,
-               avg(three_pointers_attempted) as three_point_attempts,
-               avg(free_throws_attempted) as free_throw_attempts,
-               sum(three_pointers_made) as tpm, sum(three_pointers_attempted) as tpa,
-               sum(free_throws_made) as ftm, sum(free_throws_attempted) as fta
-        from player_game_logs
+               avg(tpa) as three_point_attempts,
+               avg(fta) as free_throw_attempts,
+               sum(tpm) as tpm, sum(tpa) as tpa, sum(ftm) as ftm, sum(fta) as fta
+        from player_box_scores
         group by player_id, season
     )
     select s.player_id, p.full_name, p.is_active, s.season, s.games_played,

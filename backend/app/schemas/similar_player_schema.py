@@ -13,6 +13,8 @@ class SimilarPlayerResponse(BaseModel):
     position: str | None = None
     is_active: bool
     shared_traits: list[str] = []
+    alike: list[dict] = []
+    apart: list[dict] = []
 
 
 class SimilarPlayerSearchRequest(BaseModel):

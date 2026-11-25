@@ -20,12 +20,11 @@ export function PlayerCell({ player, note }: { player: PlayerDirectoryRow; note?
 }
 
 export function RowActions({ player }: { player: PlayerDirectoryRow }) {
-  const { favoriteIds, compareIds, toggleFavorite, toggleCompare } = useApp();
+  const { favoriteIds, compareWith, toggleFavorite } = useApp();
   const favorite = favoriteIds.includes(player.player_id);
-  const comparing = compareIds.includes(player.player_id);
   return (
     <div className="row-actions">
-      <button type="button" className={`icon-button compare-toggle ${comparing ? 'on' : ''}`} aria-pressed={comparing} disabled={!comparing && compareIds.length >= 3} title={comparing ? 'Remove from comparison' : 'Compare'} aria-label={`Compare ${player.full_name}`} onClick={() => toggleCompare(player.player_id)}><CompareIcon /></button>
+      <button type="button" className="icon-button compare-toggle" title="Compare with…" aria-label={`Compare ${player.full_name} with other players`} onClick={() => compareWith(player.player_id)}><CompareIcon /></button>
       <button type="button" className={`icon-button favorite-button ${favorite ? 'is-favorite' : ''}`} aria-pressed={favorite} title={favorite ? 'Remove from shortlist' : 'Shortlist'} aria-label={`Shortlist ${player.full_name}`} onClick={() => toggleFavorite(player.player_id)}><HeartIcon filled={favorite} /></button>
     </div>
   );

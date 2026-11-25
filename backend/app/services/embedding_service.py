@@ -3,6 +3,7 @@ import unicodedata
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+from app.services.insight_service import explain_similarity
 from app.services.stat_vectors import SeasonVectors, describe, load_season
 
 
@@ -101,6 +102,7 @@ def search_similar_players(
                 "position": row["position"],
                 "is_active": row["is_active"],
                 "shared_traits": vectors.shared_traits(reference_id, row["player_id"]),
+                **explain_similarity(vectors, reference_id, row["player_id"]),
             }
         )
         if len(results) == limit:

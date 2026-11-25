@@ -15,10 +15,14 @@ function load<T>(path: string): Promise<T> {
   }
   return request;
 }
+/** Forget an answer that changed, so the next page asks again. */
+export const forget = (start: string) => { for (const key of cache.keys()) if (key.startsWith(start)) cache.delete(key); };
 
-export function useApi<T>(path: string): { data: T | null; error: string | null } {
-  const [state, setState] = useState<{ path: string; data: T | null; error: string | null }>({ path, data: null, error: null });
+/** A null path loads nothing yet. */
+export function useApi<T>(path: string | null): { data: T | null; error: string | null } {
+  const [state, setState] = useState<{ path: string | null; data: T | null; error: string | null }>({ path, data: null, error: null });
   useEffect(() => {
+    if (path == null) return;
     let cancelled = false;
     load<T>(path)
       .then((data) => { if (!cancelled) setState({ path, data, error: null }); })
@@ -26,4 +30,14 @@ export function useApi<T>(path: string): { data: T | null; error: string | null 
     return () => { cancelled = true; };
   }, [path]);
   return state.path === path ? state : { data: null, error: null };
+}
+
+/** POST/PUT/DELETE with JSON; throws the server's own message. */
+export async function send<T>(method: string, path: string, body?: unknown): Promise<T> {
+  const response = await fetch(`/api${path}`, { method, headers: body === undefined ? undefined : { 'Content-Type': 'application/json' }, body: body === undefined ? undefined : JSON.stringify(body) });
+  if (!response.ok) {
+    const detail = ((await response.json().catch(() => null)) as { detail?: unknown } | null)?.detail;
+    throw new Error(typeof detail === 'string' ? detail : 'The request failed. Check the values and try again.');
+  }
+  return (response.status === 204 ? undefined : await response.json()) as T;
 }
