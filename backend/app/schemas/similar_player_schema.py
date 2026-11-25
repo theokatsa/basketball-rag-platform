@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
@@ -13,6 +15,8 @@ class SimilarPlayerResponse(BaseModel):
     position: str | None = None
     is_active: bool
     shared_traits: list[str] = []
+    archetype: str | None = None
+    areas: list[dict] = []
     alike: list[dict] = []
     apart: list[dict] = []
 
@@ -26,6 +30,8 @@ class SimilarPlayerSearchRequest(BaseModel):
     max_age: int | None = Field(default=None, ge=0)
     position: str | None = None
     is_active: bool | None = None
+    team_id: int | None = None  # NBA team id
+    kind: Literal["overall", "style", "production"] = "overall"
 
     @model_validator(mode="after")
     def validate_reference_player(self):

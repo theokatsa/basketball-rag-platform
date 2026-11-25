@@ -50,6 +50,8 @@ def search_similar_players_route(
             max_age=payload.max_age,
             position=payload.position,
             is_active=payload.is_active,
+            team_id=payload.team_id,
+            kind=payload.kind,
         )
     except SQLAlchemyError as exc:
         raise HTTPException(

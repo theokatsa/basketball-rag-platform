@@ -1,7 +1,9 @@
 import { useApp } from '../AppContext';
 import { Avatar } from '../components/Avatar';
 import { LoadError, Loading, PlayerCell, TeamLogo } from '../components/Common';
+import { MostViewed } from '../components/MostViewed';
 import { PlayerPicker } from '../components/PlayerPicker';
+import { Suggested } from '../components/Suggested';
 import { formatStat, statByKey } from '../stats';
 import type { BestGame, View } from '../types';
 import { useApi } from '../useApi';
@@ -33,6 +35,8 @@ export function Home() {
       <nav className="home-links" aria-label="Tools">
         {LINKS.map(([view, title, text]) => <button key={view} type="button" onClick={() => go(view)}><b>{title}</b><span>{text}</span></button>)}
       </nav>
+      {!loading && <Suggested />}
+      {!loading && <MostViewed />}
       <div className="section-head"><h2>League leaders</h2><button type="button" className="link-button" onClick={() => go('top')}>All leaderboards</button></div>
       {loading ? <Loading /> : (
         <div className="leader-grid">

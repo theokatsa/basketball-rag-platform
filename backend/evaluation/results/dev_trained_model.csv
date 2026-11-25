@@ -1,0 +1,86 @@
+﻿id,group,question,mode,precision,recall,mrr,ndcg,success,ms
+1,ranking,Who are the best rim protectors?,keyword,0.0,0.0,0.0,0.0,0.0,215
+1,ranking,Who are the best rim protectors?,vector,0.16666666666666666,0.16666666666666666,0.3333333333333333,0.15130120674940675,1.0,465
+1,ranking,Who are the best rim protectors?,hybrid,0.16666666666666666,0.16666666666666666,0.16666666666666666,0.10778915452451095,1.0,484
+1,ranking,Who are the best rim protectors?,rules,1.0,1.0,1.0,1.0,1.0,319
+1,ranking,Who are the best rim protectors?,planned,1.0,1.0,1.0,1.0,1.0,331
+2,ranking,Which players are the top rebounders in the league?,keyword,0.0,0.0,0.0,0.0,0.0,230
+2,ranking,Which players are the top rebounders in the league?,vector,0.0,0.0,0.0,0.0,0.0,484
+2,ranking,Which players are the top rebounders in the league?,hybrid,0.0,0.0,0.0,0.0,0.0,511
+2,ranking,Which players are the top rebounders in the league?,rules,1.0,1.0,1.0,1.0,1.0,393
+2,ranking,Which players are the top rebounders in the league?,planned,1.0,1.0,1.0,1.0,1.0,353
+3,filter,Big men who average at least 10 rebounds and 3 assists,keyword,0.0,0.0,0.0,0.0,0.0,220
+3,filter,Big men who average at least 10 rebounds and 3 assists,vector,0.0,0.0,0.0,0.0,0.0,469
+3,filter,Big men who average at least 10 rebounds and 3 assists,hybrid,0.0,0.0,0.0,0.0,0.0,509
+3,filter,Big men who average at least 10 rebounds and 3 assists,rules,1.0,1.0,1.0,1.0,1.0,303
+3,filter,Big men who average at least 10 rebounds and 3 assists,planned,1.0,1.0,1.0,1.0,1.0,309
+4,filter,Centers under 25 who block shots,keyword,0.0,0.0,0.0,0.0,0.0,217
+4,filter,Centers under 25 who block shots,vector,0.0,0.0,0.0,0.0,0.0,479
+4,filter,Centers under 25 who block shots,hybrid,0.0,0.0,0.0,0.0,0.0,501
+4,filter,Centers under 25 who block shots,rules,1.0,1.0,1.0,1.0,1.0,676
+4,filter,Centers under 25 who block shots,planned,1.0,1.0,1.0,1.0,1.0,347
+5,team,Which team had the best defense?,keyword,0.0,0.0,0.0,0.0,0.0,199
+5,team,Which team had the best defense?,vector,0.0,0.0,0.0,0.0,0.0,521
+5,team,Which team had the best defense?,hybrid,0.0,0.0,0.0,0.0,0.0,479
+5,team,Which team had the best defense?,rules,0.5,1.0,1.0,1.0,1.0,303
+5,team,Which team had the best defense?,planned,0.5,1.0,1.0,1.0,1.0,315
+6,team,What was the Boston Celtics' record?,keyword,0.0,0.0,0.0,0.0,0.0,187
+6,team,What was the Boston Celtics' record?,vector,0.16666666666666666,1.0,1.0,1.0,1.0,473
+6,team,What was the Boston Celtics' record?,hybrid,0.0,0.0,0.0,0.0,0.0,463
+6,team,What was the Boston Celtics' record?,rules,1.0,1.0,1.0,1.0,1.0,544
+6,team,What was the Boston Celtics' record?,planned,1.0,1.0,1.0,1.0,1.0,591
+7,shooting,Is Jayson Tatum good from the corner three?,keyword,0.16666666666666666,1.0,1.0,1.0,1.0,232
+7,shooting,Is Jayson Tatum good from the corner three?,vector,0.16666666666666666,1.0,1.0,1.0,1.0,479
+7,shooting,Is Jayson Tatum good from the corner three?,hybrid,0.16666666666666666,1.0,1.0,1.0,1.0,477
+7,shooting,Is Jayson Tatum good from the corner three?,rules,0.5,1.0,1.0,1.0,1.0,367
+7,shooting,Is Jayson Tatum good from the corner three?,planned,0.5,1.0,1.0,1.0,1.0,364
+8,matchup,Who guards Stephen Curry best?,keyword,0.16666666666666666,1.0,1.0,1.0,1.0,205
+8,matchup,Who guards Stephen Curry best?,vector,0.16666666666666666,1.0,1.0,1.0,1.0,465
+8,matchup,Who guards Stephen Curry best?,hybrid,0.16666666666666666,1.0,1.0,1.0,1.0,478
+8,matchup,Who guards Stephen Curry best?,rules,0.5,1.0,1.0,1.0,1.0,737
+8,matchup,Who guards Stephen Curry best?,planned,0.5,1.0,1.0,1.0,1.0,365
+9,pairs,Which duo on the Celtics works best together?,keyword,0.16666666666666666,1.0,1.0,1.0,1.0,205
+9,pairs,Which duo on the Celtics works best together?,vector,0.16666666666666666,1.0,1.0,1.0,1.0,452
+9,pairs,Which duo on the Celtics works best together?,hybrid,0.16666666666666666,1.0,1.0,1.0,1.0,467
+9,pairs,Which duo on the Celtics works best together?,rules,1.0,1.0,1.0,1.0,1.0,475
+9,pairs,Which duo on the Celtics works best together?,planned,1.0,1.0,1.0,1.0,1.0,471
+10,game,What happened when the Lakers played the Warriors?,keyword,0.6666666666666666,1.0,1.0,1.0,1.0,195
+10,game,What happened when the Lakers played the Warriors?,vector,0.3333333333333333,0.5,1.0,0.5585075862632192,1.0,472
+10,game,What happened when the Lakers played the Warriors?,hybrid,0.5,0.75,1.0,0.8318724637288826,1.0,537
+10,game,What happened when the Lakers played the Warriors?,rules,1.0,1.0,1.0,1.0,1.0,540
+10,game,What happened when the Lakers played the Warriors?,planned,1.0,1.0,1.0,1.0,1.0,452
+11,lookup,How many assists did Trae Young average?,keyword,0.16666666666666666,1.0,0.5,0.6309297535714575,1.0,210
+11,lookup,How many assists did Trae Young average?,vector,0.16666666666666666,1.0,1.0,1.0,1.0,449
+11,lookup,How many assists did Trae Young average?,hybrid,0.16666666666666666,1.0,1.0,1.0,1.0,468
+11,lookup,How many assists did Trae Young average?,rules,1.0,1.0,1.0,1.0,1.0,300
+11,lookup,How many assists did Trae Young average?,planned,1.0,1.0,1.0,1.0,1.0,301
+12,paraphrase,Who keeps opponents from scoring near the basket?,keyword,0.0,0.0,0.0,0.0,0.0,210
+12,paraphrase,Who keeps opponents from scoring near the basket?,vector,0.0,0.0,0.0,0.0,0.0,478
+12,paraphrase,Who keeps opponents from scoring near the basket?,hybrid,0.0,0.0,0.0,0.0,0.0,997
+12,paraphrase,Who keeps opponents from scoring near the basket?,rules,0.0,0.0,0.0,0.0,0.0,301
+12,paraphrase,Who keeps opponents from scoring near the basket?,planned,1.0,1.0,1.0,1.0,1.0,355
+13,paraphrase,Elite floor generals,keyword,0.0,0.0,0.0,0.0,0.0,198
+13,paraphrase,Elite floor generals,vector,0.16666666666666666,0.16666666666666666,0.2,0.11706259313796355,1.0,486
+13,paraphrase,Elite floor generals,hybrid,0.16666666666666666,0.16666666666666666,0.2,0.11706259313796355,1.0,468
+13,paraphrase,Elite floor generals,rules,0.0,0.0,0.0,0.0,0.0,457
+13,paraphrase,Elite floor generals,planned,1.0,1.0,1.0,1.0,1.0,327
+14,paraphrase,Snipers from downtown,keyword,0.0,0.0,0.0,0.0,0.0,211
+14,paraphrase,Snipers from downtown,vector,0.0,0.0,0.0,0.0,0.0,626
+14,paraphrase,Snipers from downtown,hybrid,0.0,0.0,0.0,0.0,0.0,521
+14,paraphrase,Snipers from downtown,rules,0.0,0.0,0.0,0.0,0.0,453
+14,paraphrase,Snipers from downtown,planned,0.8333333333333334,0.8333333333333334,1.0,0.8696762340896294,1.0,347
+15,paraphrase,Who is careless with the basketball?,keyword,0.0,0.0,0.0,0.0,0.0,211
+15,paraphrase,Who is careless with the basketball?,vector,0.0,0.0,0.0,0.0,0.0,475
+15,paraphrase,Who is careless with the basketball?,hybrid,0.0,0.0,0.0,0.0,0.0,531
+15,paraphrase,Who is careless with the basketball?,rules,0.0,0.0,0.0,0.0,0.0,450
+15,paraphrase,Who is careless with the basketball?,planned,0.8333333333333334,0.8333333333333334,1.0,0.8696762340896294,1.0,353
+16,paraphrase,Who grabs loose balls off missed shots?,keyword,0.0,0.0,0.0,0.0,0.0,209
+16,paraphrase,Who grabs loose balls off missed shots?,vector,0.0,0.0,0.0,0.0,0.0,958
+16,paraphrase,Who grabs loose balls off missed shots?,hybrid,0.0,0.0,0.0,0.0,0.0,490
+16,paraphrase,Who grabs loose balls off missed shots?,rules,0.0,0.0,0.0,0.0,0.0,479
+16,paraphrase,Who grabs loose balls off missed shots?,planned,1.0,1.0,1.0,1.0,1.0,346
+17,paraphrase,Bucket getters who can carry an offense,keyword,0.0,0.0,0.0,0.0,0.0,227
+17,paraphrase,Bucket getters who can carry an offense,vector,0.0,0.0,0.0,0.0,0.0,498
+17,paraphrase,Bucket getters who can carry an offense,hybrid,0.0,0.0,0.0,0.0,0.0,492
+17,paraphrase,Bucket getters who can carry an offense,rules,0.0,0.0,0.0,0.0,0.0,478
+17,paraphrase,Bucket getters who can carry an offense,planned,1.0,1.0,1.0,1.0,1.0,327

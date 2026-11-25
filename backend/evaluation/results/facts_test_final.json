@@ -1,0 +1,807 @@
+[
+ {
+  "id": 41,
+  "page": "player",
+  "text": "What is Donovan Mitchell's scoring average?",
+  "ok": true,
+  "expected": [
+   "24.0"
+  ],
+  "answer": "Donovan Mitchell averaged 24.0 points over 71 games (1701 in total). That ranks number 25 of 384 qualified players. [1]",
+  "provider": "calculated",
+  "ms": 4750
+ },
+ {
+  "id": 42,
+  "page": "player",
+  "text": "How many times did Kevin Durant score 35 or more?",
+  "ok": true,
+  "expected": [
+   "9"
+  ],
+  "answer": "Kevin Durant had 9 games with at least 35 points. [1]",
+  "provider": "calculated",
+  "ms": 393
+ },
+ {
+  "id": 43,
+  "page": "player",
+  "text": "Most assists in a game by Tyrese Haliburton",
+  "ok": true,
+  "expected": [
+   "18"
+  ],
+  "answer": "Tyrese Haliburton 18 assists vs the Lakers on 26 March 2025 (16 points, 0 rebounds, 18 assists). Next: Tyrese Haliburton 15 assists vs the Nuggets on 24 February 2025 (19 points, 1 rebounds, 15 assists); Tyrese Haliburton 15 assists at the Bucks on 15 March 2025 (24 points, 6 rebounds, 15 assists); Tyrese Haliburton 15 assists vs the Rockets on 4 March 2025 (28 points, 3 rebounds, 15 assists); Tyrese Haliburton 15 assists at the Heat on 2 January 2025 (33 points, 5 rebounds, 15 assists). [1]",
+  "provider": "calculated",
+  "ms": 338
+ },
+ {
+  "id": 44,
+  "page": "player",
+  "text": "How did Paolo Banchero shoot from three?",
+  "ok": true,
+  "expected": [
+   "32.0"
+  ],
+  "answer": "Paolo Banchero's three-point percentage was 32.0% (87 of 272). That ranks number 243 of 284 qualified players. [1]",
+  "provider": "calculated",
+  "ms": 344
+ },
+ {
+  "id": 45,
+  "page": "player",
+  "text": "How many minutes does Mikal Bridges play per game?",
+  "ok": true,
+  "expected": [
+   "37.1"
+  ],
+  "answer": "Mikal Bridges averaged 37.1 minutes over 82 games (3040 in total). That ranks number 4 of 384 qualified players. [1]",
+  "provider": "calculated",
+  "ms": 350
+ },
+ {
+  "id": 46,
+  "page": "player",
+  "text": "Total rebounds of Domantas Sabonis this season",
+  "ok": true,
+  "expected": [
+   "972"
+  ],
+  "answer": "Domantas Sabonis had 972 rebounds (13.9 per game over 70 games). [1]",
+  "provider": "calculated",
+  "ms": 346
+ },
+ {
+  "id": 47,
+  "page": "player",
+  "text": "How many points did Shai Gilgeous-Alexander average on the road?",
+  "ok": true,
+  "expected": [
+   "31.9"
+  ],
+  "answer": "Shai Gilgeous-Alexander averaged 31.9 points on the road over 36 games (1147 in total). [1]",
+  "provider": "calculated",
+  "ms": 348
+ },
+ {
+  "id": 48,
+  "page": "player",
+  "text": "Damian Lillard's scoring in February",
+  "ok": true,
+  "expected": [
+   "25.8"
+  ],
+  "answer": "Damian Lillard averaged 25.8 points in February over 9 games (232 in total). [1]",
+  "provider": "calculated",
+  "ms": 352
+ },
+ {
+  "id": 49,
+  "page": "player",
+  "text": "What does Anthony Davis average in rebounds when his team wins?",
+  "ok": true,
+  "expected": [
+   "12.3"
+  ],
+  "answer": "Anthony Davis averaged 12.3 rebounds in wins over 30 games (368 in total). [1]",
+  "provider": "calculated",
+  "ms": 336
+ },
+ {
+  "id": 50,
+  "page": "player",
+  "text": "How many games did Ja Morant play?",
+  "ok": true,
+  "expected": [
+   "50"
+  ],
+  "answer": "Ja Morant played 50 games. [1]",
+  "provider": "calculated",
+  "ms": 341
+ },
+ {
+  "id": 51,
+  "page": "player",
+  "text": "What is Evan Mobley's defensive rating?",
+  "ok": true,
+  "expected": [
+   "108.6"
+  ],
+  "answer": "Evan Mobley's defensive rating was 108.6. That ranks number 65 of 375 qualified players (lowest first). [1]",
+  "provider": "calculated",
+  "ms": 392
+ },
+ {
+  "id": 52,
+  "page": "player",
+  "text": "How old is Scottie Barnes?",
+  "ok": true,
+  "expected": [
+   "23"
+  ],
+  "answer": "Scottie Barnes was 23 years old in the 2024-25 season. [1]",
+  "provider": "calculated",
+  "ms": 641
+ },
+ {
+  "id": 53,
+  "page": "player",
+  "text": "How much does Zion Williamson weigh?",
+  "ok": true,
+  "expected": [
+   "284"
+  ],
+  "answer": "Zion Williamson weighs 284 lbs. [1]",
+  "provider": "calculated",
+  "ms": 398
+ },
+ {
+  "id": 54,
+  "page": "player",
+  "text": "Franz Wagner points per game against Boston",
+  "ok": true,
+  "expected": [
+   "23.0"
+  ],
+  "answer": "Franz Wagner averaged 23.0 points against the Boston Celtics over 1 games (23 in total). [1]",
+  "provider": "calculated",
+  "ms": 346
+ },
+ {
+  "id": 55,
+  "page": "player",
+  "text": "How many double-doubles did Karl-Anthony Towns record?",
+  "ok": true,
+  "expected": [
+   "58"
+  ],
+  "answer": "Karl-Anthony Towns had 58 double-doubles. [1]",
+  "provider": "calculated",
+  "ms": 349
+ },
+ {
+  "id": 56,
+  "page": "player",
+  "text": "Bam Adebayo average points over the last 15 games",
+  "ok": true,
+  "expected": [
+   "19.9"
+  ],
+  "answer": "Bam Adebayo averaged 19.9 points in the last 15 games over 15 games (298 in total). [1]",
+  "provider": "calculated",
+  "ms": 360
+ },
+ {
+  "id": 57,
+  "page": "player",
+  "text": "What is Jimmy Butler's plus-minus per game?",
+  "ok": true,
+  "expected": [
+   "4.5"
+  ],
+  "answer": "Jimmy Butler III's plus/minus was +4.5. That ranks number 42 of 384 qualified players. [1]",
+  "provider": "calculated",
+  "ms": 350
+ },
+ {
+  "id": 58,
+  "page": "player",
+  "text": "Where does Cade Cunningham rank in assists per game?",
+  "ok": true,
+  "expected": [
+   "4"
+  ],
+  "answer": "Cade Cunningham ranks number 4 of 384 qualified players in assists per game with 9.1. [1]",
+  "provider": "calculated",
+  "ms": 348
+ },
+ {
+  "id": 59,
+  "page": "top",
+  "text": "Who grabbed the most offensive rebounds per game?",
+  "ok": true,
+  "expected": [
+   "Walker Kessler"
+  ],
+  "answer": "Walker Kessler with 4.6 offensive rebounds per game, the highest. Next: Domantas Sabonis 3.8, Ivica Zubac 3.8, Rudy Gobert 3.7, Jalen Duren 3.6, Zach Edey 3.5, Yves Missi 3.5, Alperen Sengun 3.4. At least 20 games and 12 minutes per game over a full season. [1]",
+  "provider": "calculated",
+  "ms": 758
+ },
+ {
+  "id": 60,
+  "page": "top",
+  "text": "Best free throw shooter in the league",
+  "ok": true,
+  "expected": [
+   "Stephen Curry"
+  ],
+  "answer": "Stephen Curry with 93.3% free throw percentage, the highest. Next: Chris Paul 92.4%, Damian Lillard 92.1%, Kyrie Irving 91.6%, Aaron Nesmith 91.2%, Jrue Holiday 90.9%, Julian Champagnie 90.4%, Coby White 90.2%. At least 75 free throws attempted over a full season. [1]",
+  "provider": "calculated",
+  "ms": 891
+ },
+ {
+  "id": 61,
+  "page": "top",
+  "text": "Who commits the most fouls per game?",
+  "ok": true,
+  "expected": [
+   "Jaren Jackson Jr."
+  ],
+  "answer": "Jaren Jackson Jr., Karl-Anthony Towns with 3.5 fouls per game, the highest. Next: LaMelo Ball 3.3, Herbert Jones 3.3, Domantas Sabonis 3.3, Dillon Brooks 3.2, Draymond Green 3.2, Jalen Duren 3.2. At least 20 games and 12 minutes per game over a full season. [1]",
+  "provider": "calculated",
+  "ms": 765
+ },
+ {
+  "id": 62,
+  "page": "top",
+  "text": "Which player has the highest usage rate?",
+  "ok": true,
+  "expected": [
+   "Giannis Antetokounmpo"
+  ],
+  "answer": "Giannis Antetokounmpo with 34.6% usage rate, the highest. Next: LaMelo Ball 34.2%, Joel Embiid 34.2%, Shai Gilgeous-Alexander 33.6%, Paolo Banchero 33.0%, Luka Dončić 32.8%, Cam Thomas 32.8%, Zion Williamson 32.5%. At least 500 minutes over a full season. [1]",
+  "provider": "calculated",
+  "ms": 842
+ },
+ {
+  "id": 63,
+  "page": "top",
+  "text": "Highest net rating in the league",
+  "ok": true,
+  "expected": [
+   "Jaylin Williams"
+  ],
+  "answer": "Jaylin Williams with +17.9 net rating, the highest. Next: Shai Gilgeous-Alexander +16.7, Chet Holmgren +16.1, Isaiah Joe +15.8, Alex Caruso +15.0, Luke Kornet +14.9, Kenrich Williams +14.5, Aaron Wiggins +14.2. At least 500 minutes over a full season. [1]",
+  "provider": "calculated",
+  "ms": 892
+ },
+ {
+  "id": 64,
+  "page": "top",
+  "text": "Who had the most rebounds in one game?",
+  "ok": true,
+  "expected": [
+   "Domantas Sabonis"
+  ],
+  "answer": "Domantas Sabonis 28 rebounds at the Pelicans on 13 February 2025 (22 points, 28 rebounds, 5 assists). Next: Domantas Sabonis 28 rebounds at the Celtics on 10 January 2025 (23 points, 28 rebounds, 3 assists); Rudy Gobert 25 rebounds vs the Pistons on 30 March 2025 (19 points, 25 rebounds, 0 assists); Walker Kessler 25 rebounds at the Raptors on 7 March 2025 (18 points, 25 rebounds, 0 assists); Victor Wembanyama 23 rebounds vs the Nuggets on 4 January 2025 (20 points, 23 rebounds, 3 assists). [1]",
+  "provider": "calculated",
+  "ms": 902
+ },
+ {
+  "id": 65,
+  "page": "top",
+  "text": "Who played the most total minutes?",
+  "ok": true,
+  "expected": [
+   "Mikal Bridges"
+  ],
+  "answer": "Mikal Bridges with 3040 total minutes, the highest. Next: Josh Hart 2896, Anthony Edwards 2868, Devin Booker 2795, James Harden 2790, DeMar DeRozan 2767, Trae Young 2738, Tyler Herro 2726. [1]",
+  "provider": "calculated",
+  "ms": 852
+ },
+ {
+  "id": 66,
+  "page": "top",
+  "text": "Most 20 point 10 rebound games",
+  "ok": true,
+  "expected": [
+   "Giannis Antetokounmpo"
+  ],
+  "answer": "Giannis Antetokounmpo had the most games with at least 20 points and at least 10 rebounds: 52. Next: Nikola Jokić 49, Karl-Anthony Towns 43, Domantas Sabonis 31, Anthony Davis 27, Ivica Zubac 27, Alperen Sengun 23, Nikola Vučević 22. 812 such games by 150 players. [1]",
+  "provider": "calculated",
+  "ms": 792
+ },
+ {
+  "id": 67,
+  "page": "top",
+  "text": "Who was the best performer by game score in a single game?",
+  "ok": true,
+  "expected": [
+   "Giannis Antetokounmpo"
+  ],
+  "answer": "Giannis Antetokounmpo 54.2 game score vs the Pistons on 13 November 2024 (59 points, 14 rebounds, 7 assists). Next: Nikola Jokić 52.7 game score vs the Timberwolves on 1 April 2025 (61 points, 10 rebounds, 10 assists); Luka Dončić 48.7 game score at the Warriors on 15 December 2024 (45 points, 11 rebounds, 13 assists); Stephen Curry 48.6 game score at the Grizzlies on 1 April 2025 (52 points, 10 rebounds, 8 assists); De'Aaron Fox 47.0 game score vs the Timberwolves on 15 November 2024 (60 points, 3 rebounds, 7 assists). [1]",
+  "provider": "calculated",
+  "ms": 898
+ },
+ {
+  "id": 68,
+  "page": "top",
+  "text": "Best effective field goal percentage among guards",
+  "ok": true,
+  "expected": [
+   "Vít Krejčí"
+  ],
+  "answer": "Vít Krejčí with 65.1% effective field goal, the highest among guards. Next: Keon Ellis 63.9%, Christian Braun 63.4%, Gary Payton II 62.6%, Nicolas Batum 62.2%, Payton Pritchard 62.0%, Aaron Nesmith 61.7%, AJ Green 61.2%. At least 200 shots over a full season. [1]",
+  "provider": "calculated",
+  "ms": 786
+ },
+ {
+  "id": 69,
+  "page": "top",
+  "text": "Who scores the most at home?",
+  "ok": true,
+  "expected": [
+   "Shai Gilgeous-Alexander"
+  ],
+  "answer": "Shai Gilgeous-Alexander with 33.4 points per game at home, the highest. Next: Giannis Antetokounmpo 31.5, Nikola Jokić 31.0, Kevin Durant 27.6, Luka Dončić 26.3, Anthony Davis 26.2, Anthony Edwards 26.1, Paolo Banchero 26.1. At least 20 games and 12 minutes per game over a full season. [1]",
+  "provider": "calculated",
+  "ms": 797
+ },
+ {
+  "id": 70,
+  "page": "young",
+  "text": "Which player under 22 averages the most rebounds?",
+  "ok": true,
+  "expected": [
+   "Victor Wembanyama"
+  ],
+  "answer": "Victor Wembanyama with 11.0 rebounds per game, the highest among players aged 21 or younger. Next: Jalen Duren 10.3, Yves Missi 8.2, Donovan Clingan 7.9, Dereck Lively II 7.5, Kel'el Ware 7.4, Alex Sarr 6.5, Kyle Filipowski 6.1. At least 20 games and 12 minutes per game over a full season. [1]",
+  "provider": "calculated",
+  "ms": 871
+ },
+ {
+  "id": 71,
+  "page": "young",
+  "text": "Oldest player in the league",
+  "ok": false,
+  "expected": [
+   "Taj Gibson"
+  ],
+  "answer": "LeBron James, Chris Paul, Taj Gibson, P.J. Tucker: 40 years old, the oldest. Next: Al Horford 39, Kyle Lowry 39, Garrett Temple 39, Jeff Green 38. [1]",
+  "provider": "calculated",
+  "ms": 802
+ },
+ {
+  "id": 72,
+  "page": "teams",
+  "text": "What was the Warriors' home record?",
+  "ok": true,
+  "expected": [
+   "24-17"
+  ],
+  "answer": "The Golden State Warriors were 24-17 at home: 24 wins and 17 losses in 41 games, 112.5 points scored and 110.3 allowed per game. Whole season: 48-34. [1]",
+  "provider": "calculated",
+  "ms": 692
+ },
+ {
+  "id": 73,
+  "page": "teams",
+  "text": "How many games did Utah lose?",
+  "ok": true,
+  "expected": [
+   "65"
+  ],
+  "answer": "The Utah Jazz: losses 65, number 30 of 30 (lowest first). [1]",
+  "provider": "calculated",
+  "ms": 605
+ },
+ {
+  "id": 74,
+  "page": "teams",
+  "text": "Which team grabs the most rebounds?",
+  "ok": true,
+  "expected": [
+   "Houston Rockets"
+  ],
+  "answer": "Houston Rockets: 48.5 rebounds, the highest. Next: Memphis Grizzlies 47.3, Chicago Bulls 45.9, Denver Nuggets 45.7, Utah Jazz 45.4, Cleveland Cavaliers 45.4, Golden State Warriors 45.4, Boston Celtics 45.3. [1]",
+  "provider": "calculated",
+  "ms": 670
+ },
+ {
+  "id": 75,
+  "page": "teams",
+  "text": "Which team plays at the fastest pace?",
+  "ok": true,
+  "expected": [
+   "Memphis Grizzlies"
+  ],
+  "answer": "Memphis Grizzlies: 106.2 pace, the highest. Next: Chicago Bulls 105.3, Atlanta Hawks 105.2, Washington Wizards 103.5, Utah Jazz 102.7, Oklahoma City Thunder 102.6, Detroit Pistons 102.5, Cleveland Cavaliers 102.4. [1]",
+  "provider": "calculated",
+  "ms": 585
+ },
+ {
+  "id": 76,
+  "page": "teams",
+  "text": "Which team has the best net rating?",
+  "ok": true,
+  "expected": [
+   "Oklahoma City Thunder"
+  ],
+  "answer": "Oklahoma City Thunder: +12.6 net rating, the highest. Next: Cleveland Cavaliers +10.1, Boston Celtics +9.6, Minnesota Timberwolves +5.0, Los Angeles Clippers +4.5, Memphis Grizzlies +4.4, Denver Nuggets +4.1, Houston Rockets +3.4. [1]",
+  "provider": "calculated",
+  "ms": 630
+ },
+ {
+  "id": 77,
+  "page": "teams",
+  "text": "Which team forces the most turnovers?",
+  "ok": true,
+  "expected": [
+   "Oklahoma City Thunder"
+  ],
+  "answer": "Oklahoma City Thunder: 16.6% turnovers forced %, the highest. Next: Orlando Magic 16.4%, Philadelphia 76ers 15.9%, Golden State Warriors 15.5%, Portland Trail Blazers 15.2%, Atlanta Hawks 15.1%, Brooklyn Nets 15.0%, Los Angeles Clippers 15.0%. [1]",
+  "provider": "calculated",
+  "ms": 606
+ },
+ {
+  "id": 78,
+  "page": "teams",
+  "text": "Grizzlies points per game",
+  "ok": true,
+  "expected": [
+   "121.7"
+  ],
+  "answer": "The Memphis Grizzlies: points 121.7, number 2 of 30. [1]",
+  "provider": "calculated",
+  "ms": 642
+ },
+ {
+  "id": 79,
+  "page": "teams",
+  "text": "What place did the Bulls finish in the East?",
+  "ok": true,
+  "expected": [
+   "9"
+  ],
+  "answer": "The Chicago Bulls finished number 9 in the East with 39 wins and 43 losses (number 19 overall). Ties are ordered by point difference, not the league's tiebreakers. [1]",
+  "provider": "calculated",
+  "ms": 610
+ },
+ {
+  "id": 80,
+  "page": "teams",
+  "text": "Which team had the lowest opponent three-point percentage?",
+  "ok": true,
+  "expected": [
+   "Oklahoma City Thunder"
+  ],
+  "answer": "Oklahoma City Thunder: 34.2% opponent three-point percentage, the lowest. Next: Chicago Bulls 34.4%, Boston Celtics 34.7%, Toronto Raptors 34.9%, Los Angeles Clippers 35.0%, Minnesota Timberwolves 35.3%, Milwaukee Bucks 35.3%, Charlotte Hornets 35.5%. [1]",
+  "provider": "calculated",
+  "ms": 634
+ },
+ {
+  "id": 81,
+  "page": "teams",
+  "text": "How did the Rockets do in their last 10 games?",
+  "ok": true,
+  "expected": [
+   "6-4"
+  ],
+  "answer": "The Houston Rockets were 6-4 in the last 10 games: 6 wins and 4 losses in 10 games, 119.9 points scored and 114.9 allowed per game. Whole season: 52-30. [1]",
+  "provider": "calculated",
+  "ms": 598
+ },
+ {
+  "id": 82,
+  "page": "teams",
+  "text": "What was the Timberwolves' record in March?",
+  "ok": true,
+  "expected": [
+   "11-3"
+  ],
+  "answer": "The Minnesota Timberwolves were 11-3 in March: 11 wins and 3 losses in 14 games, 121.7 points scored and 109.4 allowed per game. Whole season: 49-33. [1]",
+  "provider": "calculated",
+  "ms": 594
+ },
+ {
+  "id": 83,
+  "page": "teams",
+  "text": "Which Eastern team scored the most points per game?",
+  "ok": true,
+  "expected": [
+   "Cleveland Cavaliers"
+  ],
+  "answer": "Cleveland Cavaliers: 121.9 points, the highest in the East. Next: Atlanta Hawks 118.2, Chicago Bulls 117.8, Indiana Pacers 117.4, Boston Celtics 116.3, New York Knicks 115.8, Milwaukee Bucks 115.5, Detroit Pistons 115.5. [1]",
+  "provider": "calculated",
+  "ms": 658
+ },
+ {
+  "id": 84,
+  "page": "teams",
+  "text": "Longest losing streak of the Wizards",
+  "ok": true,
+  "expected": [
+   "16"
+  ],
+  "answer": "The longest losing streak of the Washington Wizards was 16 games, from 2 November 2024 to 5 December 2024. [1]",
+  "provider": "calculated",
+  "ms": 697
+ },
+ {
+  "id": 85,
+  "page": "games",
+  "text": "How many overtime games did the Kings play?",
+  "ok": true,
+  "expected": [
+   "7"
+  ],
+  "answer": "The Sacramento Kings played 7 overtime games (3-4). The longest: Sacramento Kings 123-118 Miami Heat on 6 January 2025. [1]",
+  "provider": "calculated",
+  "ms": 638
+ },
+ {
+  "id": 86,
+  "page": "games",
+  "text": "What was the score when the Nuggets hosted the Suns?",
+  "ok": true,
+  "expected": [
+   "117"
+  ],
+  "answer": "The Denver Nuggets won 2 of 2 games against the Phoenix Suns: the Denver Nuggets beat the Phoenix Suns 117-90 on 23 December 2024, hosted by the Denver Nuggets; the Denver Nuggets beat the Phoenix Suns 149-141 after overtime on 7 March 2025, hosted by the Denver Nuggets. [1]",
+  "provider": "calculated",
+  "ms": 596
+ },
+ {
+  "id": 87,
+  "page": "games",
+  "text": "Which team scored the fewest points in a game?",
+  "ok": true,
+  "expected": [
+   "Brooklyn Nets"
+  ],
+  "answer": "Brooklyn Nets 67-126 at the Los Angeles Clippers on 15 January 2025 (margin 59). Next: Toronto Raptors 71-125 at the Boston Celtics on 31 December 2024 (margin 54); Boston Celtics 76-96 at the Orlando Magic on 9 April 2025 (margin 20); Orlando Magic 79-101 vs the Portland Trail Blazers on 23 January 2025 (margin 22); Los Angeles Lakers 80-109 at the Minnesota Timberwolves on 2 December 2024 (margin 29). [1]",
+  "provider": "calculated",
+  "ms": 589
+ },
+ {
+  "id": 88,
+  "page": "games",
+  "text": "Which team is best in the first quarter?",
+  "ok": true,
+  "expected": [
+   "Denver Nuggets"
+  ],
+  "answer": "Denver Nuggets 31.6 points scored per game in the first quarter, the highest. Next: Oklahoma City Thunder 31.3, Cleveland Cavaliers 31.2, Memphis Grizzlies 31.1, Los Angeles Lakers 30.3, Boston Celtics 30.3. [1]",
+  "provider": "calculated",
+  "ms": 961
+ },
+ {
+  "id": 89,
+  "page": "games",
+  "text": "What was the largest margin of victory for the Magic?",
+  "ok": true,
+  "expected": [
+   "30"
+  ],
+  "answer": "Orlando Magic 121-91 vs the Sacramento Kings on 29 March 2025 (margin 30). Next: Orlando Magic 121-94 vs the Washington Wizards on 10 November 2024 (margin 27); Orlando Magic 115-88 vs the New Orleans Pelicans on 8 November 2024 (margin 27); Orlando Magic 114-89 vs the Charlotte Hornets on 12 November 2024 (margin 25); Orlando Magic 123-100 at the Brooklyn Nets on 29 November 2024 (margin 23). [1]",
+  "provider": "calculated",
+  "ms": 706
+ },
+ {
+  "id": 90,
+  "page": "games",
+  "text": "Who won on Christmas Day between the Lakers and Warriors?",
+  "ok": true,
+  "expected": [
+   "Los Angeles Lakers"
+  ],
+  "answer": "The Los Angeles Lakers beat the Golden State Warriors 115-113 on 25 December 2024, hosted by the Golden State Warriors. [1]",
+  "provider": "calculated",
+  "ms": 804
+ },
+ {
+  "id": 91,
+  "page": "shots",
+  "text": "How many floaters did Trae Young make?",
+  "ok": true,
+  "expected": [
+   "180"
+  ],
+  "answer": "Trae Young made 180 of 380 floaters (47.4%, league 44.6%). [1]",
+  "provider": "calculated",
+  "ms": 17649
+ },
+ {
+  "id": 92,
+  "page": "shots",
+  "text": "Who took the most mid-range shots?",
+  "ok": true,
+  "expected": [
+   "DeMar DeRozan"
+  ],
+  "answer": "DeMar DeRozan took the most mid-range shots: 293 of 640 (45.8%). Next: Shai Gilgeous-Alexander 174 of 348 (50.0%); Devin Booker 168 of 325 (51.7%); Kevin Durant 152 of 286 (53.1%); Giannis Antetokounmpo 125 of 283 (44.2%); Jamal Murray 125 of 278 (45.0%); Jalen Brunson 102 of 227 (44.9%); LeBron James 95 of 218 (43.6%). League: 8869 of 21263 (41.7%). [1]",
+  "provider": "calculated",
+  "ms": 931
+ },
+ {
+  "id": 93,
+  "page": "shots",
+  "text": "Who dunked the most?",
+  "ok": true,
+  "expected": [
+   "Giannis Antetokounmpo"
+  ],
+  "answer": "Giannis Antetokounmpo made the most dunks: 243 of 271 (89.7%). Next: Rudy Gobert 225 of 252 (89.3%); Jalen Duren 219 of 241 (90.9%); Evan Mobley 192 of 199 (96.5%); Ivica Zubac 177 of 191 (92.7%); Jarrett Allen 159 of 174 (91.4%); Amen Thompson 138 of 148 (93.2%); OG Anunoby 132 of 144 (91.7%). League: 11661 of 13212 (88.3%). [1]",
+  "provider": "calculated",
+  "ms": 837
+ },
+ {
+  "id": 94,
+  "page": "shots",
+  "text": "What percentage does Kevin Durant shoot from mid-range?",
+  "ok": true,
+  "expected": [
+   "53.1"
+  ],
+  "answer": "Kevin Durant made 152 of 286 mid-range shots (53.1%, league 41.7%). [1]",
+  "provider": "calculated",
+  "ms": 369
+ },
+ {
+  "id": 95,
+  "page": "shots",
+  "text": "Which team attempted the most corner threes?",
+  "ok": true,
+  "expected": [
+   "Phoenix Suns"
+  ],
+  "answer": "Phoenix Suns took the most corner threes: 408 of 970 (42.1%). Next: Utah Jazz 375 of 940 (39.9%); Miami Heat 358 of 907 (39.5%); Brooklyn Nets 313 of 900 (34.8%); Chicago Bulls 345 of 891 (38.7%); Atlanta Hawks 361 of 889 (40.6%); Golden State Warriors 344 of 875 (39.3%); Cleveland Cavaliers 351 of 874 (40.2%). League: 9144 of 23532 (38.9%). [1]",
+  "provider": "calculated",
+  "ms": 719
+ },
+ {
+  "id": 96,
+  "page": "pairs",
+  "text": "Which duo has the best net rating in the league?",
+  "ok": true,
+  "expected": [
+   "Jaylin Williams",
+   "Kenrich Williams"
+  ],
+  "answer": "The best duo by net rating in the league: Jaylin Williams and Kenrich Williams (OKC) +31.3 in 311 minutes. Next: Alex Caruso and Chet Holmgren (OKC) +28.2 in 220 minutes; Isaiah Joe and Jaylin Williams (OKC) +27.0 in 436 minutes; Shai Gilgeous-Alexander and Ajay Mitchell (OKC) +25.8 in 202 minutes; Shai Gilgeous-Alexander and Kenrich Williams (OKC) +25.5 in 579 minutes; Gary Harris and Franz Wagner (ORL) +25.2 in 254 minutes. At least 200 shared minutes. [1]",
+  "provider": "calculated",
+  "ms": 846
+ },
+ {
+  "id": 97,
+  "page": "pairs",
+  "text": "How many minutes did Nikola Jokic and Jamal Murray play together?",
+  "ok": true,
+  "expected": [
+   "1619"
+  ],
+  "answer": "Nikola Jokić and Jamal Murray had a net rating of +11.1 together: 127.0 points scored and 115.9 allowed per 100 possessions, in 1619 minutes over 58 games. [1]",
+  "provider": "calculated",
+  "ms": 498
+ },
+ {
+  "id": 98,
+  "page": "matchup",
+  "text": "How did Jalen Brunson do against Derrick White as his defender?",
+  "ok": true,
+  "expected": [
+   "11"
+  ],
+  "answer": "Jalen Brunson scored 11 points on 4 of 11 shots (0 of 3 threes) with 2 assists and 1 turnovers when guarded by Derrick White, over 53 possessions in 4 games (20.9 points per 100). Derrick White scored 19 points on 6 of 12 shots (5 of 9 threes) with 3 assists and 0 turnovers when guarded by Jalen Brunson, over 53 possessions in 4 games (35.6 points per 100). [1]",
+  "provider": "calculated",
+  "ms": 434
+ },
+ {
+  "id": 99,
+  "page": "compare",
+  "text": "Who is taller, Chet Holmgren or Evan Mobley?",
+  "ok": true,
+  "expected": [
+   "Chet Holmgren"
+  ],
+  "answer": "Chet Holmgren: 7'1\" height, against Evan Mobley 6'11\". [1]",
+  "provider": "calculated",
+  "ms": 1210
+ },
+ {
+  "id": 100,
+  "page": "compare",
+  "text": "Who blocks more shots, Walker Kessler or Brook Lopez?",
+  "ok": true,
+  "expected": [
+   "Walker Kessler"
+  ],
+  "answer": "Walker Kessler: 2.4 blocks per game, against Brook Lopez 1.9. [1]",
+  "provider": "calculated",
+  "ms": 359
+ },
+ {
+  "id": 101,
+  "page": "compare",
+  "text": "Who won more games, the Clippers or the Lakers?",
+  "ok": true,
+  "expected": [
+   "Los Angeles Clippers"
+  ],
+  "answer": "Los Angeles Clippers and Los Angeles Lakers are level: 50 wins. The Los Angeles Clippers: wins 50, number 6 of 30. The Los Angeles Lakers: wins 50, number 6 of 30. [1]",
+  "provider": "calculated",
+  "ms": 706
+ },
+ {
+  "id": 102,
+  "page": "team",
+  "text": "Who is the best rebounder on the Pelicans?",
+  "ok": true,
+  "expected": [
+   "Yves Missi"
+  ],
+  "answer": "Yves Missi with 8.2 rebounds per game, the highest among players on the New Orleans Pelicans. Next: Zion Williamson 7.2, Dejounte Murray 6.5, Trey Murphy III 5.1, Karlo Matković 5.0, Jeremiah Robinson-Earl 4.8, Kelly Olynyk 4.7, Mo Bamba 4.5. At least 20 games and 12 minutes per game over a full season. [1]",
+  "provider": "calculated",
+  "ms": 875
+ },
+ {
+  "id": 103,
+  "page": "team",
+  "text": "Which Pacers player has the best three-point percentage?",
+  "ok": true,
+  "expected": [
+   "Aaron Nesmith"
+  ],
+  "answer": "Aaron Nesmith with 43.1% three-point percentage, the highest among players on the Indiana Pacers. Next: Jarace Walker 40.5%, Myles Turner 39.6%, Pascal Siakam 38.9%, Tyrese Haliburton 38.8%, Obi Toppin 36.5%, Ben Sheppard 34.2%, Bennedict Mathurin 34.0%. At least 100 threes attempted over a full season. [1]",
+  "provider": "calculated",
+  "ms": 917
+ },
+ {
+  "id": 104,
+  "page": "league",
+  "text": "How many players averaged at least 20 points per game?",
+  "ok": true,
+  "expected": [
+   "50"
+  ],
+  "answer": "50 players averaged at least 20 points: Shai Gilgeous-Alexander (32.7), Giannis Antetokounmpo (30.4), Nikola Jokić (29.6), Luka Dončić (28.2), Anthony Edwards (27.6), Jayson Tatum (26.8), Kevin Durant (26.6), Tyrese Maxey (26.3), Cade Cunningham (26.1), Jalen Brunson (26.0), Paolo Banchero (25.9), Devin Booker (25.6), LaMelo Ball (25.2), Damian Lillard (24.9), Anthony Davis (24.7) and others. 50 players, sorted by points; at least 10 games and 8 minutes per game. [1]",
+  "provider": "calculated",
+  "ms": 864
+ },
+ {
+  "id": 105,
+  "page": "league",
+  "text": "What is the average points per game of a team?",
+  "ok": true,
+  "expected": [
+   "113.8"
+  ],
+  "answer": "The league average points was 113.8 per team and game. Calculated from all games. [1]",
+  "provider": "calculated",
+  "ms": 861
+ },
+ {
+  "id": 106,
+  "page": "lineup",
+  "text": "How would a lineup of Stephen Curry, Devin Booker, Jayson Tatum, Giannis Antetokounmpo and Nikola Jokic do?",
+  "ok": true,
+  "expected": [
+   "net"
+  ],
+  "answer": "The estimated net rating of Stephen Curry, Devin Booker, Jayson Tatum, Giannis Antetokounmpo, Nikola Jokić is +17.0 points per 100 possessions: offense 122.8, defense 105.7, with a league average of 111.6. Strengths: assist rate, defensive rebound %, free throws per 100. Weaknesses: threes attempted per 100. Balance: shooters 2 of 3 wanted; creators 5 of 2 wanted; rim protectors 0 of 1 wanted. This is a statistical estimate, not a simulation. [1]",
+  "provider": "calculated",
+  "ms": 1356
+ },
+ {
+  "id": 107,
+  "page": "fit",
+  "text": "Who would be an ideal teammate for Luka Doncic?",
+  "ok": true,
+  "expected": [
+   "teammate"
+  ],
+  "answer": "An ideal teammate for Luka Dončić would be Nikola Jokić (offensive rebounding, passing, defensive rebounding). Next: Walker Kessler (offensive rebounding, shot blocking, contesting shots); Daniel Gafford (offensive rebounding, shot blocking, efficient shooting); Victor Wembanyama (shot blocking, contesting shots, defensive rebounding); Jarrett Allen (offensive rebounding, efficient shooting, shot blocking); Giannis Antetokounmpo (drawing fouls, offensive rebounding, defensive rebounding). Skills to cover: offensive rebounding, shot blocking. A statistical fit: it covers weaker skills without needing the same ball. [1]",
+  "provider": "calculated",
+  "ms": 715
+ }
+]

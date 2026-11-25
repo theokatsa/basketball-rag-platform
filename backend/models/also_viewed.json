@@ -1,0 +1,12 @@
+{
+ "settings": {
+  "shrink": 256,
+  "size": 64,
+  "reg": 6400,
+  "restart": 0.1,
+  "person_reg": 10,
+  "person_near": 10,
+  "person_content": 0.2,
+  "prior": 4
+ }
+}

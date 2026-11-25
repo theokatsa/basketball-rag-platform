@@ -6,6 +6,7 @@ import { useApi } from '../useApi';
 import { teamVars } from '../teamColors';
 import { fractionPct, radarMetrics, rankLabel } from '../utils';
 import { Avatar } from './Avatar';
+import { simulatedNote } from './MostViewed';
 import { Loading, PlayerCell, Segmented, TeamLogo } from './Common';
 import { signed } from './CourtZones';
 import { useTeamList } from './Dropdown';
@@ -71,7 +72,21 @@ function Strengths({ detail }: { detail: PlayerDetailData }) {
   );
 }
 
-function Similar({ similar, playerId }: { similar: SimilarPlayerResult[]; playerId: number }) {
+type Kind = 'overall' | 'style' | 'production';
+const KINDS: [Kind, string][] = [['overall', 'Overall'], ['style', 'Playing style'], ['production', 'Production']];
+const KIND_NOTES: Record<Kind, string> = {
+  overall: 'The match compares 42 numbers: role, scoring, shot locations and types, shooting touch, passing, rebounding and defense. Which of them count most was learned from the data.',
+  style: 'Only how a player plays: shot locations and types, passing, rebounding and defense. Minutes, volume and accuracy are left out.',
+  production: 'The match compares twelve averages measured against the league. Percentages on few attempts are pulled toward average.',
+};
+
+function Similar({ similar: first, playerId }: { similar: SimilarPlayerResult[]; playerId: number }) {
+  const [kind, setKind] = useState<Kind>('overall');
+  const [variant, setVariant] = useState<'any' | 'younger' | 'better'>('any');
+  const plain = kind === 'overall' && variant === 'any';
+  const audience = useApi<{ viewers: number; rank: number | null; players: number; users: number; simulated: number }>(`/players/${playerId}/audience`);
+  const alternative = useApi<SimilarPlayerResult[]>(plain ? null : `/players/${playerId}/similar?limit=6&kind=${kind}&variant=${variant}`);
+  const similar = plain ? first : alternative.data ?? [];
   const { byId, user, compareIds, setCompareIds, go } = useApp();
   const [chosen, setChosen] = useState(0);
   const [viewed, setViewed] = useState<{ player_id: number; viewers: number; audience: number }[] | null>(null);
@@ -89,8 +104,8 @@ function Similar({ similar, playerId }: { similar: SimilarPlayerResult[]; player
   return (
     <>
       <section className="panel wide">
-        <div className="panel-header"><div><h2>Similar players</h2><p>Closest statistical profiles. Pick one to see why.</p></div></div>
-        {!similar.length ? <p className="status">No similar profiles available.</p> : (
+        <div className="panel-header"><div><h2>Similar players</h2><p>Pick one to see why.</p></div><div className="panel-tools"><Segmented label="Compare by" value={kind} options={KINDS} onChange={(k) => { setKind(k); setChosen(0); }} /><Segmented label="Show" value={variant} options={[['any', 'Anyone'], ['younger', 'Younger'], ['better', 'Better']]} onChange={(v) => { setVariant(v); setChosen(0); }} /></div></div>
+        {!plain && alternative.error ? <p className="status error">{alternative.error}</p> : !plain && !alternative.data ? <Loading height="18rem" /> : !similar.length ? <p className="status">No player matches.</p> : (
           <div className="similar-split">
             <div className="similar-pick" role="group" aria-label="Similar players">
               {similar.map((r, i) => { const p = byId.get(r.player_id); return p && <button type="button" key={r.player_id} aria-pressed={i === chosen} onClick={() => setChosen(i)}><Avatar key={p.nba_player_id} name={p.full_name} nbaPlayerId={p.nba_player_id} className="player-thumb" /><span><b>{p.full_name}</b><small>{p.club}, {p.position}</small></span><strong>{Math.round(r.similarity * 100)}%</strong></button>; })}
@@ -98,13 +113,15 @@ function Similar({ similar, playerId }: { similar: SimilarPlayerResult[]; player
             {focus && other && own && (
               <div className="why">
                 <div className="why-head"><h3>Why {other.full_name}?</h3><button type="button" className="ghost-button" onClick={() => compare(other.player_id)}><CompareIcon />Full comparison</button></div>
+                {focus.archetype && <p>Type of player: {focus.archetype.toLowerCase()}.</p>}
+                {focus.areas.length > 0 && <div className="simple-bars">{focus.areas.map((a) => <div key={a.label}><span>{a.label}</span><b>{Math.round(a.closeness * 100)}%</b><i><em style={{ width: `${a.closeness * 100}%` }} /></i></div>)}</div>}
                 {focus.shared_traits.length > 0 && <p>Shared strengths: {focus.shared_traits.join(', ')}.</p>}
                 <table className="why-table">
                   <thead><tr><th scope="col">Closest numbers</th><th scope="col">{own.full_name}</th><th scope="col">{other.full_name}</th><th scope="col">Match</th></tr></thead>
                   <tbody>{focus.alike.map((t) => <tr key={t.label}><th scope="row">{t.label}</th><td>{show(t.own, t.percent)}</td><td>{show(t.other, t.percent)}</td><td><i><em style={{ width: `${t.closeness * 100}%` }} /></i></td></tr>)}</tbody>
                   {focus.apart.length > 0 && <><thead><tr><th scope="col" colSpan={4}>Where they differ</th></tr></thead><tbody>{focus.apart.map((t) => <tr key={t.label}><th scope="row">{t.label}</th><td>{show(t.own, t.percent)}</td><td>{show(t.other, t.percent)}</td><td><i className="low"><em style={{ width: `${Math.max(4, t.closeness * 100)}%` }} /></i></td></tr>)}</tbody></>}
                 </table>
-                <p className="radar-note">The match percentage compares twelve statistics measured against the league that season. Percentages on few attempts are pulled toward average.</p>
+                <p className="radar-note">{KIND_NOTES[kind]} A typical pair of players scores 10%.</p>
                 <PlayerCell player={other} note="Open profile" />
               </div>
             )}
@@ -112,7 +129,7 @@ function Similar({ similar, playerId }: { similar: SimilarPlayerResult[]; player
         )}
       </section>
       <section className="panel wide">
-        <div className="panel-header"><div><h2>Users who viewed {own?.full_name ?? 'this player'} also viewed</h2><p>From pages opened in the same visit by signed-in users</p></div></div>
+        <div className="panel-header"><div><h2>Users who viewed {own?.full_name ?? 'this player'} also viewed</h2><p>Learned from which pages are opened in the same visit{audience.data ? `. ${audience.data.viewers} users viewed this player${audience.data.rank ? `, number ${audience.data.rank} of ${audience.data.players}` : ''}. ${simulatedNote(audience.data)}` : ''}</p></div></div>
         {viewed == null ? <Loading height="5rem" /> : viewed.length ? <div className="suggest-grid">{viewed.map((v) => { const p = byId.get(v.player_id); return p && <PlayerCell key={v.player_id} player={p} note={`${v.viewers} of ${v.audience} ${v.audience === 1 ? 'viewer' : 'viewers'}`} />; })}</div> : <p className="status">{user ? 'Nothing yet. It fills up as people look at several players in one visit.' : 'Nothing yet. Sign in and your visits help build this list.'}</p>}
       </section>
     </>

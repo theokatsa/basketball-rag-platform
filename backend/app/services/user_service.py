@@ -102,7 +102,7 @@ def also_viewed(db, player_id: int, limit: int = 6):
         from pairs
         join audience on audience.player_id = pairs.player_id
         join audience me on me.player_id = :p
-        group by pairs.player_id order by score desc, viewers desc limit :n
+        group by pairs.player_id having count(*) >= 2 order by score desc, viewers desc limit :n
     """), {"p": player_id, "n": limit}).mappings()]
 
 
@@ -119,7 +119,7 @@ def activity(db, user_id: int):
             select b.player_id, count(distinct b.user_id) as viewers
             from player_views a join player_views b on b.user_id = a.user_id and b.visit = a.visit
             where a.player_id in (select player_id from mine) and b.player_id not in (select player_id from mine) and a.user_id <> :u
-            group by 1 order by viewers desc limit 6
+            group by 1 having count(distinct b.user_id) >= 2 order by viewers desc limit 6
         """),
     }
 

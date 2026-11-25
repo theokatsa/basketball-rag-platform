@@ -1,0 +1,482 @@
+[
+ {
+  "id": 1,
+  "page": "player",
+  "text": "How many points per game did Anthony Edwards average?",
+  "ok": true,
+  "expected": [
+   "27.6"
+  ],
+  "answer": "Anthony Edwards averaged 27.6 points over 79 games (2177 in total). That ranks number 5 of 384 qualified players. Anthony Edwards played 79 games. [1]",
+  "provider": "calculated",
+  "ms": 7296
+ },
+ {
+  "id": 2,
+  "page": "player",
+  "text": "How many 30-point games did LeBron James have?",
+  "ok": true,
+  "expected": [
+   "17"
+  ],
+  "answer": "LeBron James had 17 games with at least 30 points. [1]",
+  "provider": "calculated",
+  "ms": 437
+ },
+ {
+  "id": 3,
+  "page": "player",
+  "text": "What was Jalen Brunson's season high in points?",
+  "ok": true,
+  "expected": [
+   "55"
+  ],
+  "answer": "Jalen Brunson 55 points at the Wizards on 28 December 2024 (55 points, 3 rebounds, 9 assists). Next: Jalen Brunson 44 points vs the Bucks on 12 January 2025 (44 points, 5 rebounds, 6 assists); Jalen Brunson 42 points vs the Rockets on 3 February 2025 (42 points, 6 rebounds, 10 assists); Jalen Brunson 39 points at the Lakers on 6 March 2025 (39 points, 4 rebounds, 10 assists); Jalen Brunson 39 points at the Pelicans on 21 December 2024 (39 points, 1 rebounds, 6 assists). [1]",
+  "provider": "calculated",
+  "ms": 434
+ },
+ {
+  "id": 4,
+  "page": "player",
+  "text": "What did Nikola Jokic average against the Lakers?",
+  "ok": true,
+  "expected": [
+   "24.7"
+  ],
+  "answer": "Nikola Jokić against the Los Angeles Lakers: 24.7 points, 11.0 rebounds and 7.7 assists in 36.7 minutes over 3 games, shooting 51.2% from the field and 25.0% from three, plus/minus +10.0. [1]",
+  "provider": "calculated",
+  "ms": 956
+ },
+ {
+  "id": 5,
+  "page": "player",
+  "text": "How many triple-doubles did Nikola Jokic have?",
+  "ok": true,
+  "expected": [
+   "34"
+  ],
+  "answer": "Nikola Jokić had 34 triple-doubles. [1]",
+  "provider": "calculated",
+  "ms": 387
+ },
+ {
+  "id": 6,
+  "page": "player",
+  "text": "How tall is Victor Wembanyama?",
+  "ok": true,
+  "expected": [
+   "7'4"
+  ],
+  "answer": "Victor Wembanyama is 7'4\" tall. [1]",
+  "provider": "calculated",
+  "ms": 396
+ },
+ {
+  "id": 7,
+  "page": "player",
+  "text": "How many points did Stephen Curry average at home?",
+  "ok": true,
+  "expected": [
+   "23.1"
+  ],
+  "answer": "Stephen Curry averaged 23.1 points at home over 34 games (785 in total). [1]",
+  "provider": "calculated",
+  "ms": 413
+ },
+ {
+  "id": 8,
+  "page": "player",
+  "text": "Jayson Tatum's rebounds per game in January",
+  "ok": true,
+  "expected": [
+   "7.7"
+  ],
+  "answer": "Jayson Tatum averaged 7.7 rebounds in January over 16 games (123 in total). [1]",
+  "provider": "calculated",
+  "ms": 425
+ },
+ {
+  "id": 9,
+  "page": "player",
+  "text": "How many points did Tyrese Maxey score in his last 5 games in total?",
+  "ok": true,
+  "expected": [
+   "84"
+  ],
+  "answer": "Tyrese Maxey had 84 points in the last 5 games (16.8 per game over 5 games). [1]",
+  "provider": "calculated",
+  "ms": 425
+ },
+ {
+  "id": 10,
+  "page": "player",
+  "text": "What is Rudy Gobert's usage rate?",
+  "ok": true,
+  "expected": [
+   "12.9"
+  ],
+  "answer": "Rudy Gobert's usage rate was 12.9%. That ranks number 330 of 375 qualified players. [1]",
+  "provider": "calculated",
+  "ms": 415
+ },
+ {
+  "id": 11,
+  "page": "top",
+  "text": "Who made the most three-pointers this season?",
+  "ok": true,
+  "expected": [
+   "Anthony Edwards"
+  ],
+  "answer": "Anthony Edwards with 320 total threes, the highest. Next: Malik Beasley 319, Stephen Curry 311, Derrick White 265, Payton Pritchard 255, Tyler Herro 251, Jayson Tatum 250, Zach LaVine 239. [1]",
+  "provider": "calculated",
+  "ms": 894
+ },
+ {
+  "id": 12,
+  "page": "top",
+  "text": "Which player has the highest true shooting percentage?",
+  "ok": true,
+  "expected": [
+   "Jarrett Allen"
+  ],
+  "answer": "Jarrett Allen with 72.4% true shooting, the highest. Next: Jaxson Hayes 72.0%, Daniel Gafford 71.6%, Jalen Duren 70.3%, Rudy Gobert 68.7%, Luke Kornet 68.3%, Neemias Queta 67.4%, Jay Huff 66.6%. At least 200 shots over a full season. [1]",
+  "provider": "calculated",
+  "ms": 855
+ },
+ {
+  "id": 13,
+  "page": "top",
+  "text": "Who had the most double-doubles?",
+  "ok": true,
+  "expected": [
+   "Domantas Sabonis"
+  ],
+  "answer": "Domantas Sabonis with 61 total double-doubles, the highest. Next: Ivica Zubac 59, Nikola Jokić 59, Karl-Anthony Towns 58, Giannis Antetokounmpo 55, Trae Young 51, Alperen Sengun 45, Nikola Vučević 45. [1]",
+  "provider": "calculated",
+  "ms": 868
+ },
+ {
+  "id": 14,
+  "page": "top",
+  "text": "Who scored the most points in a single game?",
+  "ok": true,
+  "expected": [
+   "Nikola Jokić"
+  ],
+  "answer": "Nikola Jokić 61 points vs the Timberwolves on 1 April 2025 (61 points, 10 rebounds, 10 assists). Next: De'Aaron Fox 60 points vs the Timberwolves on 15 November 2024 (60 points, 3 rebounds, 7 assists); Giannis Antetokounmpo 59 points vs the Pistons on 13 November 2024 (59 points, 14 rebounds, 7 assists); Nikola Jokić 56 points at the Wizards on 7 December 2024 (56 points, 16 rebounds, 8 assists); Stephen Curry 56 points at the Magic on 27 February 2025 (56 points, 4 rebounds, 3 assists). [1]",
+  "provider": "calculated",
+  "ms": 846
+ },
+ {
+  "id": 15,
+  "page": "top",
+  "text": "Who has the best assist to turnover ratio?",
+  "ok": true,
+  "expected": [
+   "Tyrese Haliburton"
+  ],
+  "answer": "Tyrese Haliburton with 5.61 assists per turnover, the highest. Next: Tre Jones 5.49, Jeff Dowtin Jr. 5.20, Tyus Jones 4.71, Chris Paul 4.69, Kyle Lowry 4.57, Miles McBride 4.56, Jalen Pickett 4.46. At least 500 minutes over a full season. [1]",
+  "provider": "calculated",
+  "ms": 906
+ },
+ {
+  "id": 16,
+  "page": "top",
+  "text": "Which player had the most games with at least 40 points?",
+  "ok": true,
+  "expected": [
+   "Shai Gilgeous-Alexander"
+  ],
+  "answer": "Shai Gilgeous-Alexander had the most games with at least 40 points: 13. Next: Nikola Jokić 10, Anthony Edwards 9, Devin Booker 5, Giannis Antetokounmpo 5, Karl-Anthony Towns 5, Luka Dončić 4, James Harden 4. 139 such games by 55 players. [1]",
+  "provider": "calculated",
+  "ms": 850
+ },
+ {
+  "id": 17,
+  "page": "top",
+  "text": "Who is the tallest player?",
+  "ok": true,
+  "expected": [
+   "7"
+  ],
+  "answer": "Victor Wembanyama: 7'4\" tall, the tallest. Next: Zach Edey 7'3\", Bol Bol 7'3\", Walker Kessler 7'2\", Donovan Clingan 7'2\", Kristaps Porziņģis 7'2\", Moses Brown 7'2\", Brook Lopez 7'1\". [1]",
+  "provider": "calculated",
+  "ms": 881
+ },
+ {
+  "id": 18,
+  "page": "young",
+  "text": "Best scorer aged 20 or younger",
+  "ok": true,
+  "expected": [
+   "Stephon Castle"
+  ],
+  "answer": "Stephon Castle with 14.7 points per game, the highest among players aged 20 or younger. Next: Alex Sarr 13.0, Zaccharie Risacher 12.6, Bilal Coulibaly 12.3, Bub Carrington 9.8, Cam Whitmore 9.4, Noah Clowney 9.1, Isaiah Collier 8.7. At least 20 games and 12 minutes per game over a full season. [1]",
+  "provider": "calculated",
+  "ms": 880
+ },
+ {
+  "id": 19,
+  "page": "teams",
+  "text": "What is the Knicks' record on the road?",
+  "ok": true,
+  "expected": [
+   "24-17"
+  ],
+  "answer": "The New York Knicks were 24-17 on the road: 24 wins and 17 losses in 41 games, 114.0 points scored and 112.6 allowed per game. Whole season: 51-31. [1]",
+  "provider": "calculated",
+  "ms": 760
+ },
+ {
+  "id": 20,
+  "page": "teams",
+  "text": "Which team allowed the fewest points per game?",
+  "ok": true,
+  "expected": [
+   "Orlando Magic"
+  ],
+  "answer": "Orlando Magic: 105.5 points allowed, the lowest. Next: Boston Celtics 107.2, Oklahoma City Thunder 107.6, Los Angeles Clippers 108.2, Minnesota Timberwolves 109.3, Houston Rockets 109.8, Miami Heat 110.0, Golden State Warriors 110.5. [1]",
+  "provider": "calculated",
+  "ms": 806
+ },
+ {
+  "id": 21,
+  "page": "teams",
+  "text": "Who finished first in the West?",
+  "ok": true,
+  "expected": [
+   "Oklahoma City Thunder"
+  ],
+  "answer": "Oklahoma City Thunder 68-14. Then: Houston Rockets 52-30, Los Angeles Clippers 50-32, Denver Nuggets 50-32, Los Angeles Lakers 50-32, Minnesota Timberwolves 49-33, Memphis Grizzlies 48-34, Golden State Warriors 48-34, Sacramento Kings 40-42, Dallas Mavericks 39-43. Ties are ordered by point difference, not the league's tiebreakers. [1]",
+  "provider": "calculated",
+  "ms": 837
+ },
+ {
+  "id": 22,
+  "page": "teams",
+  "text": "How many games did the Pistons win?",
+  "ok": true,
+  "expected": [
+   "44"
+  ],
+  "answer": "The Detroit Pistons: wins 44, number 14 of 30. [1]",
+  "provider": "calculated",
+  "ms": 796
+ },
+ {
+  "id": 23,
+  "page": "teams",
+  "text": "What was Miami's pace?",
+  "ok": true,
+  "expected": [
+   "98.4"
+  ],
+  "answer": "The Miami Heat: pace 98.4, number 29 of 30. [1]",
+  "provider": "calculated",
+  "ms": 767
+ },
+ {
+  "id": 24,
+  "page": "teams",
+  "text": "Which team had the best record in close games?",
+  "ok": true,
+  "expected": [
+   "Washington Wizards"
+  ],
+  "answer": "Washington Wizards: 71.4% winning % in games decided by 5 points or fewer (10 wins in 14), the highest. Next: New York Knicks 66.7%, Indiana Pacers 63.2%, Houston Rockets 62.5%, Portland Trail Blazers 62.5%, Cleveland Cavaliers 61.1%, Boston Celtics 58.8%, Chicago Bulls 58.8%. [1]",
+  "provider": "calculated",
+  "ms": 785
+ },
+ {
+  "id": 25,
+  "page": "teams",
+  "text": "What was the longest winning streak of the Cavaliers?",
+  "ok": true,
+  "expected": [
+   "16"
+  ],
+  "answer": "The longest winning streak of the Cleveland Cavaliers was 16 games, from 5 February 2025 to 14 March 2025. [1]",
+  "provider": "calculated",
+  "ms": 915
+ },
+ {
+  "id": 26,
+  "page": "games",
+  "text": "What was the highest scoring game by a team?",
+  "ok": true,
+  "expected": [
+   "Indiana Pacers"
+  ],
+  "answer": "Indiana Pacers 162-109 at the Washington Wizards on 27 March 2025 (margin 53). Next: Memphis Grizzlies 155-126 vs the Toronto Raptors on 26 December 2024 (margin 29); Miami Heat 153-104 at the New Orleans Pelicans on 11 April 2025 (margin 49); Memphis Grizzlies 151-148 vs the Phoenix Suns on 25 February 2025 (margin 3, overtime); New York Knicks 149-148 vs the Atlanta Hawks on 12 February 2025 (margin 1, overtime). [1]",
+  "provider": "calculated",
+  "ms": 824
+ },
+ {
+  "id": 27,
+  "page": "games",
+  "text": "How many games went to overtime?",
+  "ok": true,
+  "expected": [
+   "60"
+  ],
+  "answer": "60 games went to overtime. The Miami Heat played the most overtime games: 8. The longest: Sacramento Kings 123-118 Miami Heat on 6 January 2025. [1]",
+  "provider": "calculated",
+  "ms": 877
+ },
+ {
+  "id": 28,
+  "page": "games",
+  "text": "What was the biggest win of the season?",
+  "ok": true,
+  "expected": [
+   "Los Angeles Clippers"
+  ],
+  "answer": "Los Angeles Clippers 126-67 vs the Brooklyn Nets on 15 January 2025 (margin 59). Next: Boston Celtics 125-71 vs the Toronto Raptors on 31 December 2024 (margin 54); Portland Trail Blazers 141-88 vs the Charlotte Hornets on 22 February 2025 (margin 53); Indiana Pacers 162-109 at the Washington Wizards on 27 March 2025 (margin 53); Memphis Grizzlies 144-93 vs the Golden State Warriors on 19 December 2024 (margin 51). [1]",
+  "provider": "calculated",
+  "ms": 862
+ },
+ {
+  "id": 29,
+  "page": "games",
+  "text": "How many times did the Celtics beat the Knicks?",
+  "ok": true,
+  "expected": [
+   "4"
+  ],
+  "answer": "The Boston Celtics won 4 of 4 games against the New York Knicks: the Boston Celtics beat the New York Knicks 132-109 on 22 October 2024, hosted by the Boston Celtics; the Boston Celtics beat the New York Knicks 131-104 on 8 February 2025, hosted by the New York Knicks; the Boston Celtics beat the New York Knicks 118-105 on 23 February 2025, hosted by the Boston Celtics; the Boston Celtics beat the New York Knicks 119-117 after overtime on 8 April 2025, hosted by the New York Knicks. [1]",
+  "provider": "calculated",
+  "ms": 828
+ },
+ {
+  "id": 30,
+  "page": "games",
+  "text": "Which team scores the most points in the fourth quarter?",
+  "ok": true,
+  "expected": [
+   "Cleveland Cavaliers"
+  ],
+  "answer": "Cleveland Cavaliers 29.8 points scored per game in the fourth quarter, the highest. Next: Indiana Pacers 29.3, Chicago Bulls 28.8, Atlanta Hawks 28.6, Memphis Grizzlies 28.5, Utah Jazz 28.4. [1]",
+  "provider": "calculated",
+  "ms": 840
+ },
+ {
+  "id": 31,
+  "page": "shots",
+  "text": "How many dunks did Giannis Antetokounmpo make?",
+  "ok": true,
+  "expected": [
+   "243"
+  ],
+  "answer": "Giannis Antetokounmpo made 243 of 271 dunks (89.7%, league 88.3%). [1]",
+  "provider": "calculated",
+  "ms": 20529
+ },
+ {
+  "id": 32,
+  "page": "shots",
+  "text": "Who made the most corner threes?",
+  "ok": true,
+  "expected": [
+   "Harrison Barnes"
+  ],
+  "answer": "Harrison Barnes made the most corner threes: 97 of 205 (47.3%). Next: Mikal Bridges 93 of 220 (42.3%); Malik Beasley 89 of 169 (52.7%); OG Anunoby 82 of 217 (37.8%); Taurean Prince 79 of 175 (45.1%); Tyus Jones 71 of 150 (47.3%); Georges Niang 66 of 161 (41.0%); Zaccharie Risacher 65 of 148 (43.9%). League: 9144 of 23532 (38.9%). [1]",
+  "provider": "calculated",
+  "ms": 895
+ },
+ {
+  "id": 33,
+  "page": "shots",
+  "text": "How many step-back shots did Luka Doncic take?",
+  "ok": true,
+  "expected": [
+   "277"
+  ],
+  "answer": "Luka Dončić made 99 of 277 step-back shots (35.7%, league 37.0%). [1]",
+  "provider": "calculated",
+  "ms": 397
+ },
+ {
+  "id": 34,
+  "page": "pairs",
+  "text": "What is the net rating of Jayson Tatum and Jaylen Brown together?",
+  "ok": true,
+  "expected": [
+   "8.1"
+  ],
+  "answer": "Jayson Tatum and Jaylen Brown had a net rating of +8.1 together: 118.7 points scored and 110.5 allowed per 100 possessions, in 1410 minutes over 56 games. [1]",
+  "provider": "calculated",
+  "ms": 516
+ },
+ {
+  "id": 35,
+  "page": "matchup",
+  "text": "How many points did Devin Booker score when guarded by Luguentz Dort?",
+  "ok": true,
+  "expected": [
+   "4"
+  ],
+  "answer": "Devin Booker scored 4 points on 1 of 3 shots (0 of 0 threes) with 2 assists and 3 turnovers when guarded by Luguentz Dort, over 51 possessions in 2 games (7.8 points per 100). Luguentz Dort scored 2 points on 1 of 4 shots (0 of 2 threes) with 1 assists and 0 turnovers when guarded by Devin Booker, over 27 possessions in 2 games (7.4 points per 100). [1]",
+  "provider": "calculated",
+  "ms": 483
+ },
+ {
+  "id": 36,
+  "page": "compare",
+  "text": "Who averages more assists, Trae Young or James Harden?",
+  "ok": true,
+  "expected": [
+   "Trae Young"
+  ],
+  "answer": "Trae Young: 11.6 assists per game, against James Harden 8.7. [1]",
+  "provider": "calculated",
+  "ms": 428
+ },
+ {
+  "id": 37,
+  "page": "compare",
+  "text": "Who shoots better from three, Klay Thompson or Buddy Hield?",
+  "ok": true,
+  "expected": [
+   "Klay Thompson"
+  ],
+  "answer": "Klay Thompson: 39.1% three-point percentage, against Buddy Hield 37.0%. [1]",
+  "provider": "calculated",
+  "ms": 421
+ },
+ {
+  "id": 38,
+  "page": "team",
+  "text": "Who is the leading scorer of the Hornets?",
+  "ok": true,
+  "expected": [
+   "LaMelo Ball"
+  ],
+  "answer": "LaMelo Ball with 25.2 points per game, the highest among players on the Charlotte Hornets. Next: Brandon Miller 21.0, Miles Bridges 20.3, Mark Williams 15.2, Nick Smith Jr. 9.8, Jusuf Nurkić 8.9, KJ Simpson 7.8, Josh Green 7.4. At least 20 games and 12 minutes per game over a full season. [1]",
+  "provider": "calculated",
+  "ms": 915
+ },
+ {
+  "id": 39,
+  "page": "team",
+  "text": "How many players on the Spurs averaged 10 or more points?",
+  "ok": true,
+  "expected": [
+   "7"
+  ],
+  "answer": "7 players (players on the San Antonio Spurs) averaged at least 10 points: Victor Wembanyama (24.3), De'Aaron Fox (23.5), Devin Vassell (16.3), Stephon Castle (14.7), Keldon Johnson (12.7), Harrison Barnes (12.3), Jeremy Sochan (11.4). 7 players, sorted by points; at least 10 games and 8 minutes per game. [1]",
+  "provider": "calculated",
+  "ms": 835
+ },
+ {
+  "id": 40,
+  "page": "league",
+  "text": "What is the league average for three-point percentage?",
+  "ok": true,
+  "expected": [
+   "36.0"
+  ],
+  "answer": "The league average three-point percentage was 36.0%. Calculated from all games. [1]",
+  "provider": "calculated",
+  "ms": 810
+ }
+]

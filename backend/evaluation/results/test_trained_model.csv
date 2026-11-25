@@ -1,0 +1,161 @@
+﻿id,group,question,mode,precision,recall,mrr,ndcg,success,ms
+18,ranking,Who are the best playmakers in the league?,keyword,0.0,0.0,0.0,0.0,0.0,244
+18,ranking,Who are the best playmakers in the league?,vector,0.0,0.0,0.0,0.0,0.0,469
+18,ranking,Who are the best playmakers in the league?,hybrid,0.0,0.0,0.0,0.0,0.0,474
+18,ranking,Who are the best playmakers in the league?,rules,1.0,1.0,1.0,1.0,1.0,302
+18,ranking,Who are the best playmakers in the league?,planned,1.0,1.0,1.0,1.0,1.0,321
+19,ranking,Show me the leading scorers,keyword,0.0,0.0,0.0,0.0,0.0,210
+19,ranking,Show me the leading scorers,vector,0.0,0.0,0.0,0.0,0.0,477
+19,ranking,Show me the leading scorers,hybrid,0.0,0.0,0.0,0.0,0.0,769
+19,ranking,Show me the leading scorers,rules,1.0,1.0,1.0,1.0,1.0,299
+19,ranking,Show me the leading scorers,planned,1.0,1.0,1.0,1.0,1.0,318
+20,ranking,Which guards steal the ball the most?,keyword,0.0,0.0,0.0,0.0,0.0,217
+20,ranking,Which guards steal the ball the most?,vector,0.0,0.0,0.0,0.0,0.0,459
+20,ranking,Which guards steal the ball the most?,hybrid,0.0,0.0,0.0,0.0,0.0,472
+20,ranking,Which guards steal the ball the most?,rules,0.8333333333333334,0.8333333333333334,1.0,0.8090791338210653,1.0,299
+20,ranking,Which guards steal the ball the most?,planned,0.8333333333333334,0.8333333333333334,1.0,0.8090791338210653,1.0,335
+21,ranking,Who turns the ball over the most?,keyword,0.5,0.16666666666666666,0.5,0.1909208661789347,1.0,203
+21,ranking,Who turns the ball over the most?,vector,0.0,0.0,0.0,0.0,0.0,450
+21,ranking,Who turns the ball over the most?,hybrid,0.2,0.16666666666666666,1.0,0.3026024134988135,1.0,651
+21,ranking,Who turns the ball over the most?,rules,0.8333333333333334,0.8333333333333334,1.0,0.8696762340896294,1.0,318
+21,ranking,Who turns the ball over the most?,planned,0.8333333333333334,0.8333333333333334,1.0,0.8696762340896294,1.0,309
+22,filter,Players averaging more than 25 points and 5 assists,keyword,0.0,0.0,0.0,0.0,0.0,233
+22,filter,Players averaging more than 25 points and 5 assists,vector,0.0,0.0,0.0,0.0,0.0,446
+22,filter,Players averaging more than 25 points and 5 assists,hybrid,0.0,0.0,0.0,0.0,0.0,471
+22,filter,Players averaging more than 25 points and 5 assists,rules,1.0,1.0,1.0,1.0,1.0,308
+22,filter,Players averaging more than 25 points and 5 assists,planned,1.0,1.0,1.0,1.0,1.0,300
+23,filter,Forwards younger than 23 with at least 5 rebounds per game,keyword,0.0,0.0,0.0,0.0,0.0,214
+23,filter,Forwards younger than 23 with at least 5 rebounds per game,vector,0.0,0.0,0.0,0.0,0.0,438
+23,filter,Forwards younger than 23 with at least 5 rebounds per game,hybrid,0.0,0.0,0.0,0.0,0.0,501
+23,filter,Forwards younger than 23 with at least 5 rebounds per game,rules,0.5,1.0,1.0,0.8529278650606567,1.0,715
+23,filter,Forwards younger than 23 with at least 5 rebounds per game,planned,0.5,1.0,1.0,0.8529278650606567,1.0,305
+24,filter,Rockets players who score over 15 points a game,keyword,0.0,0.0,0.0,0.0,0.0,207
+24,filter,Rockets players who score over 15 points a game,vector,0.0,0.0,0.0,0.0,0.0,447
+24,filter,Rockets players who score over 15 points a game,hybrid,0.0,0.0,0.0,0.0,0.0,470
+24,filter,Rockets players who score over 15 points a game,rules,1.0,1.0,1.0,1.0,1.0,304
+24,filter,Rockets players who score over 15 points a game,planned,1.0,1.0,1.0,1.0,1.0,292
+25,filter,Guards on the Thunder who average 10 or more points,keyword,0.0,0.0,0.0,0.0,0.0,214
+25,filter,Guards on the Thunder who average 10 or more points,vector,0.0,0.0,0.0,0.0,0.0,452
+25,filter,Guards on the Thunder who average 10 or more points,hybrid,0.0,0.0,0.0,0.0,0.0,488
+25,filter,Guards on the Thunder who average 10 or more points,rules,1.0,1.0,1.0,1.0,1.0,335
+25,filter,Guards on the Thunder who average 10 or more points,planned,1.0,1.0,1.0,1.0,1.0,340
+26,filter,Veterans over 34 who still score at least 15 points,keyword,0.0,0.0,0.0,0.0,0.0,212
+26,filter,Veterans over 34 who still score at least 15 points,vector,0.0,0.0,0.0,0.0,0.0,452
+26,filter,Veterans over 34 who still score at least 15 points,hybrid,0.0,0.0,0.0,0.0,0.0,508
+26,filter,Veterans over 34 who still score at least 15 points,rules,1.0,1.0,1.0,1.0,1.0,311
+26,filter,Veterans over 34 who still score at least 15 points,planned,1.0,1.0,1.0,1.0,1.0,310
+27,team,Which team scored most efficiently on offense?,keyword,0.0,0.0,0.0,0.0,0.0,189
+27,team,Which team scored most efficiently on offense?,vector,0.25,0.3333333333333333,0.5,0.2960819109658652,1.0,721
+27,team,Which team scored most efficiently on offense?,hybrid,0.0,0.0,0.0,0.0,0.0,478
+27,team,Which team scored most efficiently on offense?,rules,0.5,1.0,1.0,1.0,1.0,301
+27,team,Which team scored most efficiently on offense?,planned,0.5,1.0,1.0,1.0,1.0,681
+28,team,Which teams won the most games?,keyword,0.0,0.0,0.0,0.0,0.0,182
+28,team,Which teams won the most games?,vector,0.16666666666666666,0.3333333333333333,0.25,0.20210734650054757,1.0,449
+28,team,Which teams won the most games?,hybrid,0.16666666666666666,0.3333333333333333,0.3333333333333333,0.23463936301137822,1.0,449
+28,team,Which teams won the most games?,rules,0.5,1.0,1.0,1.0,1.0,290
+28,team,Which teams won the most games?,planned,0.5,1.0,1.0,1.0,1.0,296
+29,team,Which team took the most three-pointers?,keyword,0.0,0.0,0.0,0.0,0.0,205
+29,team,Which team took the most three-pointers?,vector,0.0,0.0,0.0,0.0,0.0,469
+29,team,Which team took the most three-pointers?,hybrid,0.0,0.0,0.0,0.0,0.0,486
+29,team,Which team took the most three-pointers?,rules,0.5,1.0,1.0,1.0,1.0,291
+29,team,Which team took the most three-pointers?,planned,0.5,1.0,1.0,1.0,1.0,437
+30,team,How good was Oklahoma City on defense?,keyword,0.0,0.0,0.0,0.0,0.0,878
+30,team,How good was Oklahoma City on defense?,vector,0.16666666666666666,1.0,1.0,1.0,1.0,497
+30,team,How good was Oklahoma City on defense?,hybrid,0.0,0.0,0.0,0.0,0.0,454
+30,team,How good was Oklahoma City on defense?,rules,1.0,1.0,1.0,1.0,1.0,429
+30,team,How good was Oklahoma City on defense?,planned,1.0,1.0,1.0,1.0,1.0,443
+31,team,Which team had the worst defense?,keyword,0.3333333333333333,0.6666666666666666,1.0,0.6713860725233041,1.0,182
+31,team,Which team had the worst defense?,vector,0.0,0.0,0.0,0.0,0.0,464
+31,team,Which team had the worst defense?,hybrid,0.16666666666666666,0.3333333333333333,0.5,0.2960819109658652,1.0,854
+31,team,Which team had the worst defense?,rules,0.5,1.0,1.0,1.0,1.0,296
+31,team,Which team had the worst defense?,planned,0.5,1.0,1.0,1.0,1.0,302
+32,shooting,Where does Devin Booker take most of his shots?,keyword,0.16666666666666666,1.0,0.5,0.6309297535714575,1.0,196
+32,shooting,Where does Devin Booker take most of his shots?,vector,0.16666666666666666,1.0,1.0,1.0,1.0,456
+32,shooting,Where does Devin Booker take most of his shots?,hybrid,0.16666666666666666,1.0,1.0,1.0,1.0,442
+32,shooting,Where does Devin Booker take most of his shots?,rules,0.5,1.0,1.0,1.0,1.0,346
+32,shooting,Where does Devin Booker take most of his shots?,planned,0.5,1.0,1.0,1.0,1.0,364
+33,shooting,How well does Anthony Edwards finish at the rim?,keyword,0.16666666666666666,1.0,0.3333333333333333,0.5,1.0,203
+33,shooting,How well does Anthony Edwards finish at the rim?,vector,0.16666666666666666,1.0,1.0,1.0,1.0,471
+33,shooting,How well does Anthony Edwards finish at the rim?,hybrid,0.16666666666666666,1.0,1.0,1.0,1.0,456
+33,shooting,How well does Anthony Edwards finish at the rim?,rules,0.5,1.0,1.0,1.0,1.0,355
+33,shooting,How well does Anthony Edwards finish at the rim?,planned,0.5,1.0,1.0,1.0,1.0,355
+34,shooting,DeMar DeRozan mid-range shooting,keyword,0.16666666666666666,1.0,1.0,1.0,1.0,206
+34,shooting,DeMar DeRozan mid-range shooting,vector,0.16666666666666666,1.0,1.0,1.0,1.0,453
+34,shooting,DeMar DeRozan mid-range shooting,hybrid,0.16666666666666666,1.0,1.0,1.0,1.0,471
+34,shooting,DeMar DeRozan mid-range shooting,rules,0.5,1.0,1.0,1.0,1.0,360
+34,shooting,DeMar DeRozan mid-range shooting,planned,0.5,1.0,1.0,1.0,1.0,358
+35,matchup,Which defenders gave Luka Doncic the most trouble?,keyword,0.16666666666666666,1.0,1.0,1.0,1.0,192
+35,matchup,Which defenders gave Luka Doncic the most trouble?,vector,0.16666666666666666,1.0,1.0,1.0,1.0,788
+35,matchup,Which defenders gave Luka Doncic the most trouble?,hybrid,0.16666666666666666,1.0,1.0,1.0,1.0,509
+35,matchup,Which defenders gave Luka Doncic the most trouble?,rules,0.5,1.0,1.0,1.0,1.0,354
+35,matchup,Which defenders gave Luka Doncic the most trouble?,planned,0.5,1.0,1.0,1.0,1.0,362
+36,matchup,Who struggled to score against Dyson Daniels?,keyword,0.16666666666666666,1.0,1.0,1.0,1.0,181
+36,matchup,Who struggled to score against Dyson Daniels?,vector,0.16666666666666666,1.0,1.0,1.0,1.0,449
+36,matchup,Who struggled to score against Dyson Daniels?,hybrid,0.16666666666666666,1.0,1.0,1.0,1.0,432
+36,matchup,Who struggled to score against Dyson Daniels?,rules,0.5,1.0,1.0,1.0,1.0,358
+36,matchup,Who struggled to score against Dyson Daniels?,planned,0.5,1.0,1.0,1.0,1.0,363
+37,pairs,Which Nuggets players have the best chemistry on the court?,keyword,0.0,0.0,0.0,0.0,0.0,206
+37,pairs,Which Nuggets players have the best chemistry on the court?,vector,0.16666666666666666,1.0,1.0,1.0,1.0,565
+37,pairs,Which Nuggets players have the best chemistry on the court?,hybrid,0.16666666666666666,1.0,1.0,1.0,1.0,461
+37,pairs,Which Nuggets players have the best chemistry on the court?,rules,1.0,1.0,1.0,1.0,1.0,446
+37,pairs,Which Nuggets players have the best chemistry on the court?,planned,1.0,1.0,1.0,1.0,1.0,432
+38,pairs,Best two-man combination for the Cavaliers,keyword,0.16666666666666666,1.0,1.0,1.0,1.0,201
+38,pairs,Best two-man combination for the Cavaliers,vector,0.16666666666666666,1.0,1.0,1.0,1.0,486
+38,pairs,Best two-man combination for the Cavaliers,hybrid,0.16666666666666666,1.0,1.0,1.0,1.0,464
+38,pairs,Best two-man combination for the Cavaliers,rules,1.0,1.0,1.0,1.0,1.0,445
+38,pairs,Best two-man combination for the Cavaliers,planned,1.0,1.0,1.0,1.0,1.0,428
+39,form,How did Cade Cunningham finish the season?,keyword,0.16666666666666666,1.0,0.3333333333333333,0.5,1.0,195
+39,form,How did Cade Cunningham finish the season?,vector,0.16666666666666666,1.0,1.0,1.0,1.0,475
+39,form,How did Cade Cunningham finish the season?,hybrid,0.16666666666666666,1.0,1.0,1.0,1.0,1003
+39,form,How did Cade Cunningham finish the season?,rules,0.5,1.0,1.0,1.0,1.0,363
+39,form,How did Cade Cunningham finish the season?,planned,0.5,1.0,1.0,1.0,1.0,368
+40,form,Was Jalen Green in good form over his last games?,keyword,0.16666666666666666,1.0,1.0,1.0,1.0,202
+40,form,Was Jalen Green in good form over his last games?,vector,0.16666666666666666,1.0,1.0,1.0,1.0,450
+40,form,Was Jalen Green in good form over his last games?,hybrid,0.16666666666666666,1.0,1.0,1.0,1.0,461
+40,form,Was Jalen Green in good form over his last games?,rules,0.5,1.0,1.0,1.0,1.0,353
+40,form,Was Jalen Green in good form over his last games?,planned,0.5,1.0,1.0,1.0,1.0,348
+41,game,Results of Knicks against 76ers games,keyword,0.6666666666666666,1.0,1.0,1.0,1.0,181
+41,game,Results of Knicks against 76ers games,vector,0.6666666666666666,1.0,1.0,1.0,1.0,684
+41,game,Results of Knicks against 76ers games,hybrid,0.6666666666666666,1.0,1.0,1.0,1.0,454
+41,game,Results of Knicks against 76ers games,rules,1.0,1.0,1.0,1.0,1.0,422
+41,game,Results of Knicks against 76ers games,planned,1.0,1.0,1.0,1.0,1.0,428
+42,game,Did the Bucks beat the Pacers?,keyword,0.6666666666666666,1.0,1.0,1.0,1.0,179
+42,game,Did the Bucks beat the Pacers?,vector,0.6666666666666666,1.0,1.0,0.9828920819566879,1.0,450
+42,game,Did the Bucks beat the Pacers?,hybrid,0.6666666666666666,1.0,1.0,1.0,1.0,452
+42,game,Did the Bucks beat the Pacers?,rules,1.0,1.0,1.0,1.0,1.0,437
+42,game,Did the Bucks beat the Pacers?,planned,1.0,1.0,1.0,1.0,1.0,431
+43,lookup,What position does Alperen Sengun play?,keyword,0.16666666666666666,1.0,0.5,0.6309297535714575,1.0,191
+43,lookup,What position does Alperen Sengun play?,vector,0.0,0.0,0.0,0.0,0.0,767
+43,lookup,What position does Alperen Sengun play?,hybrid,0.16666666666666666,1.0,0.25,0.43067655807339306,1.0,508
+43,lookup,What position does Alperen Sengun play?,rules,1.0,1.0,1.0,1.0,1.0,285
+43,lookup,What position does Alperen Sengun play?,planned,1.0,1.0,1.0,1.0,1.0,288
+44,lookup,Free throw percentage of Shai Gilgeous-Alexander,keyword,0.16666666666666666,1.0,0.5,0.6309297535714575,1.0,184
+44,lookup,Free throw percentage of Shai Gilgeous-Alexander,vector,0.0,0.0,0.0,0.0,0.0,433
+44,lookup,Free throw percentage of Shai Gilgeous-Alexander,hybrid,0.16666666666666666,1.0,0.2,0.38685280723454163,1.0,495
+44,lookup,Free throw percentage of Shai Gilgeous-Alexander,rules,1.0,1.0,1.0,1.0,1.0,282
+44,lookup,Free throw percentage of Shai Gilgeous-Alexander,planned,1.0,1.0,1.0,1.0,1.0,289
+45,lookup,Compare Jokic and Embiid,keyword,0.0,0.0,0.0,0.0,0.0,187
+45,lookup,Compare Jokic and Embiid,vector,0.3333333333333333,1.0,0.5,0.6509209298071326,1.0,1406
+45,lookup,Compare Jokic and Embiid,hybrid,0.3333333333333333,1.0,0.25,0.5012658353418871,1.0,540
+45,lookup,Compare Jokic and Embiid,rules,1.0,1.0,1.0,1.0,1.0,325
+45,lookup,Compare Jokic and Embiid,planned,1.0,1.0,1.0,1.0,1.0,296
+46,paraphrase,Who creates the most open looks for his teammates?,keyword,0.0,0.0,0.0,0.0,0.0,205
+46,paraphrase,Who creates the most open looks for his teammates?,vector,0.0,0.0,0.0,0.0,0.0,477
+46,paraphrase,Who creates the most open looks for his teammates?,hybrid,0.0,0.0,0.0,0.0,0.0,474
+46,paraphrase,Who creates the most open looks for his teammates?,rules,0.0,0.0,0.0,0.0,0.0,467
+46,paraphrase,Who creates the most open looks for his teammates?,planned,1.0,1.0,1.0,1.0,1.0,325
+47,paraphrase,Guys who clean the glass,keyword,0.0,0.0,0.0,0.0,0.0,211
+47,paraphrase,Guys who clean the glass,vector,0.0,0.0,0.0,0.0,0.0,507
+47,paraphrase,Guys who clean the glass,hybrid,0.0,0.0,0.0,0.0,0.0,474
+47,paraphrase,Guys who clean the glass,rules,0.0,0.0,0.0,0.0,0.0,471
+47,paraphrase,Guys who clean the glass,planned,0.0,0.0,0.0,0.0,0.0,471
+48,paraphrase,Who puts the ball in the basket more than anyone?,keyword,0.0,0.0,0.0,0.0,0.0,220
+48,paraphrase,Who puts the ball in the basket more than anyone?,vector,0.0,0.0,0.0,0.0,0.0,467
+48,paraphrase,Who puts the ball in the basket more than anyone?,hybrid,0.0,0.0,0.0,0.0,0.0,474
+48,paraphrase,Who puts the ball in the basket more than anyone?,rules,0.0,0.0,0.0,0.0,0.0,469
+48,paraphrase,Who puts the ball in the basket more than anyone?,planned,0.0,0.0,0.0,0.0,0.0,476
+49,paraphrase,Pickpockets who jump into passing lanes,keyword,0.0,0.0,0.0,0.0,0.0,243
+49,paraphrase,Pickpockets who jump into passing lanes,vector,0.0,0.0,0.0,0.0,0.0,485
+49,paraphrase,Pickpockets who jump into passing lanes,hybrid,0.0,0.0,0.0,0.0,0.0,474
+49,paraphrase,Pickpockets who jump into passing lanes,rules,0.16666666666666666,0.16666666666666666,0.5,0.1909208661789347,1.0,300
+49,paraphrase,Pickpockets who jump into passing lanes,planned,0.16666666666666666,0.16666666666666666,0.5,0.1909208661789347,1.0,434

@@ -1,3 +1,5 @@
+from threading import Thread
+
 from fastapi import FastAPI
 from sqlalchemy import text
 
@@ -8,7 +10,9 @@ from app.api.routes.team_routes import router as team_router
 from app.api.routes.rag_routes import router as rag_router
 from app.api.routes.game_routes import router as game_router
 from app.api.routes.user_routes import router as user_router
-from app.db import engine
+from app.db import SessionLocal, engine
+from app.services.league_data import warm
+from app.services.query_embedding_service import warm_up
 
 app = FastAPI(title="Basketball Analytics API")
 
@@ -30,3 +34,15 @@ def health_check():
 def startup_check_db():
     with engine.connect() as connection:
         connection.execute(text("SELECT 1"))
+
+
+def prepare():
+    warm_up()
+    with SessionLocal() as db:
+        warm(db)
+
+
+@app.on_event("startup")
+def load_in_background():
+    # The embedding model and the season tables take up to a minute; the API answers meanwhile.
+    Thread(target=prepare, daemon=True).start()

@@ -51,7 +51,7 @@ _SQL = text(
         group by player_id, season
     )
     select s.player_id, p.full_name, p.is_active, s.season, s.games_played,
-           pp.age, pp.position, t.full_name as team_name,
+           coalesce(adv.season_age, pp.age) as age, pp.position, t.full_name as team_name,
            s.minutes, s.points, s.rebounds, s.assists, s.steals, s.blocks, s.turnovers,
            s.field_goal_pct, s.three_point_pct, s.free_throw_pct,
            a.three_point_attempts, a.free_throw_attempts, a.tpm, a.tpa, a.ftm, a.fta
@@ -59,6 +59,7 @@ _SQL = text(
     join players p on p.id = s.player_id
     left join player_profiles pp on pp.player_id = s.player_id
     left join teams t on t.id = s.team_id
+    left join player_advanced_stats adv on adv.player_id = s.player_id and adv.season = s.season
     left join attempts a on a.player_id = s.player_id and a.season = s.season
     where s.season = :season
     """
@@ -75,7 +76,7 @@ class SeasonVectors:
 
     def traits(self, player_id: int) -> list[str]:
         i = self.index[player_id]
-        if not _qualifies(self.rows[i]):
+        if not qualifies(self.rows[i]):
             return []
         ranked = sorted(
             ((self.z[i][j], name) for j, name in enumerate(FEATURES) if name in TRAITS),
@@ -94,7 +95,7 @@ class SeasonVectors:
         """
         block = self.raw[:, [FEATURES.index(name) for name in features]]
         score = 0.5 * block.mean(axis=1) + 0.5 * block.min(axis=1)
-        order = [i for i in np.argsort(-score, kind="stable") if _qualifies(self.rows[i])]
+        order = [i for i in np.argsort(-score, kind="stable") if qualifies(self.rows[i])]
         return [(self.rows[i], 1 - rank / len(order)) for rank, i in enumerate(order)]
 
     def neighbours(self, player_id: int) -> list[tuple[dict, float]]:
@@ -105,11 +106,11 @@ class SeasonVectors:
         return [
             (self.rows[j], math.exp(-float(distance[j]) ** 2 / 2))
             for j in order
-            if j != i and _qualifies(self.rows[j])
+            if j != i and qualifies(self.rows[j])
         ]
 
 
-def _qualifies(row: dict) -> bool:
+def qualifies(row: dict) -> bool:
     return (row["games_played"] or 0) >= MIN_GAMES and (row["minutes"] or 0) >= MIN_MINUTES
 
 
@@ -142,7 +143,7 @@ def load_season(connection, season: str | None = None) -> SeasonVectors | None:
         row["free_throw_shrunk"] = (float(row["ftm"] or 0) + FREE_THROW_PRIOR * league_free) / (float(row["fta"] or 0) + FREE_THROW_PRIOR)
 
     matrix = np.array([[float(row[name] or 0) for name in FEATURES] for row in rows])
-    pool = np.array([_qualifies(row) for row in rows])
+    pool = np.array([qualifies(row) for row in rows])
     reference = matrix[pool] if pool.sum() >= 2 else matrix
     spread = reference.std(axis=0)
     raw = (matrix - reference.mean(axis=0)) / np.where(spread == 0, 1, spread)
@@ -171,5 +172,5 @@ def describe(vectors: SeasonVectors, player_id: int) -> str:
     if traits:
         sentences.append(f"Strengths: {', '.join(traits)}.")
     if row["age"] is not None:
-        sentences.append(f"Current age on record: {row['age']}.")
+        sentences.append(f"Age that season: {row['age']}.")
     return " ".join(sentences)

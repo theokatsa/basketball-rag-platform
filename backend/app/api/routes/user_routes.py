@@ -1,5 +1,6 @@
 import time
 from collections import defaultdict, deque
+from typing import Literal
 
 from fastapi import APIRouter, Cookie, Depends, HTTPException, Query, Request, Response
 from pydantic import BaseModel, Field, field_validator
@@ -7,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.core.config import COOKIE_SECURE
 from app.db import get_db
-from app.services import user_service
+from app.services import audience_service, user_service
 
 router = APIRouter()
 COOKIE = "scouting_session"
@@ -155,4 +156,25 @@ def remove_account(payload: Password, response: Response, user=Depends(required_
 
 @router.get("/players/{player_id}/also-viewed")
 def players_also_viewed(player_id: int, limit: int = Query(6, ge=1, le=12), db: Session = Depends(get_db)):
-    return user_service.also_viewed(db, player_id, limit)
+    # The learned list; before the first training, the direct counts.
+    return audience_service.also_viewed(db, player_id, limit) or user_service.also_viewed(db, player_id, limit)
+
+
+@router.get("/players/{player_id}/audience")
+def player_audience(player_id: int, db: Session = Depends(get_db)):
+    return audience_service.player_audience(db, player_id)
+
+
+@router.get("/audience/players")
+def audience_players(
+    view: Literal["most", "trending", "gems"] = "most", days: int = Query(0, ge=0, le=365), position: str | None = Query(None, pattern="^(Guard|Forward|Center)$"),
+    limit: int = Query(10, ge=1, le=50), db: Session = Depends(get_db),
+):
+    """days 0: since the beginning."""
+    if view == "trending":
+        items = audience_service.trending(db, position, limit)
+    elif view == "gems":
+        items = audience_service.hidden_gems(db, position, limit)
+    else:
+        items = audience_service.most_viewed(db, days or None, position, limit)
+    return {"items": items, **audience_service.info(db)}

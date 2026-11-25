@@ -13,7 +13,7 @@ router = APIRouter()
 @router.post("/ask", response_model=AskResponse)
 def ask(payload: AskRequest, db: Session = Depends(get_db)):
     try:
-        return answer_question(db, payload.question, payload.season, payload.limit)
+        return answer_question(db, payload.question, payload.season, payload.limit, payload.previous)
     except LLMError as exc:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc)

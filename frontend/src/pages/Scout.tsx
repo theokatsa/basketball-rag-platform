@@ -8,9 +8,12 @@ import { POSITIONS } from '../stats';
 import type { SimilarPlayerResult } from '../types';
 import { usePersisted } from '../usePersisted';
 
-type Source = { player_id: number; full_name: string; season: string; source_text: string; similarity: number };
-type Answer = { answer: string; provider: string; model: string; sources: Source[] };
-const EXAMPLES = ['Which young players have a playing style similar to Giannis?', 'Who are the best rim protectors?', 'Find high-volume three-point shooters who pass well', 'Compare Jokic and Embiid'];
+type Source = { ref: number; kind: string; title: string; player_id: number | null; full_name: string; season: string; source_text: string; similarity: number | null };
+type Checks = { numbers: number; unsupported_numbers: string[]; invalid_citations: number[]; grounded: boolean };
+type Table = { columns: string[]; rows: (string | number)[][] };
+type Answer = { options: string[]; understood: string; table: Table | null; answer: string; provider: string; model: string; sources: Source[]; plan: string[]; intent: string; checks: Checks | null; retrieval_ms: number; generation_ms: number };
+const EXAMPLES = ['How many 30-point games did LeBron have?', 'Best corner three shooters', 'Which team had the best defense?', 'Who guards Stephen Curry best?', 'Players like Giannis under 25', 'Who should the Lakers sign?'];
+const FOLLOW_UPS = ['And at home?', 'What about Jokic?', 'And against the Celtics?'];
 
 async function post<T>(path: string, body: unknown): Promise<T> {
   const response = await fetch(`/api${path}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
@@ -24,13 +27,13 @@ async function post<T>(path: string, body: unknown): Promise<T> {
 function Ask() {
   const { byId } = useApp();
   const [question, setQuestion] = usePersisted('ask-q', '');
-  const [result, setResult] = usePersisted<Answer | null>('ask-a', null);
+  const [result, setResult] = usePersisted<Answer | null>('ask-answer-2', null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const ask = async (q: string) => {
+  const ask = async (q: string, previous: string | null = result?.understood || null) => {
     if (q.trim().length < 3 || busy) return;
     setBusy(true); setError(null); setResult(null);
-    try { setResult(await post<Answer>('/ask', { question: q.trim(), season: null, limit: 6 })); }
+    try { setResult(await post<Answer>('/ask', { question: q.trim(), season: null, limit: 6, previous })); }
     catch (err) { setError(err instanceof Error ? err.message : 'The question could not be answered.'); }
     finally { setBusy(false); }
   };
@@ -40,19 +43,28 @@ function Ask() {
         <textarea className="control-input rag-question" aria-label="Your question" rows={3} maxLength={1000} value={question} onChange={(e) => setQuestion(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void ask(question); } }} placeholder="Ask about styles, strengths or comparisons" />
         <button type="submit" className="submit-button" disabled={busy || question.trim().length < 3}>{busy ? 'Searching…' : 'Ask'}</button>
       </form>
-      <div className="preset-row examples">{EXAMPLES.map((q) => <button type="button" className="chip" key={q} disabled={busy} onClick={() => { setQuestion(q); void ask(q); }}>{q}</button>)}</div>
+      <div className="preset-row examples">{EXAMPLES.map((q) => <button type="button" className="chip" key={q} disabled={busy} onClick={() => { setQuestion(q); void ask(q, null); }}>{q}</button>)}</div>
       {busy && <div className="skeleton-block" aria-busy="true"><span className="skeleton" style={{ height: '9rem' }} /></div>}
       {error && <p className="status error" role="alert">{error}</p>}
       {result && (
         <div className="rag-output" aria-live="polite">
-          {result.answer ? <p className="rag-answer">{result.answer}</p> : <p className="rag-note">No language model is connected, so there is no written answer. These are the players the search found. Set OPENROUTER_API_KEY in backend/.env to turn written answers on.</p>}
+          {result.understood && result.understood !== question.trim() && <p className="count-label">Understood as: {result.understood}</p>}
+          <p className="rag-answer">{result.answer}</p>
+          {result.options?.length > 0 && <div className="preset-row examples" aria-label="Possible meanings">{result.options.map((q) => <button type="button" className="chip" key={q} disabled={busy} onClick={() => { setQuestion(q); void ask(q, null); }}>{q}</button>)}</div>}
+          {result.table && result.table.rows.length > 1 && <div className="detail-records-scroll open"><table className="detail-records-table roster-table"><thead><tr>{result.table.columns.map((c) => <th scope="col" key={c}>{c}</th>)}</tr></thead><tbody>{result.table.rows.map((r, i) => <tr key={i}>{r.map((v, j) => <td key={j}>{v}</td>)}</tr>)}</tbody></table></div>}
+          {result.provider === 'calculated' && <div className="preset-row examples" aria-label="Follow-up questions">{FOLLOW_UPS.map((q) => <button type="button" className="chip" key={q} disabled={busy} onClick={() => { setQuestion(q); void ask(q); }}>{q}</button>)}</div>}
+          {result.provider === 'extractive' && <p className="rag-note">No language model is connected, so this answer quotes the sources directly. Set OPENROUTER_API_KEY in .env to turn written answers on.</p>}
+          {result.plan.length > 0 && <div><h3>How the question was read</h3><p className="trait-list">{result.plan.map((step) => <span key={step}>{step}</span>)}</p></div>}
+          {result.checks && result.provider !== 'extractive' && result.provider !== 'calculated' && (result.checks.grounded
+            ? <p className="status">All {result.checks.numbers} numbers in the answer appear in the sources.</p>
+            : <p className="status error">Check this answer: {[result.checks.unsupported_numbers.length > 0 && `not found in the sources: ${result.checks.unsupported_numbers.join(', ')}`, result.checks.invalid_citations.length > 0 && `cites missing sources: ${result.checks.invalid_citations.join(', ')}`].filter(Boolean).join('; ')}.</p>)}
           <div className="section-head"><h2>Evidence</h2>{result.model && <span className="provider-badge">{result.model}</span>}</div>
           <div className="evidence-grid">
             {result.sources.map((s) => {
-              const p = byId.get(s.player_id);
-              return <article className="evidence-card" key={s.player_id}><div className="result-head">{p ? <><PlayerCell player={p} /><RowActions player={p} /></> : <b>{s.full_name}</b>}</div><p>{s.source_text}</p></article>;
+              const p = s.player_id != null ? byId.get(s.player_id) : undefined;
+              return <article className="evidence-card" key={s.ref}><div className="result-head">{p ? <><PlayerCell player={p} /><RowActions player={p} /></> : <b>{s.title}</b>}</div><small>[{s.ref}] {p ? s.title : (s.kind === 'computed' ? 'calculated from the tables' : s.kind.replace('_', ' '))}</small><p>{s.source_text}</p></article>;
             })}
-            {!result.sources.length && <p className="status">Nothing in the database matched this question.</p>}
+            {!result.sources.length && !result.options?.length && <p className="status">Nothing in the database matched this question.</p>}
           </div>
         </div>
       )}
@@ -122,7 +134,7 @@ function Similar() {
           </ol>
         )}
         {results && !results.length && <div className="empty-state"><p>No players match these filters.</p><small>Widen the age range or position.</small></div>}
-        {!results && !error && <div className="empty-state"><p>Choose a player to start.</p><small>Matches compare twelve stats covering volume, shooting and defence, each scaled against the league.</small></div>}
+        {!results && !error && <div className="empty-state"><p>Choose a player to start.</p><small>Matches compare 42 numbers covering role, shot selection, touch, passing, rebounding and defense.</small></div>}
       </section>
     </div>
   );

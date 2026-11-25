@@ -13,3 +13,6 @@ frontend/vite.config.d.ts
 
 OllamaSetup*.exe
 install-ollama.ps1
+
+backend/models/basketball-minilm/
+backend/models/checkpoint.pt

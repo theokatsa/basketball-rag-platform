@@ -1,0 +1,807 @@
+[
+ {
+  "id": 41,
+  "page": "player",
+  "text": "What is Donovan Mitchell's scoring average?",
+  "ok": true,
+  "expected": [
+   "24.0"
+  ],
+  "answer": "Donovan Mitchell is a guard who played 71 games for the Cleveland Cavaliers in 2024-25. Averages: 31.4 minutes, 24.0 points, 4.5 rebounds, 5.0 assists, 1.3 steals, 0.2 blocks and 2.1 turnovers. [1]",
+  "provider": "extractive",
+  "ms": 239
+ },
+ {
+  "id": 42,
+  "page": "player",
+  "text": "How many times did Kevin Durant score 35 or more?",
+  "ok": false,
+  "expected": [
+   "9"
+  ],
+  "answer": "Kevin Durant is a forward who played 62 games for the Phoenix Suns in 2024-25. Strengths: high-volume scorer, draws many fouls, accurate three-point shooter, rim protector. [1]",
+  "provider": "extractive",
+  "ms": 233
+ },
+ {
+  "id": 43,
+  "page": "player",
+  "text": "Most assists in a game by Tyrese Haliburton",
+  "ok": false,
+  "expected": [
+   "18"
+  ],
+  "answer": "Tyrese Haliburton is a guard who played 73 games for the Indiana Pacers in 2024-25. Averages: 33.6 minutes, 18.6 points, 3.5 rebounds, 9.2 assists, 1.4 steals, 0.7 blocks and 1.6 turnovers. [1]",
+  "provider": "extractive",
+  "ms": 237
+ },
+ {
+  "id": 44,
+  "page": "player",
+  "text": "How did Paolo Banchero shoot from three?",
+  "ok": true,
+  "expected": [
+   "32.0"
+  ],
+  "answer": "Paolo Banchero is a forward who played 46 games for the Orlando Magic in 2024-25. Shooting: 45.2% from the field, 32.0% from three on 5.9 attempts, 72.7% on free throws. [1]",
+  "provider": "extractive",
+  "ms": 250
+ },
+ {
+  "id": 45,
+  "page": "player",
+  "text": "How many minutes does Mikal Bridges play per game?",
+  "ok": false,
+  "expected": [
+   "37.1"
+  ],
+  "answer": "Mikal Bridges is a guard-forward who played 82 games for the New York Knicks in 2024-25. Averages: 37.0 minutes, 17.6 points, 3.2 rebounds, 3.7 assists, 0.9 steals, 0.5 blocks and 1.6 turnovers. [1]",
+  "provider": "extractive",
+  "ms": 240
+ },
+ {
+  "id": 46,
+  "page": "player",
+  "text": "Total rebounds of Domantas Sabonis this season",
+  "ok": false,
+  "expected": [
+   "972"
+  ],
+  "answer": "Domantas Sabonis is a forward-center who played 70 games for the Sacramento Kings in 2024-25. Averages: 34.7 minutes, 19.1 points, 13.9 rebounds, 6.0 assists, 0.7 steals, 0.4 blocks and 2.9 turnovers. [1]",
+  "provider": "extractive",
+  "ms": 232
+ },
+ {
+  "id": 47,
+  "page": "player",
+  "text": "How many points did Shai Gilgeous-Alexander average on the road?",
+  "ok": false,
+  "expected": [
+   "31.9"
+  ],
+  "answer": "Shai Gilgeous-Alexander is a guard who played 76 games for the Oklahoma City Thunder in 2024-25. Averages: 34.2 minutes, 32.7 points, 5.0 rebounds, 6.4 assists, 1.7 steals, 1.0 blocks and 2.4 turnovers. [1]",
+  "provider": "extractive",
+  "ms": 244
+ },
+ {
+  "id": 48,
+  "page": "player",
+  "text": "Damian Lillard's scoring in February",
+  "ok": false,
+  "expected": [
+   "25.8"
+  ],
+  "answer": "Damian Lillard is a guard who played 58 games for the Milwaukee Bucks in 2024-25. Averages: 36.1 minutes, 24.9 points, 4.7 rebounds, 7.1 assists, 1.2 steals, 0.2 blocks and 2.8 turnovers. [1]",
+  "provider": "extractive",
+  "ms": 238
+ },
+ {
+  "id": 49,
+  "page": "player",
+  "text": "What does Anthony Davis average in rebounds when his team wins?",
+  "ok": false,
+  "expected": [
+   "12.3"
+  ],
+  "answer": "Anthony Davis is a forward-center who played 51 games for the Dallas Mavericks in 2024-25. Averages: 33.4 minutes, 24.7 points, 11.6 rebounds, 3.5 assists, 1.2 steals, 2.2 blocks and 2.2 turnovers. [1]",
+  "provider": "extractive",
+  "ms": 237
+ },
+ {
+  "id": 50,
+  "page": "player",
+  "text": "How many games did Ja Morant play?",
+  "ok": true,
+  "expected": [
+   "50"
+  ],
+  "answer": "Ja Morant is a guard who played 50 games for the Memphis Grizzlies in 2024-25. Strengths: primary playmaker, draws many fouls, high-volume scorer, disruptive perimeter defender. [1]",
+  "provider": "extractive",
+  "ms": 236
+ },
+ {
+  "id": 51,
+  "page": "player",
+  "text": "What is Evan Mobley's defensive rating?",
+  "ok": true,
+  "expected": [
+   "108.6"
+  ],
+  "answer": "Evan Mobley is a center who played 71 games for the Cleveland Cavaliers in 2024-25. Advanced: 22.6% usage, 63.3% true shooting, assisted 14.9% of teammates' baskets, offensive rating 120.5, defensive rating 108.6, net rating +11.9. [1]",
+  "provider": "extractive",
+  "ms": 243
+ },
+ {
+  "id": 52,
+  "page": "player",
+  "text": "How old is Scottie Barnes?",
+  "ok": false,
+  "expected": [
+   "23"
+  ],
+  "answer": "Scottie Barnes is a forward-guard who played 65 games for the Toronto Raptors in 2024-25. Averages: 32.8 minutes, 19.3 points, 7.7 rebounds, 5.8 assists, 1.4 steals, 1.0 blocks and 2.8 turnovers. [1]",
+  "provider": "extractive",
+  "ms": 267
+ },
+ {
+  "id": 53,
+  "page": "player",
+  "text": "How much does Zion Williamson weigh?",
+  "ok": false,
+  "expected": [
+   "284"
+  ],
+  "answer": "Zion Williamson is a forward who played 30 games for the New Orleans Pelicans in 2024-25. Averages: 28.6 minutes, 24.6 points, 7.2 rebounds, 5.3 assists, 1.2 steals, 0.9 blocks and 3.0 turnovers. [1]",
+  "provider": "extractive",
+  "ms": 242
+ },
+ {
+  "id": 54,
+  "page": "player",
+  "text": "Franz Wagner points per game against Boston",
+  "ok": false,
+  "expected": [
+   "23.0"
+  ],
+  "answer": "Franz Wagner is a forward who played 60 games for the Orlando Magic in 2024-25. Averages: 33.7 minutes, 24.2 points, 5.7 rebounds, 4.7 assists, 1.3 steals, 0.4 blocks and 2.3 turnovers. [1]",
+  "provider": "extractive",
+  "ms": 255
+ },
+ {
+  "id": 55,
+  "page": "player",
+  "text": "How many double-doubles did Karl-Anthony Towns record?",
+  "ok": false,
+  "expected": [
+   "58"
+  ],
+  "answer": "Karl-Anthony Towns is a center-forward who played 72 games for the New York Knicks in 2024-25. Strengths: strong rebounder, high-volume scorer, draws many fouls, accurate three-point shooter. [1]",
+  "provider": "extractive",
+  "ms": 518
+ },
+ {
+  "id": 56,
+  "page": "player",
+  "text": "Bam Adebayo average points over the last 15 games",
+  "ok": false,
+  "expected": [
+   "19.9"
+  ],
+  "answer": "Form at the end of the season: in the last 10 games of 2024-25 Bam Adebayo averaged 21.3 points (before: 17.6), 8.3 rebounds (before: 9.8), 4.0 assists (before: 4.4), 1.3 steals (before: 1.2), 0.5 blocks (before: 0.7), 1.5 turnovers (before: 2.1), 32.8 minutes (before: 34.6), shooting 58.1% true shooting (before: 55.7%) and 55.3% from three (before: 31.7%). Overall this was close to the usual level. [1]\nBam Adebayo is a center-forward who played 78 games for the Miami Heat in 2024-25. Averages: 34.3 minutes, 18.1 points, 9.6 rebounds, 4.3 assists, 1.3 steals, 0.7 blocks and 2.1 turnovers. [2]",
+  "provider": "extractive",
+  "ms": 300
+ },
+ {
+  "id": 57,
+  "page": "player",
+  "text": "What is Jimmy Butler's plus-minus per game?",
+  "ok": false,
+  "expected": [
+   "4.5"
+  ],
+  "answer": "Jimmy Butler III is a forward who played 55 games for the Golden State Warriors in 2024-25. Averages: 31.7 minutes, 17.5 points, 5.4 rebounds, 5.4 assists, 1.4 steals, 0.3 blocks and 1.3 turnovers. [1]",
+  "provider": "extractive",
+  "ms": 230
+ },
+ {
+  "id": 58,
+  "page": "player",
+  "text": "Where does Cade Cunningham rank in assists per game?",
+  "ok": true,
+  "expected": [
+   "4"
+  ],
+  "answer": "Cade Cunningham took 1453 tracked shots in 2024-25, most often in the paint outside the restricted area (33.2% of them). Shooting by zone: 241 of 483 (49.9%, league 44.5%) in the paint outside the restricted area; 142 of 394 (36.0%, league 35.4%) on above-the-break threes; 207 of 364 (56.9%, league 66.4%) at the rim (restricted area); 86 of 191 (45.0%, league 41.7%) from mid-range; 4 of 12 (33.3%, league 38.7%) on left corner threes. [1]\nCade Cunningham is a guard who played 70 games for the Detroit Pistons in 2024-25. Averages: 35.0 minutes, 26.1 points, 6.1 rebounds, 9.1 assists, 1.0 steals, 0.8 blocks and 4.4 turnovers. [2]",
+  "provider": "extractive",
+  "ms": 298
+ },
+ {
+  "id": 59,
+  "page": "top",
+  "text": "Who grabbed the most offensive rebounds per game?",
+  "ok": false,
+  "expected": [
+   "Walker Kessler"
+  ],
+  "answer": "In order: Domantas Sabonis [1], Karl-Anthony Towns [2], Nikola Jokić [3], Ivica Zubac [4], Walker Kessler [5], Giannis Antetokounmpo [6].",
+  "provider": "extractive",
+  "ms": 316
+ },
+ {
+  "id": 60,
+  "page": "top",
+  "text": "Best free throw shooter in the league",
+  "ok": true,
+  "expected": [
+   "Stephen Curry"
+  ],
+  "answer": "In order: Stephen Curry [1], Damian Lillard [2], Kyrie Irving [3], Shai Gilgeous-Alexander [4], Coby White [5], Chris Paul [6].",
+  "provider": "extractive",
+  "ms": 324
+ },
+ {
+  "id": 61,
+  "page": "top",
+  "text": "Who commits the most fouls per game?",
+  "ok": false,
+  "expected": [
+   "Jaren Jackson Jr."
+  ],
+  "answer": "In order: Stephen Curry [1], Damian Lillard [2], Kyrie Irving [3], Shai Gilgeous-Alexander [4], Coby White [5], Chris Paul [6].",
+  "provider": "extractive",
+  "ms": 301
+ },
+ {
+  "id": 62,
+  "page": "top",
+  "text": "Which player has the highest usage rate?",
+  "ok": false,
+  "expected": [
+   "Giannis Antetokounmpo"
+  ],
+  "answer": "Guerschon Yabusele is a forward who played 70 games for the Philadelphia 76ers in 2024-25. Advanced: 16.3% usage, 61.6% true shooting, assisted 11.4% of teammates' baskets, offensive rating 113.5, defensive rating 116.7, net rating -3.2. [1]\nJonathan Mogbo is a forward who played 63 games for the Toronto Raptors in 2024-25. Advanced: 14.5% usage, 49.6% true shooting, assisted 16.0% of teammates' baskets, offensive rating 103.7, defensive rating 111.9, net rating -8.2. [2]\nJett Howard is a guard who played 60 games for the Orlando Magic in 2024-25. Advanced: 18.1% usage, 49.1% true shooting, assisted 10.2% of teammates' baskets, offensive rating 103.0, defensive rating 108.7, net rating -5.7. [3]",
+  "provider": "extractive",
+  "ms": 769
+ },
+ {
+  "id": 63,
+  "page": "top",
+  "text": "Highest net rating in the league",
+  "ok": false,
+  "expected": [
+   "Jaylin Williams"
+  ],
+  "answer": "Nic Claxton is a center who played 70 games for the Brooklyn Nets in 2024-25. Advanced: 16.6% usage, 56.9% true shooting, assisted 14.0% of teammates' baskets, offensive rating 103.6, defensive rating 116.2, net rating -12.6. [1]\nJosh Green took 420 tracked shots in 2024-25, most often on above-the-break threes (22.4% of them). Shooting by zone: 34 of 94 (36.2%, league 35.4%) on above-the-break threes; 53 of 88 (60.2%, league 66.4%) at the rim (restricted area); 31 of 77 (40.3%, league 39.1%) on right corner threes; 32 of 76 (42.1%, league 38.7%) on left corner threes; 18 of 52 (34.6%, league 44.5%) in the paint outside the restricted area; 12 of 33 (36.4%, league 41.7%) from mid-range. [2]\nTyrese Maxey is a guard who played 52 games for the Philadelphia 76ers in 2024-25. Advanced: 29.3% usage, 56.2% true shooting, assisted 27.6% of teammates' baskets, offensive rating 113.8, defensive rating 117.4, net rating -3.5. [3]",
+  "provider": "extractive",
+  "ms": 508
+ },
+ {
+  "id": 64,
+  "page": "top",
+  "text": "Who had the most rebounds in one game?",
+  "ok": true,
+  "expected": [
+   "Domantas Sabonis"
+  ],
+  "answer": "In order: Domantas Sabonis [1], Karl-Anthony Towns [2], Nikola Jokić [3], Ivica Zubac [4], Walker Kessler [5], Giannis Antetokounmpo [6].",
+  "provider": "extractive",
+  "ms": 315
+ },
+ {
+  "id": 65,
+  "page": "top",
+  "text": "Who played the most total minutes?",
+  "ok": false,
+  "expected": [
+   "Mikal Bridges"
+  ],
+  "answer": "Two-man combinations of the Philadelphia 76ers in 2024-25 with at least 200 shared minutes. Best duos and chemistry on the court by net rating: KJ Martin and Tyrese Maxey (+7.7 points per 100 possessions in 301 minutes together); Justin Edwards and Paul George (+3.2 points per 100 possessions in 209 minutes together); Kyle Lowry and Guerschon Yabusele (+3.0 points per 100 possessions in 279 minutes together); KJ Martin and Kelly Oubre Jr. (+2.9 points per 100 possessions in 266 minutes together); KJ Martin and Jared McCain (+2.3 points per 100 possessions in 215 minutes together). [1]\nTwo-man combinations of the Orlando Magic in 2024-25 with at least 200 shared minutes. Best duos and chemistry on the court by net rating: Gary Harris and Franz Wagner (+25.2 points per 100 possessions in 254 minutes together); Goga Bitadze and Wendell Carter Jr. (+17.1 points per 100 possessions in 217 minutes together); Anthony Black and Gary Harris (+15.5 points per 100 possessions in 436 minutes together); Cory Joseph and Franz Wagner (+13.1 points per 100 possessions in 304 minutes together); Franz Wagner and Moritz Wagner (+12.7 points per 100 possessions in 236 minutes together). [2]\nTwo-man combinations of the Utah Jazz in 2024-25 with at least 200 shared minutes. Best duos and chemistry on the court by net rating: John Collins and Collin Sexton (+5.5 points per 100 possessions in 626 minutes together); Isaiah Collier and Svi Mykhailiuk (+2.3 points per 100 possessions in 286 minutes together); John Collins and Walker Kessler (+2.3 points per 100 possessions in 606 minutes together); Micah Potter and Brice Sensabaugh (+1.9 points per 100 possessions in 278 minutes together); Isaiah Collier and John Collins (+1.4 points per 100 possessions in 458 minutes together). [3]",
+  "provider": "extractive",
+  "ms": 477
+ },
+ {
+  "id": 66,
+  "page": "top",
+  "text": "Most 20 point 10 rebound games",
+  "ok": false,
+  "expected": [
+   "Giannis Antetokounmpo"
+  ],
+  "answer": "In order: Domantas Sabonis [1], Karl-Anthony Towns [2], Nikola Jokić [3], Ivica Zubac [4], Walker Kessler [5], Giannis Antetokounmpo [6].",
+  "provider": "extractive",
+  "ms": 272
+ },
+ {
+  "id": 67,
+  "page": "top",
+  "text": "Who was the best performer by game score in a single game?",
+  "ok": false,
+  "expected": [
+   "Giannis Antetokounmpo"
+  ],
+  "answer": "In order: Shai Gilgeous-Alexander [1], Giannis Antetokounmpo [2], Nikola Jokić [3], Luka Dončić [4], Anthony Edwards [5], Jayson Tatum [6].",
+  "provider": "extractive",
+  "ms": 268
+ },
+ {
+  "id": 68,
+  "page": "top",
+  "text": "Best effective field goal percentage among guards",
+  "ok": false,
+  "expected": [
+   "Vít Krejčí"
+  ],
+  "answer": "In order: Tyrese Maxey [1], Josh Hart [2], Devin Booker [3], Mikal Bridges [4], OG Anunoby [5], Jayson Tatum [6].",
+  "provider": "extractive",
+  "ms": 257
+ },
+ {
+  "id": 69,
+  "page": "top",
+  "text": "Who scores the most at home?",
+  "ok": true,
+  "expected": [
+   "Shai Gilgeous-Alexander"
+  ],
+  "answer": "In order: Shai Gilgeous-Alexander [1], Giannis Antetokounmpo [2], Nikola Jokić [3], Luka Dončić [4], Anthony Edwards [5], Jayson Tatum [6].",
+  "provider": "extractive",
+  "ms": 247
+ },
+ {
+  "id": 70,
+  "page": "young",
+  "text": "Which player under 22 averages the most rebounds?",
+  "ok": false,
+  "expected": [
+   "Victor Wembanyama"
+  ],
+  "answer": "In order: Yves Missi [1], Alex Sarr [2], Bilal Coulibaly [3], Tidjane Salaün [4], Bub Carrington [5], Noah Clowney [6].",
+  "provider": "extractive",
+  "ms": 250
+ },
+ {
+  "id": 71,
+  "page": "young",
+  "text": "Oldest player in the league",
+  "ok": false,
+  "expected": [
+   "Taj Gibson"
+  ],
+  "answer": "Oshae Brissett is a forward-guard who played 6 games for the Philadelphia 76ers in 2024-25. Averages: 23.7 minutes, 8.7 points, 3.7 rebounds, 0.7 assists, 0.7 steals, 0.5 blocks and 1.3 turnovers. [1]\nJosh Green took 420 tracked shots in 2024-25, most often on above-the-break threes (22.4% of them). Shooting by zone: 34 of 94 (36.2%, league 35.4%) on above-the-break threes; 53 of 88 (60.2%, league 66.4%) at the rim (restricted area); 31 of 77 (40.3%, league 39.1%) on right corner threes; 32 of 76 (42.1%, league 38.7%) on left corner threes; 18 of 52 (34.6%, league 44.5%) in the paint outside the restricted area; 12 of 33 (36.4%, league 41.7%) from mid-range. [2]\nJalen McDaniels is a forward who played 4 games for the Sacramento Kings in 2024-25. Averages: 1.8 minutes, 0.0 points, 0.0 rebounds, 0.3 assists, 0.3 steals, 0.0 blocks and 0.0 turnovers. [3]",
+  "provider": "extractive",
+  "ms": 413
+ },
+ {
+  "id": 72,
+  "page": "teams",
+  "text": "What was the Warriors' home record?",
+  "ok": false,
+  "expected": [
+   "24-17"
+  ],
+  "answer": "The Golden State Warriors won 48 and lost 34 of their 82 games in 2024-25 (12th most wins), 24 of 41 at home. Offense: 113.8 points per game, offensive rating 112.0 (16th of 30). [1]",
+  "provider": "extractive",
+  "ms": 377
+ },
+ {
+  "id": 73,
+  "page": "teams",
+  "text": "How many games did Utah lose?",
+  "ok": true,
+  "expected": [
+   "65"
+  ],
+  "answer": "The Utah Jazz won 17 and lost 65 of their 82 games in 2024-25 (30th most wins), 10 of 41 at home. Offense: 111.9 points per game, offensive rating 107.8 (24th of 30). [1]",
+  "provider": "extractive",
+  "ms": 382
+ },
+ {
+  "id": 74,
+  "page": "teams",
+  "text": "Which team grabs the most rebounds?",
+  "ok": true,
+  "expected": [
+   "Houston Rockets"
+  ],
+  "answer": "In order: Houston Rockets [1], Memphis Grizzlies [2], Chicago Bulls [3], Denver Nuggets [4], Utah Jazz [5], Cleveland Cavaliers [6].",
+  "provider": "extractive",
+  "ms": 242
+ },
+ {
+  "id": 75,
+  "page": "teams",
+  "text": "Which team plays at the fastest pace?",
+  "ok": true,
+  "expected": [
+   "Memphis Grizzlies"
+  ],
+  "answer": "In order: Memphis Grizzlies [1], Atlanta Hawks [2], Chicago Bulls [3], Washington Wizards [4], Utah Jazz [5], Detroit Pistons [6].",
+  "provider": "extractive",
+  "ms": 294
+ },
+ {
+  "id": 76,
+  "page": "teams",
+  "text": "Which team has the best net rating?",
+  "ok": false,
+  "expected": [
+   "Oklahoma City Thunder"
+  ],
+  "answer": "Offense: 105.1 points per game, offensive rating 105.7 (28th of 30). Defense: 112.2 points allowed, defensive rating 112.8 (20th best). [1]\nBest for the Cleveland Cavaliers: Evan Mobley 23 points, 16 rebounds, 1 assists; Darius Garland 20 points, 1 rebounds, 6 assists. Best for the Brooklyn Nets: Cam Thomas 22 points, 2 rebounds, 6 assists; Cameron Johnson 23 points, 5 rebounds, 1 assists. [2]\nBest for the Brooklyn Nets: Cameron Johnson 33 points, 10 rebounds, 6 assists; Ben Simmons 12 points, 5 rebounds, 7 assists. Best for the Toronto Raptors: Gradey Dick 19 points, 6 rebounds, 2 assists; Ochai Agbaji 20 points, 5 rebounds, 1 assists. [3]",
+  "provider": "extractive",
+  "ms": 670
+ },
+ {
+  "id": 77,
+  "page": "teams",
+  "text": "Which team forces the most turnovers?",
+  "ok": false,
+  "expected": [
+   "Oklahoma City Thunder"
+  ],
+  "answer": "In order: Utah Jazz [1], Portland Trail Blazers [2], Memphis Grizzlies [3], Washington Wizards [4], Atlanta Hawks [5], Charlotte Hornets [6].",
+  "provider": "extractive",
+  "ms": 223
+ },
+ {
+  "id": 78,
+  "page": "teams",
+  "text": "Grizzlies points per game",
+  "ok": true,
+  "expected": [
+   "121.7"
+  ],
+  "answer": "Offense: 121.7 points per game, offensive rating 114.4 (6th of 30). Style: pace 106.4 possessions (1st), 37.9 three-point attempts per game (13th) at 36.7% (11th), 47.3 rebounds (2nd), 28.4 assists (8th), 15.7 turnovers (28th fewest). [1]",
+  "provider": "extractive",
+  "ms": 391
+ },
+ {
+  "id": 79,
+  "page": "teams",
+  "text": "What place did the Bulls finish in the East?",
+  "ok": false,
+  "expected": [
+   "9"
+  ],
+  "answer": "The Chicago Bulls won 39 and lost 43 of their 82 games in 2024-25 (18th most wins), 18 of 41 at home. Offense: 117.8 points per game, offensive rating 111.9 (17th of 30). [1]",
+  "provider": "extractive",
+  "ms": 390
+ },
+ {
+  "id": 80,
+  "page": "teams",
+  "text": "Which team had the lowest opponent three-point percentage?",
+  "ok": false,
+  "expected": [
+   "Oklahoma City Thunder"
+  ],
+  "answer": "In order: Orlando Magic [1], Washington Wizards [2], Charlotte Hornets [3], Philadelphia 76ers [4], Portland Trail Blazers [5], Brooklyn Nets [6].",
+  "provider": "extractive",
+  "ms": 249
+ },
+ {
+  "id": 81,
+  "page": "teams",
+  "text": "How did the Rockets do in their last 10 games?",
+  "ok": false,
+  "expected": [
+   "6-4"
+  ],
+  "answer": "The Houston Rockets won 52 and lost 30 of their 82 games in 2024-25 (4th most wins), 29 of 41 at home. Offense: 114.3 points per game, offensive rating 111.4 (20th of 30). [1]",
+  "provider": "extractive",
+  "ms": 388
+ },
+ {
+  "id": 82,
+  "page": "teams",
+  "text": "What was the Timberwolves' record in March?",
+  "ok": false,
+  "expected": [
+   "11-3"
+  ],
+  "answer": "The Minnesota Timberwolves won 49 and lost 33 of their 82 games in 2024-25 (10th most wins), 25 of 41 at home. Offense: 114.3 points per game, offensive rating 113.6 (10th of 30). [1]",
+  "provider": "extractive",
+  "ms": 394
+ },
+ {
+  "id": 83,
+  "page": "teams",
+  "text": "Which Eastern team scored the most points per game?",
+  "ok": true,
+  "expected": [
+   "Cleveland Cavaliers"
+  ],
+  "answer": "In order: Cleveland Cavaliers [1], Boston Celtics [2], Oklahoma City Thunder [3], Denver Nuggets [4], New York Knicks [5], Memphis Grizzlies [6].",
+  "provider": "extractive",
+  "ms": 244
+ },
+ {
+  "id": 84,
+  "page": "teams",
+  "text": "Longest losing streak of the Wizards",
+  "ok": false,
+  "expected": [
+   "16"
+  ],
+  "answer": "The Washington Wizards won 18 and lost 64 of their 82 games in 2024-25 (29th most wins), 8 of 41 at home. Offense: 108.0 points per game, offensive rating 103.9 (30th of 30). [1]",
+  "provider": "extractive",
+  "ms": 387
+ },
+ {
+  "id": 85,
+  "page": "games",
+  "text": "How many overtime games did the Kings play?",
+  "ok": false,
+  "expected": [
+   "7"
+  ],
+  "answer": "The Sacramento Kings won 40 and lost 42 of their 82 games in 2024-25 (16th most wins), 20 of 41 at home. Offense: 115.7 points per game, offensive rating 113.8 (8th of 30). [1]",
+  "provider": "extractive",
+  "ms": 375
+ },
+ {
+  "id": 86,
+  "page": "games",
+  "text": "What was the score when the Nuggets hosted the Suns?",
+  "ok": false,
+  "expected": [
+   "117"
+  ],
+  "answer": "The Phoenix Suns won 36 and lost 46 of their 82 games in 2024-25 (21st most wins), 24 of 41 at home. Offense: 113.6 points per game, offensive rating 113.7 (9th of 30). [1]\nThe Denver Nuggets won 50 and lost 32 of their 82 games in 2024-25 (9th most wins), 26 of 41 at home. Offense: 120.8 points per game, offensive rating 117.2 (4th of 30). [2]",
+  "provider": "extractive",
+  "ms": 416
+ },
+ {
+  "id": 87,
+  "page": "games",
+  "text": "Which team scored the fewest points in a game?",
+  "ok": false,
+  "expected": [
+   "Brooklyn Nets"
+  ],
+  "answer": "In order: Washington Wizards [1], Charlotte Hornets [2], Brooklyn Nets [3], Orlando Magic [4], New Orleans Pelicans [5], Toronto Raptors [6].",
+  "provider": "extractive",
+  "ms": 290
+ },
+ {
+  "id": 88,
+  "page": "games",
+  "text": "Which team is best in the first quarter?",
+  "ok": false,
+  "expected": [
+   "Denver Nuggets"
+  ],
+  "answer": "Best for the Cleveland Cavaliers: Evan Mobley 25 points, 9 rebounds, 3 assists; Donovan Mitchell 21 points, 2 rebounds, 3 assists. Best for the Toronto Raptors: Chris Boucher 18 points, 2 rebounds, 1 assists; Gradey Dick 16 points, 2 rebounds, 1 assists. [1]\nBest for the Cleveland Cavaliers: Jarrett Allen 17 points, 11 rebounds, 2 assists; Donovan Mitchell 19 points, 2 rebounds, 5 assists. Best for the Detroit Pistons: Cade Cunningham 33 points, 4 rebounds, 6 assists; Jaden Ivey 22 points, 5 rebounds, 4 assists. [2]\nBest for the Indiana Pacers: Pascal Siakam 19 points, 8 rebounds, 9 assists; Myles Turner 20 points, 9 rebounds, 4 assists. Best for the Detroit Pistons: Cade Cunningham 28 points, 5 rebounds, 8 assists; Jalen Duren 13 points, 13 rebounds, 4 assists. [3]",
+  "provider": "extractive",
+  "ms": 433
+ },
+ {
+  "id": 89,
+  "page": "games",
+  "text": "What was the largest margin of victory for the Magic?",
+  "ok": true,
+  "expected": [
+   "30"
+  ],
+  "answer": "The Orlando Magic won 41 and lost 41 of their 82 games in 2024-25 (15th most wins), 22 of 41 at home. Offense: 105.4 points per game, offensive rating 106.5 (27th of 30). [1]",
+  "provider": "extractive",
+  "ms": 377
+ },
+ {
+  "id": 90,
+  "page": "games",
+  "text": "Who won on Christmas Day between the Lakers and Warriors?",
+  "ok": false,
+  "expected": [
+   "Los Angeles Lakers"
+  ],
+  "answer": "In order: Luka Dončić [1], Austin Reaves [2], LeBron James [3], Stephen Curry [4], Jimmy Butler III [5], Rui Hachimura [6].",
+  "provider": "extractive",
+  "ms": 263
+ },
+ {
+  "id": 91,
+  "page": "shots",
+  "text": "How many floaters did Trae Young make?",
+  "ok": false,
+  "expected": [
+   "180"
+  ],
+  "answer": "Trae Young is a guard who played 76 games for the Atlanta Hawks in 2024-25. Strengths: primary playmaker, draws many fouls, high-volume scorer, high-volume three-point shooter. [1]",
+  "provider": "extractive",
+  "ms": 259
+ },
+ {
+  "id": 92,
+  "page": "shots",
+  "text": "Who took the most mid-range shots?",
+  "ok": false,
+  "expected": [
+   "DeMar DeRozan"
+  ],
+  "answer": "In order: Malik Beasley [1], Zach LaVine [2], Stephen Curry [3], Norman Powell [4], Anthony Edwards [5], Payton Pritchard [6].",
+  "provider": "extractive",
+  "ms": 275
+ },
+ {
+  "id": 93,
+  "page": "shots",
+  "text": "Who dunked the most?",
+  "ok": false,
+  "expected": [
+   "Giannis Antetokounmpo"
+  ],
+  "answer": "Form at the end of the season: in the last 10 games of 2024-25 Jordan Hawkins averaged 10.5 points (before: 10.8), 3.5 rebounds (before: 2.7), 1.3 assists (before: 1.1), 0.1 steals (before: 0.6), 0.4 blocks (before: 0.4), 1.3 turnovers (before: 1.0), 24.8 minutes (before: 23.4), shooting 51.2% true shooting (before: 50.2%) and 32.3% from three (before: 33.3%). Overall this was close to the usual level. [1]\nJordan Hawkins took 556 tracked shots in 2024-25, most often on above-the-break threes (44.1% of them). Shooting by zone: 75 of 245 (30.6%, league 35.4%) on above-the-break threes; 38 of 97 (39.2%, league 41.7%) from mid-range; 27 of 69 (39.1%, league 44.5%) in the paint outside the restricted area; 32 of 58 (55.2%, league 66.4%) at the rim (restricted area); 18 of 52 (34.6%, league 38.7%) on left corner threes; 17 of 35 (48.6%, league 39.1%) on right corner threes. [2]\nForm at the end of the season: in the last 10 games of 2024-25 Anthony Gill averaged 5.3 points (before: 2.0), 3.1 rebounds (before: 0.9), 0.8 assists (before: 0.2), 0.3 steals (before: 0.2), 0.0 blocks (before: 0.1), 0.4 turnovers (before: 0.2), 16.6 minutes (before: 6.2), shooting 54.8% true shooting (before: 61.6%). Overall this was clearly better than earlier, a hot finish. [3]",
+  "provider": "extractive",
+  "ms": 419
+ },
+ {
+  "id": 94,
+  "page": "shots",
+  "text": "What percentage does Kevin Durant shoot from mid-range?",
+  "ok": true,
+  "expected": [
+   "53.1"
+  ],
+  "answer": "Kevin Durant took 1124 tracked shots in 2024-25, most often in the paint outside the restricted area (30.4% of them). Shooting by zone: 182 of 342 (53.2%, league 44.5%) in the paint outside the restricted area; 152 of 286 (53.1%, league 41.7%) from mid-range; 116 of 284 (40.8%, league 35.4%) on above-the-break threes; 98 of 124 (79.0%, league 66.4%) at the rim (restricted area); 22 of 46 (47.8%, league 39.1%) on right corner threes; 22 of 42 (52.4%, league 38.7%) on left corner threes. [1]\nKevin Durant is a forward who played 62 games for the Phoenix Suns in 2024-25. Shooting: 52.7% from the field, 43.0% from three on 6.0 attempts, 83.9% on free throws. [2]",
+  "provider": "extractive",
+  "ms": 294
+ },
+ {
+  "id": 95,
+  "page": "shots",
+  "text": "Which team attempted the most corner threes?",
+  "ok": false,
+  "expected": [
+   "Phoenix Suns"
+  ],
+  "answer": "In order: Boston Celtics [1], Golden State Warriors [2], Chicago Bulls [3], Cleveland Cavaliers [4], Minnesota Timberwolves [5], Utah Jazz [6].",
+  "provider": "extractive",
+  "ms": 240
+ },
+ {
+  "id": 96,
+  "page": "pairs",
+  "text": "Which duo has the best net rating in the league?",
+  "ok": false,
+  "expected": [
+   "Jaylin Williams",
+   "Kenrich Williams"
+  ],
+  "answer": "Two-man combinations of the Brooklyn Nets in 2024-25 with at least 200 shared minutes. Best duos and chemistry on the court by net rating: Tosan Evbuomwan and Day'Ron Sharpe (+11.8 points per 100 possessions in 264 minutes together); Dorian Finney-Smith and Dennis Schröder (+8.1 points per 100 possessions in 378 minutes together); Cameron Johnson and Day'Ron Sharpe (+6.8 points per 100 possessions in 214 minutes together); Dorian Finney-Smith and Cameron Johnson (+5.6 points per 100 possessions in 504 minutes together); Day'Ron Sharpe and Ziaire Williams (+5.3 points per 100 possessions in 221 minutes together). [1]\nOffense: 105.1 points per game, offensive rating 105.7 (28th of 30). Defense: 112.2 points allowed, defensive rating 112.8 (20th best). [2]\nTwo-man combinations of the Philadelphia 76ers in 2024-25 with at least 200 shared minutes. Best duos and chemistry on the court by net rating: KJ Martin and Tyrese Maxey (+7.7 points per 100 possessions in 301 minutes together); Justin Edwards and Paul George (+3.2 points per 100 possessions in 209 minutes together); Kyle Lowry and Guerschon Yabusele (+3.0 points per 100 possessions in 279 minutes together); KJ Martin and Kelly Oubre Jr. (+2.9 points per 100 possessions in 266 minutes together); KJ Martin and Jared McCain (+2.3 points per 100 possessions in 215 minutes together). [3]",
+  "provider": "extractive",
+  "ms": 409
+ },
+ {
+  "id": 97,
+  "page": "pairs",
+  "text": "How many minutes did Nikola Jokic and Jamal Murray play together?",
+  "ok": false,
+  "expected": [
+   "1619"
+  ],
+  "answer": "Nikola Jokić is a center who played 70 games for the Denver Nuggets in 2024-25. Averages: 36.7 minutes, 29.6 points, 12.7 rebounds, 10.2 assists, 1.8 steals, 0.6 blocks and 3.3 turnovers. [1]\nJamal Murray is a guard who played 67 games for the Denver Nuggets in 2024-25. Averages: 36.1 minutes, 21.4 points, 3.9 rebounds, 6.0 assists, 1.4 steals, 0.5 blocks and 2.1 turnovers. [2]",
+  "provider": "extractive",
+  "ms": 238
+ },
+ {
+  "id": 98,
+  "page": "matchup",
+  "text": "How did Jalen Brunson do against Derrick White as his defender?",
+  "ok": false,
+  "expected": [
+   "11"
+  ],
+  "answer": "Jalen Brunson is a guard who played 65 games for the New York Knicks in 2024-25. Advanced: 28.9% usage, 60.5% true shooting, assisted 31.8% of teammates' baskets, offensive rating 118.3, defensive rating 115.7, net rating +2.6. [1]\nDerrick White is a guard who played 76 games for the Boston Celtics in 2024-25. Advanced: 19.5% usage, 60.6% true shooting, assisted 19.9% of teammates' baskets, offensive rating 119.7, defensive rating 109.5, net rating +10.2. [2]",
+  "provider": "extractive",
+  "ms": 233
+ },
+ {
+  "id": 99,
+  "page": "compare",
+  "text": "Who is taller, Chet Holmgren or Evan Mobley?",
+  "ok": true,
+  "expected": [
+   "Chet Holmgren"
+  ],
+  "answer": "Chet Holmgren is a center-forward who played 32 games for the Oklahoma City Thunder in 2024-25. Averages: 27.4 minutes, 15.0 points, 8.0 rebounds, 2.0 assists, 0.7 steals, 2.2 blocks and 1.8 turnovers. [1]\nEvan Mobley is a center who played 71 games for the Cleveland Cavaliers in 2024-25. Averages: 30.5 minutes, 18.5 points, 9.3 rebounds, 3.2 assists, 0.9 steals, 1.6 blocks and 2.0 turnovers. [2]",
+  "provider": "extractive",
+  "ms": 240
+ },
+ {
+  "id": 100,
+  "page": "compare",
+  "text": "Who blocks more shots, Walker Kessler or Brook Lopez?",
+  "ok": true,
+  "expected": [
+   "Walker Kessler"
+  ],
+  "answer": "Walker Kessler took 417 tracked shots in 2024-25, most often at the rim (restricted area) (77.0% of them). Shooting by zone: 237 of 321 (73.8%, league 66.4%) at the rim (restricted area); 35 of 61 (57.4%, league 44.5%) in the paint outside the restricted area; 2 of 25 (8.0%, league 35.4%) on above-the-break threes. [1]\nBrook Lopez took 774 tracked shots in 2024-25, most often on above-the-break threes (43.2% of them). Shooting by zone: 117 of 334 (35.0%, league 35.4%) on above-the-break threes; 155 of 199 (77.9%, league 66.4%) at the rim (restricted area); 72 of 140 (51.4%, league 44.5%) in the paint outside the restricted area; 28 of 62 (45.2%, league 41.7%) from mid-range; 15 of 23 (65.2%, league 39.1%) on right corner threes; 7 of 16 (43.8%, league 38.7%) on left corner threes. [2]\nWalker Kessler is a center who played 58 games for the Utah Jazz in 2024-25. Averages: 30.0 minutes, 11.1 points, 12.2 rebounds, 1.7 assists, 0.6 steals, 2.4 blocks and 1.5 turnovers. [3]",
+  "provider": "extractive",
+  "ms": 432
+ },
+ {
+  "id": 101,
+  "page": "compare",
+  "text": "Who won more games, the Clippers or the Lakers?",
+  "ok": true,
+  "expected": [
+   "Los Angeles Clippers"
+  ],
+  "answer": "On 19 January 2025 the Los Angeles Clippers beat the Los Angeles Lakers 116-102 at home. Best for the Los Angeles Clippers: Ivica Zubac 21 points, 19 rebounds, 3 assists; James Harden 21 points, 4 rebounds, 12 assists. [1]\nOn 28 February 2025 the Los Angeles Lakers beat the Los Angeles Clippers 106-102 at home. Best for the Los Angeles Lakers: LeBron James 28 points, 13 rebounds, 3 assists; Luka Dončić 31 points, 2 rebounds, 5 assists. [2]\nOn 4 February 2025 the Los Angeles Lakers beat the Los Angeles Clippers 122-97 away. Best for the Los Angeles Lakers: LeBron James 26 points, 8 rebounds, 9 assists; Austin Reaves 20 points, 6 rebounds, 9 assists. [3]",
+  "provider": "extractive",
+  "ms": 374
+ },
+ {
+  "id": 102,
+  "page": "team",
+  "text": "Who is the best rebounder on the Pelicans?",
+  "ok": true,
+  "expected": [
+   "Yves Missi"
+  ],
+  "answer": "In order: Yves Missi [1], Zion Williamson [2], Dejounte Murray [3], Trey Murphy III [4], Karlo Matković [5], Jeremiah Robinson-Earl [6].",
+  "provider": "extractive",
+  "ms": 257
+ },
+ {
+  "id": 103,
+  "page": "team",
+  "text": "Which Pacers player has the best three-point percentage?",
+  "ok": false,
+  "expected": [
+   "Aaron Nesmith"
+  ],
+  "answer": "In order: Tyrese Haliburton [1], Myles Turner [2], Aaron Nesmith [3], Pascal Siakam [4], Obi Toppin [5], Jarace Walker [6].",
+  "provider": "extractive",
+  "ms": 263
+ },
+ {
+  "id": 104,
+  "page": "league",
+  "text": "How many players averaged at least 20 points per game?",
+  "ok": false,
+  "expected": [
+   "50"
+  ],
+  "answer": "In order: Shai Gilgeous-Alexander [1], Giannis Antetokounmpo [2], Nikola Jokić [3], Luka Dončić [4], Anthony Edwards [5], Jayson Tatum [6].",
+  "provider": "extractive",
+  "ms": 226
+ },
+ {
+  "id": 105,
+  "page": "league",
+  "text": "What is the average points per game of a team?",
+  "ok": false,
+  "expected": [
+   "113.8"
+  ],
+  "answer": "In order: Shai Gilgeous-Alexander [1], Giannis Antetokounmpo [2], Nikola Jokić [3], Luka Dončić [4], Anthony Edwards [5], Jayson Tatum [6].",
+  "provider": "extractive",
+  "ms": 278
+ },
+ {
+  "id": 106,
+  "page": "lineup",
+  "text": "How would a lineup of Stephen Curry, Devin Booker, Jayson Tatum, Giannis Antetokounmpo and Nikola Jokic do?",
+  "ok": false,
+  "expected": [
+   "net"
+  ],
+  "answer": "Stephen Curry is a guard who played 70 games for the Golden State Warriors in 2024-25. Averages: 32.2 minutes, 24.5 points, 4.4 rebounds, 6.0 assists, 1.1 steals, 0.4 blocks and 2.9 turnovers. [1]\nDevin Booker is a guard who played 75 games for the Phoenix Suns in 2024-25. Averages: 37.3 minutes, 25.6 points, 4.1 rebounds, 7.1 assists, 0.9 steals, 0.2 blocks and 2.9 turnovers. [2]\nJayson Tatum is a forward-guard who played 72 games for the Boston Celtics in 2024-25. Averages: 36.4 minutes, 26.8 points, 8.7 rebounds, 6.0 assists, 1.1 steals, 0.5 blocks and 2.9 turnovers. [3]",
+  "provider": "extractive",
+  "ms": 235
+ },
+ {
+  "id": 107,
+  "page": "fit",
+  "text": "Who would be an ideal teammate for Luka Doncic?",
+  "ok": true,
+  "expected": [
+   "teammate"
+  ],
+  "answer": "Luka Dončić is a forward-guard who played 50 games for the Los Angeles Lakers in 2024-25. Advanced: 32.8% usage, 58.7% true shooting, assisted 34.2% of teammates' baskets, offensive rating 119.6, defensive rating 110.5, net rating +9.1. [1]",
+  "provider": "extractive",
+  "ms": 237
+ }
+]

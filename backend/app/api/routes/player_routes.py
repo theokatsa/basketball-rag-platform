@@ -1,3 +1,5 @@
+from typing import Literal
+
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
@@ -140,7 +142,9 @@ def read_player_shots(player_id: int, db: Session = Depends(get_db)):
 def read_similar_players(
     player_id: int,
     season: str | None = None,
-    limit: int = 5,
+    limit: int = Query(5, ge=1, le=50),
+    kind: Literal["overall", "style", "production"] = "overall",
+    variant: Literal["any", "younger", "better"] = "any",
     db: Session = Depends(get_db),
 ):
     player = get_player_by_id(db, player_id)
@@ -148,4 +152,4 @@ def read_similar_players(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Player not found"
         )
-    return get_similar_players(db, player_id, season, limit)
+    return get_similar_players(db, player_id, season, limit, kind, variant)

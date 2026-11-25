@@ -161,6 +161,38 @@ const PROFILE: [string, string[]][] = [
 ];
 const ROSTER = ['minutes', 'points', 'rebounds', 'assists', 'steals', 'blocks', 'ts', 'three', 'usage', 'net_rating'];
 
+type Targets = { needs: { label: string; z: number }[]; targets: { player_id: number; score: number; reasons: string[] }[] };
+
+/** Players elsewhere who are strong where this team is weak. */
+function TargetPanel({ id }: { id: number }) {
+  const { byId } = useApp();
+  const [position, setPosition] = usePersisted('targets-pos', '');
+  const { data, error } = useApi<Targets>(`/insights/teams/${id}/targets?limit=6${position ? `&position=${position}` : ''}`);
+  if (error) return null;
+  const weak = data?.needs.filter((n) => n.z < -0.3).slice(0, 3).map((n) => n.label) ?? [];
+  return (
+    <section className="panel">
+      <div className="panel-header"><div><h2>Players who would help</h2><p>{weak.length ? `Strong where this squad is weakest: ${weak.join(', ')}` : 'No clear weakness against other squads'}</p></div><Segmented label="Position" value={position} options={[['', 'All'], ['Guard', 'Guards'], ['Forward', 'Forwards'], ['Center', 'Centers']]} onChange={setPosition} /></div>
+      {!data ? <Loading height="9rem" /> : <div className="ideal-grid">{data.targets.map((t) => { const p = byId.get(t.player_id); return p && <article key={t.player_id}><div className="result-head"><PlayerCell player={p} /><RowActions player={p} /></div><p>Brings {t.reasons.join(', ')}.</p><small>Overall score {t.score} of 100</small></article>; })}</div>}
+      <p className="radar-note">A statistical match. Contracts and availability are not in the database.</p>
+    </section>
+  );
+}
+
+/** Teams with the same way of playing, whatever their strength. */
+function SimilarTeams({ id, all }: { id: number; all: TeamSummary[] }) {
+  const { go } = useApp();
+  const { data, error } = useApi<{ team_id: number; similarity: number; shared: string[] }[]>(`/insights/teams/${id}/similar?limit=4`);
+  if (error) return null;
+  return (
+    <section className="panel">
+      <div className="panel-header"><div><h2>Teams that play alike</h2><p>By pace, shot selection and how possessions are won, not by strength</p></div></div>
+      {!data ? <Loading height="7rem" /> : <div className="ideal-grid">{data.map((s) => { const t = all.find((x) => x.team_id === s.team_id); return t && <article key={t.team_id}><button type="button" className="player-link" onClick={() => go('team', t.team_id)}><TeamLogo teamId={t.team_id} size={34} /><span className="player-name">{t.name}</span></button><p>{s.shared.length ? `Both: ${s.shared.join(', ')}.` : 'Alike overall, with no single trait standing out.'}</p><small>{Math.round(s.similarity * 100)}% match, {t.wins}–{t.losses}</small></article>; })}</div>}
+      <p className="radar-note">A typical pair of teams scores 25%.</p>
+    </section>
+  );
+}
+
 export function Team({ id }: { id: number }) {
   const { loading, error, totals, go, openGame } = useApp();
   const { data, error: teamError } = useApi<TeamSummary[]>('/team-summaries');
@@ -234,6 +266,8 @@ export function Team({ id }: { id: number }) {
           </table>
         </div>
       </section>
+      <TargetPanel id={id} />
+      <SimilarTeams id={id} all={data} />
       <section className="panel">
         <div className="panel-header"><div><h2>Results</h2><p>{games.length} games</p></div><div className="panel-tools"><Segmented label="Place" value={where} options={[['all', 'All'], ['home', 'Home'], ['away', 'Away']]} onChange={setWhere} /><Segmented label="Result" value={result} options={[['all', 'All'], ['won', 'Won'], ['lost', 'Lost']]} onChange={setResult} /></div></div>
         <ul className="result-list">{paged.items.map((g) => <li key={g.game_id}><button type="button" onClick={() => openGame(g.game_id)}><span className="result-date">{formatDate(g.date)}</span><span className={`result-mark ${g.won ? 'w' : 'l'}`}>{g.won ? 'W' : 'L'}</span><span className="result-opponent">{g.home ? 'vs' : 'at'} <TeamLogo teamId={g.opponent_id} size={26} /> {byTeam.get(g.opponent_id)?.name}</span><b>{g.points}–{g.opponent_points}</b></button></li>)}</ul>
