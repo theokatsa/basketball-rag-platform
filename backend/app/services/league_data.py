@@ -16,9 +16,10 @@ from app.services.cache import cached, rows
 from app.services.game_service import EAST
 from app.services.insight_service import inches, load_profiles
 from app.services.shot_service import OPPONENT_SQL, ZONE_SQL
+from app.core.config import ACTIVE_SEASON_SQL
 
 SUMS = ["minutes", "points", "fgm", "fga", "tpm", "tpa", "ftm", "fta", "oreb", "dreb", "reb", "ast", "stl", "blk", "tov", "pf"]
-SEASON = "(select max(season) from player_box_scores)"
+SEASON = ACTIVE_SEASON_SQL
 
 
 def _frame(db, sql, params=None) -> pd.DataFrame:

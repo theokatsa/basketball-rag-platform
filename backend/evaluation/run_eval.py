@@ -20,6 +20,7 @@ sys.stdout.reconfigure(encoding="utf-8")
 from sqlalchemy import text  # noqa: E402
 
 from app.db import SessionLocal  # noqa: E402
+from evaluation.pinning import key_connection, keys  # noqa: E402
 from app.services.query_embedding_service import embed_query, warm_up  # noqa: E402
 from app.services.retrieval import MODES, retrieve  # noqa: E402
 from evaluation.questions import Q, UNANSWERABLE  # noqa: E402
@@ -56,12 +57,12 @@ def score(found, relevant):
 def run(split, show):
     warm_up()
     records = []
-    with SessionLocal() as db:
+    with SessionLocal() as db, key_connection() as kc:  # keys on 2024-25 only (pinning.py)
         db.execute(text("select 1"))
         for mode in MODES:  # fill the caches so that timings measure retrieval
             retrieve(db, "warm up", None, K, mode)
         for item in (q for q in Q if q["split"] == split):
-            truth = db.execute(text(item["sql"])).scalars().all()
+            truth = kc.execute(text(item["sql"])).scalars().all()
             relevant = {(item["kind"], e) for e in truth} if item["target"] == "doc" else set(truth)
             for mode in MODES:
                 embed_query.cache_clear()

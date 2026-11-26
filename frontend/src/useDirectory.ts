@@ -85,8 +85,10 @@ export function useDirectory() {
     else { setSortKey(key); setSortDirection(defaultDirection(key)); }
   };
   const clearFilters = () => { setQuery(''); setClub(''); setPosition(''); setRules([]); };
+  /** The directory as it first opens: no filters, sorted by points, first page. */
+  const reset = () => { clearFilters(); setSortKey('points'); setSortDirection('desc'); setDetailed(false); setMode('pergame'); setPage(1); };
 
-  return { players, loading, error, query, setQuery, club, setClub, position, setPosition, rules, setRules, sortKey, sortDirection, sortBy, page: safePage, setPage, pageCount, filtered, paged, filterCount, clearFilters, detailed, setDetailed, mode, setMode, totals };
+  return { players, loading, error, query, setQuery, club, setClub, position, setPosition, rules, setRules, sortKey, sortDirection, sortBy, page: safePage, setPage, pageCount, filtered, paged, filterCount, clearFilters, reset, detailed, setDetailed, mode, setMode, totals };
 }
 
 export type DirectoryState = ReturnType<typeof useDirectory>;

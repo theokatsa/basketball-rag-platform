@@ -136,10 +136,12 @@ circle.zone-outline { stroke-width: 3.5; } circle.zone-outline.lit { stroke-widt
 
 .full-court { position: relative; min-width: 720px; } .full-court svg { display: block; width: 100%; border-radius: 14px; background: #17110c; }
 .game-shot.made .mark { fill: var(--team); stroke: color-mix(in srgb, var(--team-edge) 55%, #fff); stroke-width: 1.3; filter: drop-shadow(0 0 2px #000); }
-.game-shot.missed .mark { fill: rgba(10, 8, 6, .6); stroke: var(--team-glow); stroke-width: 1.5; stroke-opacity: .7; }
-.game-shot.rest { opacity: .4; } .game-shot.lit .mark { r: 9px; stroke: #fff; stroke-width: 2.5; stroke-opacity: 1; }
+.game-shot.missed .mark { fill: none; stroke: var(--team-glow); stroke-width: 2.4; stroke-linecap: round; stroke-opacity: .85; filter: drop-shadow(0 0 1.5px #000); }
+.game-shot.missed.lit .mark { stroke: #fff; stroke-width: 2.6; stroke-opacity: 1; transform: scale(1.7); }
+.game-shot.rest { opacity: .4; } .game-shot.made.lit .mark { r: 9px; stroke: #fff; stroke-width: 2.5; stroke-opacity: 1; }
 .shot-tip.game-tip { width: 265px; } .game-tip .tip-player { margin-bottom: .5rem; }
 .game-key { display: inline-block; width: .8rem; height: .8rem; margin-right: .4rem; border: 1.6px solid #cfc8be; border-radius: 50%; vertical-align: -1px; } .game-key.made { background: #cfc8be; }
+.game-key.miss { position: relative; border: 0; border-radius: 0; } .game-key.miss::before, .game-key.miss::after { content: ''; position: absolute; left: 50%; top: -1px; width: 2px; height: calc(100% + 2px); border-radius: 1px; background: #cfc8be; transform: translateX(-50%) rotate(45deg); } .game-key.miss::after { transform: translateX(-50%) rotate(-45deg); }
 .area-table { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem 1rem; max-width: 1040px; margin: 1.4rem auto 0; }
 .area-team { display: flex; align-items: center; gap: .8rem; } .area-team.right { flex-direction: row-reverse; text-align: right; } .area-team b { display: block; font-size: 1.1rem; } .area-team small { color: var(--muted); }
 .area-row { grid-column: 1 / -1; display: grid; grid-template-columns: 4rem 1fr 9rem 1fr 4rem; align-items: center; gap: .9rem; } .area-row > span { text-align: right; line-height: 1.2; } .area-row > span:last-child { text-align: left; } .area-row b { display: block; } .area-row small { color: var(--muted); } .area-row strong { text-align: center; font-size: .9rem; font-weight: 600; }
@@ -159,6 +161,20 @@ circle.zone-outline { stroke-width: 3.5; } circle.zone-outline.lit { stroke-widt
 .dot-group .dot.out { fill: #77716a; fill-opacity: .28; stroke: none; }
 .halo.team { fill: var(--team-glow); fill-opacity: .25; stroke: var(--team-glow); stroke-opacity: .8; stroke-width: 1.5; }
 .scatter-legend i.out-key { background: #77716a; opacity: .5; } .scatter-legend i.fill { box-shadow: 0 0 0 1.5px var(--team-edge); }
+.dot-group .dot.club { fill: var(--team); fill-opacity: .82; stroke: color-mix(in srgb, var(--team-edge) 45%, #0a0a0b); stroke-width: 1.2; }
+.dot-group:hover .dot.club { fill-opacity: 1; stroke: #fff; stroke-width: 2; }
+.scatter-legend i.team-key { background: conic-gradient(#e03a3e 0 25%, #1d86d8 0 50%, #fec524 0 75%, #12873f 0); }
+.scatter-legend i.ring { box-shadow: 0 0 0 2px #0a0a0b, 0 0 0 3.5px #fff; }
+.star { pointer-events: none; }
+.star-hit { pointer-events: auto; cursor: pointer; }
+.star-guide { stroke: var(--team-glow); stroke-width: 1.5; stroke-dasharray: 4 5; opacity: .75; }
+.star-tag { fill: #0a0a0b; stroke: var(--team-glow); stroke-width: 1.5; }
+.scatter .star-tag-text { fill: var(--ink); font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.star-ring { fill: none; stroke: var(--team-glow); stroke-width: 2; opacity: .5; }
+.star-dot { fill: var(--team); stroke: #fff; stroke-width: 2.5; filter: drop-shadow(0 2px 6px rgba(0, 0, 0, .6)); }
+.star-pill { fill: #0a0a0b; stroke: var(--team-glow); stroke-width: 1.5; }
+.scatter .star-name { fill: var(--ink); font-size: 14.5px; font-weight: 700; }
+.star-hit:hover .star-pill { fill: #1c1c1f; }
 .team-ring { fill: color-mix(in srgb, var(--team-glow) 20%, #131315); stroke: var(--team-glow); stroke-width: 2; }
 .scatter .quad-text { fill: rgba(255, 255, 255, .38); font-size: 13px; }
 .standings tbody .team-row th { padding-left: .7rem; }

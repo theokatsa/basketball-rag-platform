@@ -214,7 +214,9 @@ are slightly optimistic. Minutes are the most important overall feature, which i
 leaves them out. Recognising a player is not the same as a scout's idea of similarity.
 
 **Archetypes** are k-means groups in the learned space (8, chosen by silhouette). The silhouette is
-0.17: roles overlap, and the labels are loose.
+0.17: roles overlap, and the labels are loose. Each group is labelled by its three most distinctive
+features ("Shoots mostly threes, shoots from far, wing threes"); pages show a short role name instead
+("Floor spacer", ROLE_NAMES in similarity_service.py). These describe the group, not the player.
 
 **Suggestions** compare candidates with each player someone shortlisted, compared or viewed (not with
 their average, since a person can have several interests), add what was viewed together, and spread
@@ -313,6 +315,15 @@ Suggestions mix behaviour (45%) and similarity (45%) with quality (10%). The sha
 not a measurement: in the simulation behaviour wins easily, but only 12% of simulated clicks follow
 similarity, a number that was chosen, not observed. Real users decide this.
 
+Fixed on 2026-11-26: the two parts were not on the same scale. Behaviour was rescaled so the best ten
+score about 1, but similarity was left raw, and for a rare player like Jokić the closest match is only
+0.36. The intended 45/45 was in effect about 25/75 for behaviour, so popular players crowded out
+similar ones. Similarity is now rescaled the same way. Two more changes came from reading the Home
+page: with nothing known about a person, the list took the best player of each of the eight groups,
+which brought in bench players with good per-minute numbers (Ty Jerome, Moritz Wagner after 30 games).
+It now takes regular starters (40 games, 24 minutes) by quality and 30-day views, at most two per
+group. And each suggestion is described by the player's own strengths, not his group's label.
+
 **Most viewed** counts different users per period, with the place in the period before. **Trending**
 compares the views of the last 5 days with the player's usual share of traffic, in standard
 deviations of a count; with hundreds of players it needs 3 to avoid chance. It found all 4 players
@@ -353,10 +364,217 @@ python training/train_also_viewed.py --confirm 303   compare on a fresh simulati
 After train_similarity.py run scripts/build_rag_index.py. To use another embedding model set
 EMBEDDING_MODEL and rebuild; a mismatch is refused.
 
-## 14. Next
+## 14. Questions written by other people
 
-1. Configure a language model and measure generation (grounding, citations, cost).
-2. Collect questions from other people as a new test set. Both test sets here have been used.
-3. Compare a larger or multilingual embedding model for paraphrases.
-4. Ask a few people to judge similar and suggested players, and replace the simulated audience with real use.
+The two earlier test sets were written alongside the system, so a third set was taken from outside:
+246 questions from three public sources, kept in their original wording
+(backend/evaluation/external_questions.py).
+
+| Source | Questions | What it is |
+|---|---|---|
+| Hugging Face text-to-SQL NBA set | 50 | stats questions written by an unknown author |
+| Stathead sample searches | 145 | example searches from Basketball-Reference's search tool (college ones left out) |
+| Scouting guides (3 sites) | 51 | questions scouts ask about a player |
+
+The rules were fixed before any answer was computed: "a season" means 2024-25, the only season stored;
+questions about careers, other seasons, playoffs, awards, the draft, WNBA/ABA or data that is not stored
+should be declined; per-game leaders without a stated minimum use the NBA.com minimums (58 games). The
+scouting questions name no player, so each was given one, taken in a fixed order from regular players.
+The file was frozen (its sha256 is in the report) and run once, with no change to the system.
+
+| Source | Answerable: correct | Should decline: declined |
+|---|---|---|
+| Hugging Face | 3 of 35 (9%) | 2 of 15 (13%) |
+| Stathead | 14 of 56 (25%) | 34 of 87 (39%) |
+| Scouting | - | 2 of 35 (6%) |
+| All | 17 of 91 (19%) | 38 of 137 (28%) |
+
+The earlier sets gave 98.5% correct and 6 of 6 declined. Against outside wording the system is far weaker.
+That is the most important result of the evaluation. The failures fall into a few patterns:
+
+1. **One wrong fallback.** 34 of the wrong answers are the same "best duo by net rating" list: questions
+   of the form "who has the highest X among players who ..." are taken as a question about pairs.
+2. **Conditions dropped.** Teenager, 7-footer, rookie, last-place team, "fewer than 20 minutes" and
+   overtime are ignored, and the plain leader is returned instead.
+3. **Wrong statistic or direction.** Totals are answered with per-game numbers, some "highest" questions
+   get the lowest, and every player streak becomes the team winning streak.
+4. **Declining only on known words.** A question with a player's name almost always gets that player's
+   profile, even "Was he coachable?" or "Would you let your daughter marry him?". The system declines only
+   when it sees a word it knows is missing ("draft", "coachable").
+
+The 16 scouting questions that can partly be answered from statistics ("Can he guard multiple positions?")
+are not scored automatically; their answers are in results/external_to_read.md for a person to judge.
+
+Limits: the answer keys were still written here, by SQL on the raw tables; the "lead" check passes any
+tied leader, so a few team questions with many ties are easy; one number was failed only by rounding
+(true value 23.25, key 23.3, answer 23.2). This set has now been used too: a fix found by reading these
+failures must be reported as "after seeing the set".
+
+```text
+python evaluation/run_external.py --name external    results/external.md, .json, _to_read.md
+python evaluation/run_external.py --set web --reader llm   the fourth set (part 17) with the reader of part 16
+python evaluation/selective.py results/external_rules.json  risk against coverage (part 19)
+```
+
+**Correction (2026-11-26).** Failure pattern 1 is not caused by "among players who": all 34 "best duo"
+answers come from one alternative of a regular expression in `fact_engine._shared`, `play\w* with`,
+meant for "played with" but also matching "player**s with** the highest…". None of the 34 questions is
+about duos. The pattern now only takes the verb (`play(?:s|ed|ing)? with`). After seeing the set:
+
+| Run | Answerable: correct | Should decline: declined |
+|---|---|---|
+| frozen run | 17 of 91 (19%) | 38 of 137 (28%) |
+| after the duo fix (after seeing the set) | 20 of 91 (22%) | 38 of 137 (28%) |
+
+The duo answers disappeared, but of the 20 answerable questions that got one, only three became right;
+the other 17 now fail at the next rule (a dropped condition, the wrong statistic or direction), and the
+14 that should be declined now get another answer instead. Fixing rules one by one does not generalise;
+part 16 changes the reader instead.
+
+## 15. Questions and feedback from people
+
+The Scout page keeps every question (`ask_log`) with what the system did, unless the person switches it
+off; the page says so under the question box. Under each answer: "Was this answer right?" and, for no, a
+reason (wrong statistic, wrong player or team, a wrong number, should have declined) and what it should
+have said (`answer_feedback`). Beside each similar player: "Is X a good match?" (`similar_feedback`).
+No row names a person: no account, no address. A random number kept by the browser (`visitor`) groups
+one person's answers; `ASK_LOG_SOURCE` (an environment setting, default `local`) separates a study
+from development. Tables: `scripts/schema_feedback.sql`, created at startup.
+
+```text
+ASK_LOG_SOURCE=study                                   while other people use the site
+python evaluation/export_asked.py --source study       their questions, for a test set with answer keys
+python evaluation/judge_similarity.py --source study   the blind test of part 20
+```
+
+The questions people type are the test set that part 14 asked for, and the only one that can measure
+real wording; they still need answer keys written by SQL, like the other sets, before being run.
+
+## 16. A language model reads the question
+
+Parts 8 and 14 show that the calculation is right when the question is understood, and that the
+word-matching reader is what fails on outside wording. A language model now reads the question into a
+small structured query (`stat_query.py`, a StatQuery): who is asked about (players or teams, by name, or
+a group: positions, rookies, conference, a team's roster), which games (home or away, wins or losses,
+months, last games, opponents), conditions ("at least 50 games", "averaging 20 points", "40 points in a
+game"), what to measure (a statistic per game, in total or per 36 minutes, a sum of statistics, or a
+ratio of totals such as blocks per foul) and what to do with it (rank, value, compare, count, average,
+sum, list). Three kinds: season numbers, single games, and counts of games. A fourth, "other", hands
+shot zones, matchups, duos, lineups, streaks, standings and similar players to the old reader, and the
+model can say that a question cannot be answered, with a reason (another season or a career, playoffs,
+awards or the draft, not a statistic, not recorded).
+
+```text
+question -> language model -> StatQuery (JSON that must fit a schema) -> checks -> calculation -> answer
+                      \-> not answerable: declined with the reason
+                      \-> "other", invalid twice, or no model: the word-matching reader (part 8)
+```
+
+The model never writes a number. `query_executor.py` checks everything in the query (names against the
+season's players and teams, by surname so that "Michael Jordan" does not become Michael Porter Jr.,
+statistics against the metric tables) and calculates over the same in-memory season as the fact engine.
+Rates and averages use the NBA.com leaderboard minimums (58 games; FG% 300 made, 3P% 82 made, FT% 125
+made), scaled to a slice of games, unless the question states a minimum of games, minutes or attempts.
+
+The prompt (`llm_reader.py`) holds the contract, the list of statistics and ten examples written for it,
+none taken from a test set. The answer must be JSON fitting the schema (structured output); a reply that
+does not validate is sent back once with the error, then the old reader answers. Answers can be cached
+by model, prompt version and question (`READER_CACHE`), so an evaluation can be repeated exactly.
+
+**The chips.** On the Scout page the query is shown as chips that can be changed: kind, players or
+teams, who counts, which games, conditions, measure, calculation, order and how many. "Recalculate"
+sends the changed query to the executor without reading the question again. When the model declined, a
+person can ask to calculate anyway. An edited answer is logged as `edited`, which also records where
+readings were wrong.
+
+**Protocol.** The StatQuery contract was written before the fourth test set was collected (part 17).
+The prompt was written from the contract and tried on new questions of my own. The third set (part 14)
+has been seen, so it is now development data for this reader: its numbers will be reported as such.
+Results: to be filled in after the runs (they need a language model with credit).
+
+## 17. A fourth test set, from the web
+
+Collected on 2026-11-26 after the contract of part 16 was fixed, frozen at 21:05 UTC
+(`evaluation/web_questions.py`, sha256 `260c7dc74469f27d431268c37389c5e4fb11915d7d1f6498bc6a90579c0de661`).
+No system was run on it while it was collected or keyed.
+
+| Source | Questions | What it is |
+|---|---|---|
+| USC text-to-SQL test file (Hugging Face) | 50 | every third of 150 questions about team games, written for another NBA database |
+| StatMuse | 54 | what users typed into StatMuse, as its pages show it; every result of 12 recorded searches with one answer |
+| Quizzes (Sporcle, Yardbarker) | 34 | all clues of a 2024-25 almanac and an advanced-stats quiz, and three list questions |
+
+70 are answerable (51 checked by the first name, 13 by a number, 4 by one of several accepted numbers,
+2 by every name), 64 should be declined (other seasons, playoffs, awards, data that is not kept) and 4
+are left to a person. StatMuse results that ask for a whole table ("NBA player stats 2024-25"), garbled
+text and near-duplicates were left out and are listed in the file. Rules were fixed before any key was
+computed (in the file): no season means 2024-25, "2025" alone means 2024-25, other seasons are declined,
+and an "average percentage" may be the mean of games or the season ratio.
+
+The keys are SQL on the raw tables, as before, but several can be checked against numbers printed on
+the quiz pages, which this project did not write: rebounds leader 13.9, blocks leader 2.4, FG% 70.6%,
+FT% 93.3%, 3P% 45.6%, steals 3.0, most wins 68, most losses 65. All agree with the keys, including the
+blocks leader, which only holds with the 58-game minimum (Wembanyama averaged more in 46 games).
+
+Results: to be run once, with both readers, after the reader is final.
+
+## 18. Checking who a number belongs to
+
+Part 5's check passes a real number given to the wrong player. `grounding.misattributed` pairs every
+number with the player or team named last before it, in the answer and in the sources, and flags a
+number that the sources give to someone else and never to the one the answer names ("Jokić averaged
+30.4" when the sources say "Giannis Antetokounmpo 30.4, Nikola Jokić 29.6"). Numbers a source states
+without a name, and small whole numbers (ranks, counts below 10), are not judged, to keep false alarms
+rare. The page shows "the sources give these to someone else: …".
+
+`evaluation/run_generation.py` measures the writer (the language model that turns sources into prose):
+every number in a source, no number given to the wrong owner, citations present and valid, whether the
+written answer is still right when the calculated sentence it was written from was right ("broke"),
+time, tokens and cost, and a sample sheet for a person to score (faithful, complete, clear, 0-2 each).
+Results: to be filled in after the runs.
+
+## 19. When to answer
+
+Every answer now carries a confidence from 0 to 1 and the signals it was made from. The strongest is
+agreement: the model's query and the old reader are asked the same question; when both name the same
+leader or give the same number, they rarely share the mistake. Hand-set values (`rag_service.confidence`):
+model calculated and readers agree 0.95, model calculated with nothing to compare 0.8, readers disagree
+0.6, old reader calculated 0.5 (0.45 after a fallback), documents only 0.3, declined or asked back 0.
+The page warns when the readers disagree, after a fallback, and for answers assembled from documents.
+
+`evaluation/selective.py` draws risk against coverage: answering only above a confidence, how many
+questions are answered (coverage) and how many of those answers are wrong (risk); AURC is the area under
+that curve, lower is better. Answering a question that should be declined is wrong. It can also learn
+the weight of each signal (logistic regression) on a seen set and report it on a held-out one.
+
+The old reader on the third set (after seeing it):
+
+| Answer when confidence is at least | Coverage | Risk |
+|---|---|---|
+| 0.50 (calculated answers only) | 60% | 86% |
+| 0.30 (everything it answered) | 81% | 89% |
+
+AURC 0.705. Its confidence hardly separates right from wrong: the old reader is confidently wrong on
+outside wording, which is what the language-model reader has to improve. Results for it: after the runs.
+
+## 20. Two pages for the defence
+
+**How it works** shows the pipeline, runs one question through both readers and the four retrieval
+methods side by side (part 4's finding, live: embeddings find the right document but cannot rank or
+filter), and shows the headline results read from `evaluation/results`.
+
+**Judge similar players** is a blind test of part 9. A regular player (40 games, 20 minutes) is shown
+with two lists of five similar players: the learned measure and the twelve averages used before, in
+random order; the page never learns which is which. People choose the list that is more alike, or "about
+the same". `evaluation/judge_similarity.py` reports how often each method wins and a sign test; since
+one person's answers are not independent, also per person. 10 to 15 people judging 10 players each is
+enough to detect a clear preference.
+
+## 21. Next
+
+1. Run the language-model reader on the third set (development), then once on the fourth set, with the
+   old reader alongside; fit the confidence weights on the third set and report them on the fourth.
+2. Measure the writer with `run_generation.py`, and have a person score the sample.
+3. Run a short study (`ASK_LOG_SOURCE=study`): questions, verdicts and blind judgments from other people.
+4. Compare a larger or multilingual embedding model for paraphrases.
 5. Add seasons.

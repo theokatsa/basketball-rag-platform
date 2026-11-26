@@ -11,8 +11,6 @@ export function rankLabel(rank: number | null): string {
 
 /** Season stats store shooting percentages as fractions (0.452). */
 export const fractionPct = (value: number | null) => (value == null ? '-' : `${(value * 100).toFixed(1)}%`);
-/** Directory rows store shooting percentages already scaled (45.2). */
-export const scaledPct = (value: number | null) => (value == null ? '-' : `${value.toFixed(1)}%`);
 
 export function loadStored<T>(key: string, fallback: T): T {
   try {
@@ -46,8 +44,6 @@ export function radarMetrics(stat: SeasonStat, scope: 'all' | 'position'): Radar
 
 /** API percentiles are the "top fraction" (0.03 = top 3%). Never show "Top 0%". */
 export const topLabel = (percentile: number | null) => (percentile == null ? 'n/a' : `Top ${Math.max(1, Math.round(percentile * 100))}%`);
-/** Same idea for an average strength value where 1 = best. */
-export const topFromStrength = (strength: number) => `Top ${Math.max(1, Math.round((1 - strength) * 100))}%`;
 
 /** Shot matchups are stored as "HOME vs AWAY"; show them as "AWAY @ HOME". */
 export function formatMatchup(matchup: string): string {

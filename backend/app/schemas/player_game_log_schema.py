@@ -71,35 +71,6 @@ class PlayerTotalsResponse(BaseModel):
     defended_fg_diff: float | None = None
 
 
-class LeagueShotZoneResponse(BaseModel):
-    shot_zone_basic: str
-    shot_zone_area: str
-    attempts: int
-    made: int
-
-
-class PlayerShotZoneResponse(LeagueShotZoneResponse):
-    player_id: int
-
-
-class TeamShotZoneResponse(LeagueShotZoneResponse):
-    team_id: int
-
-
-class PlayerFormResponse(BaseModel):
-    player_id: int
-    games_played: int
-    recent_points: float
-    recent_rebounds: float
-    recent_assists: float
-    recent_minutes: float
-    earlier_points: float
-    earlier_rebounds: float
-    earlier_assists: float
-    earlier_minutes: float
-    recent_games: list[int]
-
-
 class BestGameResponse(BaseModel):
     player_id: int
     game_id: str

@@ -22,12 +22,12 @@ const text = (d: Def, v: number, plus = d.signed) => `${plus && v > 0 ? '+' : ''
 const level = (s: number) => Math.min(3, Math.floor(Math.abs(s)));
 const WORDS = ['Within normal range', 'A little unusual', 'Unusual', 'Very unusual'];
 
-function Spark({ stat, d }: { stat: FormStat; d: Def }) {
+function Spark({ stat, d, big = false }: { stat: FormStat; d: Def; big?: boolean }) {
   const values = stat.games.filter((v): v is number => v != null);
   const hi = Math.max(1, stat.before, ...values), lo = Math.min(0, stat.before, ...values);
   const y = (v: number) => ((v - lo) / (hi - lo)) * 100;
   return (
-    <span className="form-spark" role="img" aria-label={`Last games: ${values.join(', ')}. Average before: ${text(d, stat.before)}`}>
+    <span className={`form-spark ${big ? 'big' : ''}`} role="img" aria-label={`Last games: ${values.join(', ')}. Average before: ${text(d, stat.before)}`}>
       <u style={{ bottom: `${y(stat.before)}%` }} />
       {stat.games.map((v, i) => <i key={i} title={v == null ? 'No attempts' : text(d, v)}>{v != null && <em className={(v >= stat.before) !== Boolean(d.lower) ? 'good' : ''} style={{ bottom: `${y(Math.min(0, v))}%`, height: `${Math.max(3, Math.abs(y(v) - y(0)))}%` }} />}</i>)}
     </span>
@@ -59,7 +59,8 @@ export function Form() {
     <button type="button" className={`form-hero ${warm ? 'hot' : 'cold'}`} onClick={() => open(r.p.player_id)}>
       <span className="form-hero-logo"><TeamLogo teamId={r.p.club_team_id} size={190} /></span>
       <Avatar key={r.p.nba_player_id} name={r.p.full_name} nbaPlayerId={r.p.nba_player_id} className="form-hero-photo" />
-      <span className="form-hero-text"><small>{warm ? 'Biggest rise' : 'Biggest drop'}</small><b>{r.p.full_name}</b><strong>{text(d, r.s.now)}<em>{text(d, r.change, true)}</em></strong><small>{d.label.replace(' (overall)', '')} over the last {recent}, was {text(d, r.s.before)}</small></span>
+      <span className="form-hero-text"><small className="form-hero-kicker">{rank === 'surprise' ? (warm ? 'Most unusual rise' : 'Most unusual drop') : (warm ? 'Biggest rise' : 'Biggest drop')}</small><b>{r.p.full_name}</b><strong>{text(d, r.s.now)}<em>{text(d, r.change, true)}</em></strong><small>{d.label.replace(' (overall)', '')} over the last {recent}, was {text(d, r.s.before)}</small></span>
+      <span className="form-hero-spark"><Spark stat={r.s} d={d} big /><small>Last {recent} games, oldest first</small></span>
     </button>
   );
   const list = (warm: boolean, paged: typeof hotPage) => (
@@ -91,13 +92,17 @@ export function Form() {
         <Segmented label="Position" value={position} options={[['', 'All'], ...POSITIONS.map((p) => [p, `${p}s`] as [string, string])]} onChange={setPosition} />
         <Segmented label="Recent games" value={recent} options={[['5', 'Last 5'], ['10', 'Last 10'], ['15', 'Last 15'], ['20', 'Last 20']]} onChange={setRecent} />
         <Segmented label="Rank by" value={rank} options={[['surprise', 'Most unusual'], ['change', 'Biggest change']]} onChange={setRank} />
-        <label className="inline-range">At least {minutes} minutes<input type="range" min={5} max={36} value={minutes} onChange={(e) => setMinutes(Number(e.target.value))} /></label>
+        <label className="inline-range">At least {minutes} min a game<input type="range" min={5} max={36} value={minutes} onChange={(e) => setMinutes(Number(e.target.value))} /></label>
       </div>
       {!data || loading ? <Loading height="34rem" /> : (
         <>
           <div className="form-heroes">{hero(hot[0], true)}{hero(cold[0], false)}</div>
+          <div className="form-key" aria-label="How to read the lists">
+            <span><i className="key-bars" aria-hidden="true"><em /><em /><em /></i>One bar per game, oldest first</span>
+            <span><i className="key-line" aria-hidden="true" />The earlier average</span>
+            <span><span className="heat-dots" aria-hidden="true"><i className="on" /><i className="on" /><i /></span>How unusual the change is for that player, against his normal game-to-game swings</span>
+          </div>
           <div className="two-col">{list(true, hotPage)}{list(false, coldPage)}</div>
-          <p className="radar-note">Dots show how unusual the change is for that player, measured against the normal game-to-game swings earlier in the season. The thin line in each small chart is the earlier average.</p>
         </>
       )}
     </>

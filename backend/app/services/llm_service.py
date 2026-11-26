@@ -49,6 +49,7 @@ class OpenRouterProvider(LLMProvider):
         if not OPENROUTER_API_KEY:
             raise LLMError("OPENROUTER_API_KEY is required when LLM_PROVIDER=openrouter")
         self.model = OPENROUTER_MODEL
+        self.last_tokens = 0  # prompt + completion tokens of the last answer, for the cost
 
     def generate(self, system_prompt: str, user_prompt: str) -> str:
         data = self._post(
@@ -63,9 +64,11 @@ class OpenRouterProvider(LLMProvider):
             {
                 "Authorization": f"Bearer {OPENROUTER_API_KEY}",
                 "HTTP-Referer": "http://localhost:5173",
-                "X-Title": "Basketball RAG Scouting Console",
+                "X-Title": "NBAmeetsdata",
             },
         )
+        usage = data.get("usage") or {}
+        self.last_tokens = int(usage.get("prompt_tokens") or 0) + int(usage.get("completion_tokens") or 0)
         try:
             return data["choices"][0]["message"]["content"].strip()
         except (KeyError, IndexError, TypeError) as exc:

@@ -3,10 +3,10 @@ import { useApp } from '../AppContext';
 import type { View } from '../types';
 
 const MAIN: [View, string][] = [['home', 'Home'], ['players', 'Players'], ['top', 'Top players'], ['teams', 'Teams'], ['games', 'Games'], ['scout', 'Scout']];
-const TOOLS: [View, string, string][] = [['explorer', 'Stat Explorer', 'Plot any two stats'], ['shotlab', 'Shot Lab', 'Best shooters by zone'], ['young', 'Young talent', 'Best players by age'], ['form', 'Hot and cold', 'Last 10 games'], ['lineup', 'Lineup Builder', 'Test five players']];
+const TOOLS: [View, string, string][] = [['explorer', 'Stat Explorer', 'Plot any two stats'], ['shotlab', 'Shot Lab', 'Best shooters by zone'], ['young', 'Young talent', 'Best players by age'], ['form', 'Hot and cold', 'Last 10 games'], ['lineup', 'Lineup Builder', 'Test five players'], ['how', 'How it works', 'The pipeline and the tests'], ['judge', 'Judge similar players', 'Help test the similarity model']];
 
 export function Nav({ view }: { view: View }) {
-  const { go, favoriteIds, compareIds, error, user } = useApp();
+  const { navigate, favoriteIds, compareIds, error, user } = useApp();
   const [menu, setMenu] = useState<'tools' | 'all' | null>(null);
   const bar = useRef<HTMLElement>(null);
   useEffect(() => { setMenu(null); }, [view]);
@@ -20,13 +20,13 @@ export function Nav({ view }: { view: View }) {
     return () => { document.removeEventListener('mousedown', close); document.removeEventListener('keydown', close); };
   }, [menu]);
   const current = view === 'team' ? 'teams' : view === 'game' ? 'games' : view;
-  const pick = (v: View) => { setMenu(null); go(v); };
+  const pick = (v: View) => { setMenu(null); navigate(v); };
   const tab = (v: View, label: string, count = 0) => <button key={v} type="button" aria-current={current === v ? 'page' : undefined} className={current === v ? 'nav-tab active' : 'nav-tab'} onClick={() => pick(v)}>{label}{count > 0 && <span>{count}</span>}</button>;
   const toolActive = TOOLS.some(([v]) => v === current);
   const toolList = TOOLS.map(([v, label, text]) => <button key={v} type="button" aria-current={current === v ? 'page' : undefined} className="menu-item" onClick={() => pick(v)}><b>{label}</b><small>{text}</small></button>);
   return (
     <header className="topbar" ref={bar}>
-      <button type="button" className="brand" onClick={() => pick('home')} aria-label="Scouting Console, home"><span className="brand-ball" aria-hidden="true" /><span className="brand-name">Scouting <em>Console</em></span></button>
+      <button type="button" className="brand" onClick={() => pick('home')} aria-label="NBAmeetsdata, home"><span className="brand-ball" aria-hidden="true" /><span className="brand-name">NBA<small>meets</small><em>Data</em></span></button>
       <nav className="main-nav" aria-label="Main">
         {MAIN.map(([v, label]) => tab(v, label))}
         <div className="nav-drop">
@@ -36,7 +36,7 @@ export function Nav({ view }: { view: View }) {
       </nav>
       <div className="nav-side">
         {error && <span className="offline-note">API offline</span>}
-        {tab('shortlist', 'Shortlist', favoriteIds.length)}{tab('compare', 'Compare', compareIds.length)}
+        {user && tab('shortlist', 'Shortlist', favoriteIds.length)}{tab('compare', 'Compare', compareIds.length)}
         {user ? <button type="button" className="user-button" aria-current={current === 'account' ? 'page' : undefined} title={`${user.display_name}, your account`} onClick={() => pick('account')}>{user.display_name.slice(0, 1).toUpperCase()}<span className="visually-hidden"> Your account</span></button> : <button type="button" className="signin-button" onClick={() => pick('login')}>Sign in</button>}
         <button type="button" className="nav-tab menu-button" aria-expanded={menu === 'all'} onClick={() => setMenu(menu === 'all' ? null : 'all')}>Menu</button>
       </div>

@@ -3,6 +3,7 @@ from statistics import mean, pstdev
 from sqlalchemy import text
 
 from app.services.cache import cached, rows
+from app.core.config import ACTIVE_SEASON_SQL
 
 STATS = ["points", "reb", "ast", "stl", "blk", "tov", "tpm", "minutes", "plus_minus", "game_score", "fg", "three", "ts"]
 
@@ -35,11 +36,11 @@ def _single(game, stat):
 def form(db, window: int):
     """Each player's last N games against the earlier ones, for every statistic."""
     def load():
-        games = rows(db, text("""
+        games = rows(db, text(f"""
             select b.*, b.game_date::text as day,
                    (b.points + 0.4 * b.fgm - 0.7 * b.fga - 0.4 * (b.fta - b.ftm) + 0.7 * b.oreb + 0.3 * b.dreb + b.stl + 0.7 * b.ast + 0.7 * b.blk - 0.4 * b.pf - b.tov)::float as game_score
             from player_box_scores b
-            where b.season = (select max(season) from player_box_scores) and b.minutes > 0
+            where b.season = {ACTIVE_SEASON_SQL} and b.minutes > 0
             order by b.player_id, b.game_date
         """))
         grouped: dict[int, list[dict]] = {}

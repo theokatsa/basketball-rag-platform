@@ -32,6 +32,8 @@ export type AppData = {
   open: (playerId: number) => void;
   openGame: (gameId: string) => void;
   go: (view: View, id?: number) => void;
+  /** Opens a page from the main navigation: fresh, without what it remembered from the last visit. */
+  navigate: (view: View) => void;
   signedIn: (user: User, merge: boolean) => Promise<void>;
   signOut: () => Promise<void>;
 };

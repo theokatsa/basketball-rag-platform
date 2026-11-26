@@ -11,8 +11,9 @@ from sqlalchemy import text
 
 from app.services.cache import cached, rows
 from app.services.stat_vectors import FEATURES
+from app.core.config import ACTIVE_SEASON_SQL
 
-LATEST = "(select max(season) from player_advanced_stats)"
+LATEST = ACTIVE_SEASON_SQL
 MIN_POOL_GAMES, MIN_POOL_MINUTES = 20, 12
 MATCHUP_PRIOR = 60  # possessions at the player's own average added to every matchup
 USAGE_COST = 0.6  # points per possession lost per unit of extra usage: one usage point costs 0.6 points per 100 (a cautious value)

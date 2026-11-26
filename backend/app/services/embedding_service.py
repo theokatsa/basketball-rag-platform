@@ -28,36 +28,6 @@ def _resolve_reference_player(
     return min(matches, key=rank)["player_id"]
 
 
-def search_reference_players(
-    db: Session,
-    query: str | None,
-    season: str | None = None,
-    limit: int = 10,
-):
-    vectors = load_season(db, season)
-    if vectors is None:
-        return []
-    needle = normalize_name(query or "")
-    matches = [row for row in vectors.rows if needle in normalize_name(row["full_name"])]
-    matches.sort(key=lambda row: -(row["points"] or 0))
-    return [
-        {"player_id": row["player_id"], "full_name": row["full_name"]} for row in matches[:limit]
-    ]
-
-
-def get_search_positions(db: Session):
-    positions_sql = text(
-        """
-        select distinct position
-        from player_profiles
-        where position is not null
-          and btrim(position) <> ''
-        order by position
-        """
-    )
-    return db.execute(positions_sql).mappings().all()
-
-
 def search_similar_players(
     db: Session,
     player_id: int | None = None,

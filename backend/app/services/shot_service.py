@@ -6,6 +6,7 @@ The same rules live in frontend/src/components/CourtZones.tsx (zoneOf); keep the
 from sqlalchemy import text
 
 from app.services.cache import cached, rows
+from app.core.config import ACTIVE_SEASON_SQL
 
 ZONE_SQL = """
 case
@@ -28,7 +29,7 @@ case
 end
 """
 OPPONENT_SQL = "case when split_part(sc.matchup, ' vs ', 1) = t.abbreviation then split_part(sc.matchup, ' vs ', 2) else split_part(sc.matchup, ' vs ', 1) end"
-SEASON = "sc.season = (select max(season) from shot_charts)"
+SEASON = f"sc.season = {ACTIVE_SEASON_SQL}"
 COUNTS = "count(*) as attempts, sum(sc.shot_made::int) as made"
 
 

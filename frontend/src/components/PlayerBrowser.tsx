@@ -16,7 +16,7 @@ const ROWS = 8;
 
 /** The player list used everywhere a player has to be chosen. */
 export function PlayerBrowser({ request, onClose }: { request: BrowseRequest; onClose: () => void }) {
-  const { players, totals, byId, favoriteIds, historyIds } = useApp();
+  const { players, totals, byId, favoriteIds, historyIds, user } = useApp();
   const { title, max, min = 1, exclude = [] } = request;
   const [chosen, setChosen] = useState<number[]>(request.selected ?? []);
   const [query, setQuery] = useState('');
@@ -53,7 +53,7 @@ export function PlayerBrowser({ request, onClose }: { request: BrowseRequest; on
     if (max === 1) finish([id]);
     else setChosen((list) => (list.includes(id) ? list.filter((v) => v !== id) : list.length >= max ? list : [...list, id]));
   };
-  const sources: [Source, string][] = [['all', 'All players'], ...(anchor != null && max > 1 ? [['similar', 'Similar'] as [Source, string]] : []), ...(historyIds.length ? [['recent', 'Recent'] as [Source, string]] : []), ...(favoriteIds.length ? [['shortlist', 'Shortlist'] as [Source, string]] : [])];
+  const sources: [Source, string][] = [['all', 'All players'], ...(anchor != null && max > 1 ? [['similar', 'Similar'] as [Source, string]] : []), ...(historyIds.length ? [['recent', 'Recent'] as [Source, string]] : []), ...(user && favoriteIds.length ? [['shortlist', 'Shortlist'] as [Source, string]] : [])];
   const columns = [...new Set(['points', 'rebounds', 'assists', sort])].map(statByKey);
 
   return (

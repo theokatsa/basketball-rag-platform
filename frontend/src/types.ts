@@ -11,7 +11,7 @@ export type PlayerDetailData = { player: PlayerRecord; profile: PlayerProfile; s
 /** 'name', 'club' or the key of a statistic in stats.ts */
 export type SortKey = string;
 export type SortDirection = 'asc' | 'desc';
-export type View = 'games' | 'game' | 'login' | 'account' | 'home' | 'players' | 'top' | 'teams' | 'team' | 'scout' | 'explorer' | 'shotlab' | 'young' | 'form' | 'lineup' | 'shortlist' | 'player' | 'compare' | 'report';
+export type View = 'games' | 'game' | 'login' | 'account' | 'home' | 'players' | 'top' | 'teams' | 'team' | 'scout' | 'explorer' | 'shotlab' | 'young' | 'form' | 'lineup' | 'shortlist' | 'player' | 'compare' | 'report' | 'how' | 'judge';
 /** One line of the filter builder: this statistic is at least / at most this value. */
 export type FilterRule = { id: number; stat: string; op: 'min' | 'max'; value: number };
 

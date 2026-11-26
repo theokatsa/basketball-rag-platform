@@ -13,9 +13,6 @@ import { usePersisted } from '../usePersisted';
 
 const W = 1000, H = 600, L = 64, B = 56, T = 20, R = 24;
 const PRESETS: [string, string, string][] = [['Scoring vs efficiency', 'points', 'ts'], ['Usage vs efficiency', 'usage', 'ts'], ['Playmaking vs turnovers', 'assists', 'turnovers'], ['Rebounds vs blocks', 'rebounds', 'blocks'], ['Offense vs defense', 'off_rating', 'def_rating'], ['Age vs production', 'age', 'production']];
-const COLORS: Record<string, string> = { Guard: '#e8590c', Forward: '#9085e9', Center: '#199e70' };
-const mainPosition = (position: string | null) => (position ?? '').split('-')[0];
-const colorOf = (position: string | null) => COLORS[mainPosition(position)] ?? '#aaa';
 
 /** About eight round tick values across the range. */
 function ticks(min: number, max: number): number[] {
@@ -25,6 +22,29 @@ function ticks(min: number, max: number): number[] {
   const out: number[] = [];
   for (let v = Math.ceil(min / step) * step; v <= max + 1e-9; v += step) out.push(Number(v.toFixed(6)));
   return out;
+}
+
+/** The highlighted player: one ring, a name tag, and dashed guides to both axes with the values. */
+function Star({ x, y, name, xText, yText, teamId, onOpen }: { x: number; y: number; name: string; xText: string; yText: string; teamId: number | null; onOpen: () => void }) {
+  const width = name.length * 8.4 + 30;
+  const labelX = Math.min(W - R - width / 2, Math.max(L + width / 2, x));
+  const below = y < T + 60;
+  const labelY = below ? y + 26 : y - 50;
+  const tag = (text: string) => text.length * 7.6 + 16;
+  return (
+    <g className="star" style={colorVars(teamColor(teamId))}>
+      <line x1={x} x2={x} y1={y + 12} y2={H - B} className="star-guide" />
+      <line x1={L} x2={x - 12} y1={y} y2={y} className="star-guide" />
+      <rect x={x - tag(xText) / 2} y={H - B - 11} width={tag(xText)} height={22} rx={6} className="star-tag" /><text x={x} y={H - B + 4.5} textAnchor="middle" className="star-tag-text">{xText}</text>
+      <rect x={L - tag(yText) + 4} y={y - 11} width={tag(yText)} height={22} rx={6} className="star-tag" /><text x={L - tag(yText) / 2 + 4} y={y + 4.5} textAnchor="middle" className="star-tag-text">{yText}</text>
+      <g className="star-hit" onClick={onOpen}>
+        <circle cx={x} cy={y} r={17} className="star-ring" />
+        <circle cx={x} cy={y} r={10} className="star-dot" />
+        <rect x={labelX - width / 2} y={labelY} width={width} height={26} rx={13} className="star-pill" />
+        <text x={labelX} y={labelY + 17.5} textAnchor="middle" className="star-name">{name}</text>
+      </g>
+    </g>
+  );
 }
 
 export function Explorer() {
@@ -59,14 +79,13 @@ export function Explorer() {
   const tip = hover != null && hover !== found ? view?.dots.find((d) => d.p.player_id === hover) : undefined;
   const star = view?.dots.find((d) => d.p.player_id === found);
   const starPlayer = found != null ? byId.get(found) : undefined;
-  const starTeam = starPlayer?.club_team_id ?? null;
   const focused = Boolean(club) || found != null;
-  /** With a highlight on, only the highlighted team and player keep a colour: their team's. */
-  const inFocus = (p: PlayerDirectoryRow) => (club ? p.club_full_name === club : p.club_team_id === starTeam);
+  /** Every dot wears its team's colour. A highlighted team keeps it and everyone else goes grey; a highlighted player stands alone. */
+  const inFocus = (p: PlayerDirectoryRow) => Boolean(club) && p.club_full_name === club;
   const size = (p: PlayerDirectoryRow) => 3.5 + (p.minutes ?? 0) / 10;
-  const look = (p: PlayerDirectoryRow) => (!focused ? { fill: colorOf(p.position), className: 'dot' } : inFocus(p) ? { className: 'dot team' } : { className: 'dot out' });
+  const look = (p: PlayerDirectoryRow) => (!focused ? { className: 'dot club' } : inFocus(p) ? { className: 'dot team' } : { className: 'dot out' });
   const ordered = view ? (focused ? [...view.dots].sort((a, b) => Number(inFocus(a.p)) - Number(inFocus(b.p))) : view.dots).filter((d) => d.p.player_id !== found) : [];
-  const teamNames = [...new Map((view?.dots ?? []).filter((d) => focused && (inFocus(d.p) || d.p.player_id === found)).map((d) => [d.p.club_team_id, d.p])).values()];
+  const teamNames = [...new Map((view?.dots ?? []).filter((d) => inFocus(d.p)).map((d) => [d.p.club_team_id, d.p])).values()];
   const rank = (value: number, s: StatDef, axis: 'xv' | 'yv') => 1 + view!.dots.filter((o) => (s.lowerIsBetter ? o[axis] < value : o[axis] > value)).length;
   return (
     <>
@@ -100,7 +119,7 @@ export function Explorer() {
                     </g>
                   ))}
                   {tip && <circle cx={view.px(tip.xv)} cy={view.py(tip.yv)} r={size(tip.p) + 3} style={colorVars(teamColor(tip.p.club_team_id))} className="dot-top team" />}
-                  {star && <g className="dot-star" style={colorVars(teamColor(star.p.club_team_id))} onClick={() => open(star.p.player_id)}><circle cx={view.px(star.xv)} cy={view.py(star.yv)} r={22} className="halo team" /><circle cx={view.px(star.xv)} cy={view.py(star.yv)} r={11.5} className="dot-top team" /><text x={Math.min(W - 110, Math.max(L + 100, view.px(star.xv)))} y={view.py(star.yv) < 70 ? view.py(star.yv) + 42 : view.py(star.yv) - 30} textAnchor="middle" className="dot-label">{star.p.full_name}</text></g>}
+                  {star && <Star x={view.px(star.xv)} y={view.py(star.yv)} name={star.p.full_name} xText={formatStat(x, star.xv)} yText={formatStat(y, star.yv)} teamId={star.p.club_team_id} onOpen={() => open(star.p.player_id)} />}
                 </svg>
                 {tip && (
                   <div className={`scatter-tip rich ${view.px(tip.xv) > W * 0.6 ? 'flip' : ''} ${view.py(tip.yv) > H * 0.6 ? 'up' : ''}`} style={{ left: `${(view.px(tip.xv) / W) * 100}%`, top: `${(view.py(tip.yv) / H) * 100}%` }} role="tooltip">
@@ -112,7 +131,7 @@ export function Explorer() {
               </div>
             </div>
             <div className="scatter-foot">
-              <span className="scatter-legend">{focused ? <>{teamNames.map((p) => <span key={p.club_team_id} style={colorVars(teamColor(p.club_team_id))}><i className="fill" />{p.club_full_name}</span>)}<span><i className="out-key" />Everyone else</span></> : Object.entries(COLORS).map(([name, color]) => <span key={name}><i style={{ background: color }} />{name}s</span>)}<span>Bigger dots play more minutes</span><span>Dashed lines are the average</span><span><i className="quad-key" />Better than average on both</span></span>
+              <span className="scatter-legend">{focused ? <>{teamNames.map((p) => <span key={p.club_team_id} style={colorVars(teamColor(p.club_team_id))}><i className="fill" />{p.club_full_name}</span>)}{star && <span style={colorVars(teamColor(star.p.club_team_id))}><i className="fill ring" />{star.p.full_name}</span>}<span><i className="out-key" />Everyone else</span></> : <span><i className="team-key" />Dot colour is the player&apos;s team</span>}<span>Bigger dots play more minutes</span><span>Dashed lines are the average</span><span><i className="quad-key" />Better than average on both</span></span>
               {star && <span><b>{star.p.full_name}</b> {formatStat(x, star.xv)} {x.short} ({rank(star.xv, x, 'xv')} of {view.dots.length}), {formatStat(y, star.yv)} {y.short} ({rank(star.yv, y, 'yv')} of {view.dots.length})</span>}
             </div>
           </>

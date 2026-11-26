@@ -1,23 +1,33 @@
 """Question -> plan -> evidence -> cited answer -> check."""
 
+import contextlib
+import contextvars
+import logging
 import re
 import time
 
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-from app.core.config import OPENROUTER_API_KEY
-from app.services import fact_engine
+from pydantic import ValidationError
+
+from app.core.config import OPENROUTER_API_KEY, QUESTION_READER
+from app.services import fact_engine, llm_reader, query_executor
+from app.services.query_executor import QueryError
+from app.services.stat_query import StatQuery
 from app.services.cache import cached
 from app.services.greek import to_english
-from app.services.grounding import check
-from app.services.llm_service import get_llm_provider
+from app.services.grounding import check, lead
+from app.services.llm_service import LLMError, get_llm_provider
+from app.services import league_data
 from app.services.league_data import season_name
 from app.services.paraphrase_router import suggest
 from app.services.query_planner import Plan
 from app.services.question_reader import standalone
 from app.services.retrieval import documents_for, plan_question, retrieve
 from app.services.text_utils import normalize_name
+
+log = logging.getLogger(__name__)
 
 SYSTEM_PROMPT = """You are a basketball scouting analyst answering from a database.
 Rules:
@@ -101,20 +111,137 @@ def _without_statistics(db, question: str) -> str | None:
     return next((n for n in everyone if " " in n and re.search(rf"(?<!\w){re.escape(normalize_name(n))}(?!\w)", plain)), None)
 
 
-def answer_question(db: Session, question: str, season: str | None, limit: int, previous: str | None = None) -> dict:
-    understood = standalone(to_english(question), to_english(previous) if previous else None, db)
+DECLINED = {
+    "other_season_or_career": "The database holds the 2024-25 regular season only, so careers and other seasons are not in it.",
+    "playoffs": "Playoff games are not in the database, only the 2024-25 regular season.",
+    "awards_or_draft": "Awards, the draft, contracts and trades are not in the database.",
+    "not_a_statistic": "Statistics cannot answer this: it needs someone who watched or knows the player.",
+    "not_recorded": "This statistic is not recorded in the database.",
+    "other": "This is outside the 2024-25 regular-season statistics in the database.",
+}
+
+
+_writing: contextvars.ContextVar[bool] = contextvars.ContextVar("writing", default=True)
+
+
+@contextlib.contextmanager
+def without_writing():
+    """Answers in this block are not written by the language model (the comparison page needs them fast)."""
+    token = _writing.set(False)
+    try:
+        yield
+    finally:
+        _writing.reset(token)
+
+
+def _known_names(db) -> tuple[str, ...]:
+    """Every player and team of the season, so the check can tell whose number an answer gives."""
+    return cached("known_names", lambda: tuple(sorted(set(league_data.people(db)["full_name"]) | set(league_data.team_list(db)["full_name"]))))
+
+
+def default_reader() -> str:
+    """QUESTION_READER=rules keeps the word-matching reader even with a key."""
+    return "llm" if OPENROUTER_API_KEY and QUESTION_READER != "rules" else "rules"
+
+
+def answer_question(db: Session, question: str, season: str | None, limit: int, previous: str | None = None, query: dict | None = None, reader: str | None = None,
+                    history: list[str] | None = None) -> dict:
+    """reader "llm": a language model reads the question into a StatQuery that is calculated; "rules": the word-matching reader.
+    query: a StatQuery edited on the page, calculated as it is. history: earlier questions of the conversation, oldest first."""
+    english = to_english(question)
+    earlier = to_english(previous) if previous else None
+    note, reading = "", None
+    if query is not None:
+        try:
+            return _from_query(db, StatQuery.model_validate(query), question, season, limit, "edited", None)
+        except ValidationError as error:
+            first = error.errors()[0]
+            where = " → ".join(str(p) for p in first["loc"])
+            return _declined(f"This version of the question cannot be calculated: {where} is not allowed ({first['msg'].lower()}).", question, "edited", query, "")
+        except QueryError as error:
+            return _declined(f"This version of the question cannot be calculated: {error}", question, "edited", query, "")
+    if (reader or default_reader()) == "llm" and (season is None or season == season_name(db)):
+        reading = llm_reader.read(english, earlier, [to_english(h) for h in (history or [])])
+        if reading.query is not None and not reading.query.answerable:
+            return _declined(DECLINED.get(reading.query.reason or "other", DECLINED["other"]), reading.query.restated or question, "llm", reading.query.model_dump(), "", reading)
+        if reading.query is not None and reading.query.topic != "other":
+            try:
+                return _from_query(db, reading.query, question, season, limit, "llm", reading)
+            except QueryError as error:
+                if error.unknown_name:  # a player or team that is not in the season
+                    return _declined(str(error), reading.query.restated or question, "llm", reading.query.model_dump(), "", reading)
+                note = f"Calculated by the rule reader: {error}"
+        elif reading.query is None:
+            note = f"The language model did not read the question ({reading.error}), so the rule reader did."
+    understood = standalone(english, earlier, db)
     result = _answer(db, understood, season, limit, question)
-    return result | {"understood": understood}
+    signals = {"reader": "rules", "calculated": result.get("intent") == "calculated", "agree": None, "fallback": reading is not None, "conditions": 0, "topic": ""}
+    return result | {"understood": understood, "reader": "rules", "reader_note": note, **_reading_info(reading), "signals": signals, "confidence": confidence(signals, result["provider"])}
 
 
-def _answer(db: Session, question: str, season: str | None, limit: int, original: str) -> dict:
+def _reading_info(reading) -> dict:
+    if reading is None:
+        return {}
+    return {"reader_model": reading.model, "reader_ms": reading.ms, "reader_tokens": reading.prompt_tokens + reading.completion_tokens}
+
+
+def _declined(answer: str, understood: str, reader: str, query: dict | None, note: str, reading=None) -> dict:
+    return {
+        "answer": answer, "provider": "declined", "model": "", "sources": [], "plan": [], "intent": "out_of_scope", "table": None, "checks": None,
+        "retrieval_ms": 0, "generation_ms": 0, "understood": understood, "reader": reader, "query": query, "reader_note": note, **_reading_info(reading),
+        "signals": {"reader": reader, "calculated": False, "agree": None, "fallback": False, "conditions": 0, "topic": ""}, "confidence": 0.0,
+    }
+
+
+def _from_query(db: Session, s: StatQuery, question: str, season: str | None, limit: int, reader: str, reading) -> dict:
     started = time.perf_counter()
-    if name := _without_statistics(db, question):
+    fact = query_executor.run(db, s)
+    agree = _agreement(db, question, season, fact) if reader == "llm" else None
+    result = _answer(db, s.restated or question, season, limit, question, fact=fact, started=started)
+    signals = {"reader": reader, "calculated": True, "agree": agree, "fallback": False, "conditions": len(s.conditions), "topic": s.topic}
+    return result | {"understood": s.restated or question, "reader": reader, "query": s.model_dump(), "reader_note": "", **_reading_info(reading),
+                     "signals": signals, "confidence": confidence(signals, result["provider"])}
+
+
+def _agreement(db, question: str, season: str | None, fact) -> bool | None:
+    """Does the word-matching reader, asked the same question, name the same leader or give the same number?
+    Two readers that work in different ways rarely make the same mistake. None: the rules found no number to compare."""
+    try:
+        other = _find_fact(db, standalone(to_english(question), None, db), season)
+    except Exception:  # noqa: BLE001 - the second opinion is optional
+        db.rollback()
+        return None
+    if other is None:
+        return None
+    names = _known_names(db)
+    (who_a, number_a), (who_b, number_b) = lead(fact.answer, names), lead(other.answer, names)
+    if who_a and who_b:
+        return who_a == who_b
+    return number_a == number_b if number_a and number_b else None
+
+
+def confidence(signals: dict, provider: str) -> float:
+    """How sure the system is that the answer is right, from 0 to 1; declining and asking back are 0.
+    Fixed by hand before the fourth test set was run; evaluation/selective.py also fits weights on a seen set."""
+    if provider in ("declined", "clarify"):
+        return 0.0
+    if signals.get("reader") == "edited":
+        return 1.0
+    if signals.get("reader") == "llm" and signals.get("calculated"):
+        return {True: 0.95, None: 0.8, False: 0.6}[signals.get("agree")]
+    if signals.get("calculated"):
+        return 0.45 if signals.get("fallback") else 0.5
+    return 0.3  # retrieved documents: an answer to a different question is likely
+
+
+def _answer(db: Session, question: str, season: str | None, limit: int, original: str, fact=None, started: float | None = None) -> dict:
+    started = started or time.perf_counter()
+    if fact is None and (name := _without_statistics(db, question)):
         return {
             "answer": f"{name} has no {season_name(db)} statistics in the database.", "provider": "declined", "model": "", "sources": [], "plan": [f"Player: {name}"], "intent": "out_of_scope", "table": None,
             "checks": None, "retrieval_ms": round((time.perf_counter() - started) * 1000), "generation_ms": 0,
         }
-    fact = _find_fact(db, question, season)
+    fact = fact or _find_fact(db, question, season)
     if fact is None and (options := _options(db, question, season)):
         return {
             "answer": "I am not sure which statistic this is about. Did you mean one of these?", "provider": "clarify", "model": "", "sources": [], "plan": [], "intent": "unclear", "table": None, "options": options,
@@ -140,13 +267,18 @@ def _answer(db: Session, question: str, season: str | None, limit: int, original
         return result | {"answer": reason, "provider": "declined"}
 
     generation = time.perf_counter()
-    if OPENROUTER_API_KEY:
+    if OPENROUTER_API_KEY and _writing.get():
         provider = get_llm_provider()
-        result |= {"answer": provider.generate(SYSTEM_PROMPT, build_prompt(question if question == original else f"{original} (understood as: {question})", steps, sources)), "provider": provider.name, "model": provider.model}
-    elif fact:
+        try:
+            result |= {"answer": provider.generate(SYSTEM_PROMPT, build_prompt(question if question == original else f"{original} (understood as: {question})", steps, sources)), "provider": provider.name, "model": provider.model,
+                       "generation_tokens": provider.last_tokens}
+        except LLMError as error:  # no credit, no network, a timeout: answer as if no model were connected
+            log.warning("language model failed: %s", error)
+            result["model_error"] = str(error).split(":")[0][:80]  # the status only; the provider's message stays in the log
+    if not result["answer"] and fact:
         result |= {"answer": f"{fact.answer} {fact.detail}".strip() + " [1]", "provider": "calculated"}
-    else:
+    elif not result["answer"]:
         result |= {"answer": extractive_answer(question, plan, sources), "provider": "extractive"}
     result["generation_ms"] = round((time.perf_counter() - generation) * 1000)
-    result["checks"] = check(result["answer"], question, [f"{s['title']} {s['source_text']}" for s in sources])
+    result["checks"] = check(result["answer"], question, [f"{s['title']} {s['source_text']}" for s in sources], _known_names(db))
     return result

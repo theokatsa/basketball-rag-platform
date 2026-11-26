@@ -46,8 +46,6 @@ const brand = (id: number | null | undefined) => (id != null && BRANDS[id]) || P
 const build = (fill: string): TeamColor => (fill === '#000000' ? { fill, edge: '#f2f2f2', glow: '#d5d5d8' } : { fill, edge: fill, glow: fill });
 
 export const teamColor = (id: number | null | undefined) => build(brand(id)[0]);
-export const teamAlt = (id: number | null | undefined) => build(brand(id)[1]);
-
 type Triple = [number, number, number];
 const linear = (hex: string): Triple => [1, 3, 5].map((i) => { const c = parseInt(hex.slice(i, i + 2), 16) / 255; return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; }) as Triple;
 function oklab([r, g, b]: Triple): Triple {
@@ -76,4 +74,3 @@ export function matchColors(awayId: number, homeId: number): [TeamColor, TeamCol
 /** CSS variables for anything that should wear a team's colours. */
 export const teamVars = (id: number | null | undefined) => ({ '--team': teamColor(id).fill, '--team-edge': teamColor(id).edge, '--team-glow': teamColor(id).glow }) as CSSProperties;
 export const colorVars = (c: TeamColor) => ({ '--team': c.fill, '--team-edge': c.edge, '--team-glow': c.glow }) as CSSProperties;
-export const TEAM_IDS = Object.keys(BRANDS).map(Number);

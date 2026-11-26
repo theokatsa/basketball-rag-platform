@@ -54,9 +54,6 @@ export function RadarChart({ series, label }: { series: RadarSeries[]; label: st
   );
 }
 
-export function averageStrength(metrics: RadarMetric[]): number {
-  return metrics.length ? metrics.reduce((sum, m) => sum + strength(m.percentile), 0) / metrics.length : 0;
-}
 
 export function toneFor(avg: number): string {
   return avg >= 0.95 ? '#ffc247' : avg >= 0.75 ? '#ff7a1f' : '#9c968d';

@@ -1,19 +1,13 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useApp } from '../AppContext';
+import { Chat } from '../components/Chat';
 import { PageHead, PlayerCell, RowActions, Segmented } from '../components/Common';
 import { CloseIcon } from '../components/Icons';
 import { PlayerPicker } from '../components/PlayerPicker';
 import { POSITIONS } from '../stats';
 import type { SimilarPlayerResult } from '../types';
 import { usePersisted } from '../usePersisted';
-
-type Source = { ref: number; kind: string; title: string; player_id: number | null; full_name: string; season: string; source_text: string; similarity: number | null };
-type Checks = { numbers: number; unsupported_numbers: string[]; invalid_citations: number[]; grounded: boolean };
-type Table = { columns: string[]; rows: (string | number)[][] };
-type Answer = { options: string[]; understood: string; table: Table | null; answer: string; provider: string; model: string; sources: Source[]; plan: string[]; intent: string; checks: Checks | null; retrieval_ms: number; generation_ms: number };
-const EXAMPLES = ['How many 30-point games did LeBron have?', 'Best corner three shooters', 'Which team had the best defense?', 'Who guards Stephen Curry best?', 'Players like Giannis under 25', 'Who should the Lakers sign?'];
-const FOLLOW_UPS = ['And at home?', 'What about Jokic?', 'And against the Celtics?'];
 
 async function post<T>(path: string, body: unknown): Promise<T> {
   const response = await fetch(`/api${path}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
@@ -22,54 +16,6 @@ async function post<T>(path: string, body: unknown): Promise<T> {
     throw new Error(typeof detail === 'string' ? detail : 'The request failed. Check the values and try again.');
   }
   return (await response.json()) as T;
-}
-
-function Ask() {
-  const { byId } = useApp();
-  const [question, setQuestion] = usePersisted('ask-q', '');
-  const [result, setResult] = usePersisted<Answer | null>('ask-answer-2', null);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const ask = async (q: string, previous: string | null = result?.understood || null) => {
-    if (q.trim().length < 3 || busy) return;
-    setBusy(true); setError(null); setResult(null);
-    try { setResult(await post<Answer>('/ask', { question: q.trim(), season: null, limit: 6, previous })); }
-    catch (err) { setError(err instanceof Error ? err.message : 'The question could not be answered.'); }
-    finally { setBusy(false); }
-  };
-  return (
-    <section className="panel">
-      <form className="ask-form" onSubmit={(e: FormEvent) => { e.preventDefault(); void ask(question); }}>
-        <textarea className="control-input rag-question" aria-label="Your question" rows={3} maxLength={1000} value={question} onChange={(e) => setQuestion(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void ask(question); } }} placeholder="Ask about styles, strengths or comparisons" />
-        <button type="submit" className="submit-button" disabled={busy || question.trim().length < 3}>{busy ? 'Searching…' : 'Ask'}</button>
-      </form>
-      <div className="preset-row examples">{EXAMPLES.map((q) => <button type="button" className="chip" key={q} disabled={busy} onClick={() => { setQuestion(q); void ask(q, null); }}>{q}</button>)}</div>
-      {busy && <div className="skeleton-block" aria-busy="true"><span className="skeleton" style={{ height: '9rem' }} /></div>}
-      {error && <p className="status error" role="alert">{error}</p>}
-      {result && (
-        <div className="rag-output" aria-live="polite">
-          {result.understood && result.understood !== question.trim() && <p className="count-label">Understood as: {result.understood}</p>}
-          <p className="rag-answer">{result.answer}</p>
-          {result.options?.length > 0 && <div className="preset-row examples" aria-label="Possible meanings">{result.options.map((q) => <button type="button" className="chip" key={q} disabled={busy} onClick={() => { setQuestion(q); void ask(q, null); }}>{q}</button>)}</div>}
-          {result.table && result.table.rows.length > 1 && <div className="detail-records-scroll open"><table className="detail-records-table roster-table"><thead><tr>{result.table.columns.map((c) => <th scope="col" key={c}>{c}</th>)}</tr></thead><tbody>{result.table.rows.map((r, i) => <tr key={i}>{r.map((v, j) => <td key={j}>{v}</td>)}</tr>)}</tbody></table></div>}
-          {result.provider === 'calculated' && <div className="preset-row examples" aria-label="Follow-up questions">{FOLLOW_UPS.map((q) => <button type="button" className="chip" key={q} disabled={busy} onClick={() => { setQuestion(q); void ask(q); }}>{q}</button>)}</div>}
-          {result.provider === 'extractive' && <p className="rag-note">No language model is connected, so this answer quotes the sources directly. Set OPENROUTER_API_KEY in .env to turn written answers on.</p>}
-          {result.plan.length > 0 && <div><h3>How the question was read</h3><p className="trait-list">{result.plan.map((step) => <span key={step}>{step}</span>)}</p></div>}
-          {result.checks && result.provider !== 'extractive' && result.provider !== 'calculated' && (result.checks.grounded
-            ? <p className="status">All {result.checks.numbers} numbers in the answer appear in the sources.</p>
-            : <p className="status error">Check this answer: {[result.checks.unsupported_numbers.length > 0 && `not found in the sources: ${result.checks.unsupported_numbers.join(', ')}`, result.checks.invalid_citations.length > 0 && `cites missing sources: ${result.checks.invalid_citations.join(', ')}`].filter(Boolean).join('; ')}.</p>)}
-          <div className="section-head"><h2>Evidence</h2>{result.model && <span className="provider-badge">{result.model}</span>}</div>
-          <div className="evidence-grid">
-            {result.sources.map((s) => {
-              const p = s.player_id != null ? byId.get(s.player_id) : undefined;
-              return <article className="evidence-card" key={s.ref}><div className="result-head">{p ? <><PlayerCell player={p} /><RowActions player={p} /></> : <b>{s.title}</b>}</div><small>[{s.ref}] {p ? s.title : (s.kind === 'computed' ? 'calculated from the tables' : s.kind.replace('_', ' '))}</small><p>{s.source_text}</p></article>;
-            })}
-            {!result.sources.length && !result.options?.length && <p className="status">Nothing in the database matched this question.</p>}
-          </div>
-        </div>
-      )}
-    </section>
-  );
 }
 
 function Similar() {
@@ -118,6 +64,9 @@ function Similar() {
       <section className="panel">
         {error && <p className="status error" role="alert">{error}</p>}
         {results && results.length > 0 && (
+          <div className="similar-head"><h2>{results.length} players most like {player?.full_name ?? 'this player'}</h2><small>Shared traits are strengths both players have. The bar shows how close the 42 numbers are.</small></div>
+        )}
+        {results && results.length > 0 && (
           <ol className="rank-list similar-results">
             {results.map((r, i) => {
               const p = byId.get(r.player_id);
@@ -125,7 +74,7 @@ function Similar() {
                 <li key={r.player_id}>
                   <span className="rank-no">{i + 1}</span>
                   <PlayerCell player={p} note={[p.club, p.position, r.age != null && `age ${r.age}`].filter(Boolean).join(', ')} />
-                  <span className="trait-list">{r.shared_traits.map((t) => <span key={t}>{t}</span>)}</span>
+                  <span className="trait-list tags">{r.shared_traits.map((t) => <span key={t}>{t}</span>)}</span>
                   <span className="match"><b>{Math.round(r.similarity * 100)}%</b><i className="rank-bar"><em style={{ width: `${r.similarity * 100}%` }} /></i></span>
                   <RowActions player={p} />
                 </li>
@@ -145,7 +94,7 @@ export function Scout() {
   return (
     <>
       <PageHead title="Scout" intro={tab === 'ask' ? 'Ask in plain language and see the evidence behind it.' : 'Find players with the same statistical profile.'}><Segmented label="Tool" value={tab} options={[['ask', 'Ask a question'], ['similar', 'Find similar']]} onChange={setTab} /></PageHead>
-      {tab === 'ask' ? <Ask /> : <Similar />}
+      {tab === 'ask' ? <Chat /> : <Similar />}
     </>
   );
 }

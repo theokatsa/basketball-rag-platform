@@ -30,7 +30,8 @@ function Leaders() {
   const base = league?.get(zone);
   const average = base ? base.made / base.att : 0;
   const worth = isThreeZone(zone) ? 3 : 2;
-  const minimum = opponent ? Math.max(4, Math.round(minimumFor(zone) / 12)) : minimumFor(zone);
+  /** Against one team every attempt counts: the adjusted % already pulls small samples to the average. */
+  const minimum = opponent ? 1 : minimumFor(zone);
   const ranked = useMemo(() => (data ?? []).filter((r) => r.zone === zone && r.attempts >= minimum).flatMap((r) => {
     const p = byId.get(r.player_id);
     if (!p || !playsPosition(p, position)) return [];
@@ -38,17 +39,20 @@ function Leaders() {
     return [{ p, r, raw: r.made / r.attempts, adjusted, added: (r.made - r.attempts * average) * worth }];
   }).sort((a, b) => (sort === 'raw' ? b.raw - a.raw : sort === 'made' ? b.r.made - a.r.made : sort === 'added' ? b.added - a.added : b.adjusted - a.adjusted)), [data, byId, zone, position, sort, minimum, average, worth]);
   const paged = usePaged(ranked, 10, [zone, sort, position, opponent].join('|'));
+  /** The court shows the shots that match the filters; colours compare them with the whole league. */
+  const filtered = useMemo(() => (data ? toZoneMap(data.filter((r) => { const p = byId.get(r.player_id); return p != null && playsPosition(p, position); })) : null), [data, byId, position]);
+  const scope = [position && `${position.toLowerCase()}s`, opponent && `against ${opponent}`].filter(Boolean).join(' ');
   if (error) return <LoadError message={error} />;
   if (!league) return <Loading height="34rem" />;
   return (
     <section className="panel">
       <div className="shot-chart">
         <div>
-          <ZoneCourt picker label="Pick a court zone" zones={league} league={league} hover={hover} selected={zone} onHover={setHover} onSelect={setZone} />
-          <p className="radar-note">Click a zone. Numbers on the court are league averages. The zones come from shot coordinates and cover the whole half court.</p>
+          <ZoneCourt picker label="Pick a court zone" zones={filtered ?? league} league={league} hover={hover} selected={zone} onHover={setHover} onSelect={setZone} />
+          <p className="radar-note">Click a zone. {scope ? <>Numbers on the court are shots by <b>{scope}</b>; warm zones are better than the league average, cool ones worse.</> : 'Numbers on the court are the whole league.'} The zones come from shot coordinates and cover the whole half court.</p>
         </div>
         <div>
-          <div className="panel-header"><div><h2>{zoneLabel(zone)}</h2><p>At least {minimum} attempts. League average {base ? pct(base.made, base.att) : '–'}, {(average * worth).toFixed(2)} points per shot</p></div></div>
+          <div className="panel-header"><div><h2>{zoneLabel(zone)}</h2><p>{opponent ? 'Every shot against this team counts; sort by Adjusted % to discount one-off makes.' : `At least ${minimum} attempts.`} League average {base ? pct(base.made, base.att) : '–'}, {(average * worth).toFixed(2)} points per shot</p></div></div>
           <div className="filter-bar lab-tools">
             <Dropdown label="Zone" value={zone} options={ZONES.map((z) => ({ value: z.key, label: z.label, group: z.group }))} onChange={setZone} />
             <TeamSelect value={opponent} onChange={setOpponent} by="abbr" all="Against everyone" label="Against" />
@@ -59,7 +63,7 @@ function Leaders() {
             <div className="lab-table">
               <div className="lab-head"><span /><span>Player</span><span>Made</span><span>FG%</span><span title="Pulled toward the league average when there are few attempts">Adjusted</span><span title="Points beyond what an average shooter scores on the same shots">Pts added</span></div>
               {paged.items.map(({ p, r, raw, adjusted, added }, i) => <div className="lab-line" key={p.player_id}><span className="rank-no">{paged.offset + i + 1}</span><PlayerCell player={p} /><span>{r.made}/{r.attempts}</span><span>{(raw * 100).toFixed(1)}%</span><b>{(adjusted * 100).toFixed(1)}%</b><span className={added > 0 ? 'zone-diff up' : 'zone-diff down'}>{signed(added)}</span></div>)}
-              {!ranked.length && <p className="status">Nobody has enough attempts here.</p>}
+              {!ranked.length && <p className="status">{opponent ? 'Nobody shot from here against this team.' : 'Nobody has enough attempts here.'}</p>}
             </div>
           )}
           <Pagination page={paged.page} pageCount={paged.pageCount} onPage={paged.onPage} label="Shooter pages" />

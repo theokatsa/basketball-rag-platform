@@ -479,7 +479,7 @@ def _shared(db, q: Query) -> Fact | None:
             teams = data.team_list(db)
             t = q.teams[0]
             return Fact(f"Teams that play like the {t['full_name']}", f"The {teams.at[alike[0]['team_id'], 'full_name']} play most like the {t['full_name']} ({100 * alike[0]['similarity']:.0f}%{': ' + ', '.join(alike[0]['shared']) if alike[0]['shared'] else ''}). Next: " + ", ".join(f"{teams.at[a['team_id'], 'full_name']} {100 * a['similarity']:.0f}%" for a in alike[1:]) + ".", "Compared by pace, shot selection and how possessions are won, not by strength.", f"team:{t['nba_team_id']}", [], [a["team_id"] for a in alike], plan=describe_plan(q, "Nearest team styles"))
-    if has(r"duos?|pair(?:s|ing|ings)?|two[- ]man|tandems?|chemistry|together|combinations?|shared minutes|on the court with|play\w* with", low) and not tf.shot_words(q)[0]:
+    if has(r"duos?|pair(?:s|ing|ings)?|two[- ]man|tandems?|chemistry|together|combinations?|shared minutes|on the court with|play(?:s|ed|ing)? with", low) and not tf.shot_words(q)[0]:
         if fact := tf.pair_answer(db, q):
             return fact
     if has(r"improv\w*|declin\w*|hott?est|coldest|rising|trending|better lately|slump\w*|heating up|cooling", low) and (not q.players or q.metrics):

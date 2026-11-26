@@ -9,6 +9,8 @@ import { Avatar } from './Avatar';
 import { simulatedNote } from './MostViewed';
 import { Loading, PlayerCell, Segmented, TeamLogo } from './Common';
 import { signed } from './CourtZones';
+import { MatchFeedback } from './Feedback';
+import type { Verdict } from './Feedback';
 import { useTeamList } from './Dropdown';
 import { GameLogs } from './GameLogs';
 import { BackIcon, CompareIcon, HeartIcon } from './Icons';
@@ -89,6 +91,7 @@ function Similar({ similar: first, playerId }: { similar: SimilarPlayerResult[];
   const similar = plain ? first : alternative.data ?? [];
   const { byId, user, compareIds, setCompareIds, go } = useApp();
   const [chosen, setChosen] = useState(0);
+  const [votes, setVotes] = useState<Record<string, Verdict>>({});
   const [viewed, setViewed] = useState<{ player_id: number; viewers: number; audience: number }[] | null>(null);
   useEffect(() => {
     let cancelled = false;
@@ -122,6 +125,7 @@ function Similar({ similar: first, playerId }: { similar: SimilarPlayerResult[];
                   {focus.apart.length > 0 && <><thead><tr><th scope="col" colSpan={4}>Where they differ</th></tr></thead><tbody>{focus.apart.map((t) => <tr key={t.label}><th scope="row">{t.label}</th><td>{show(t.own, t.percent)}</td><td>{show(t.other, t.percent)}</td><td><i className="low"><em style={{ width: `${Math.max(4, t.closeness * 100)}%` }} /></i></td></tr>)}</tbody></>}
                 </table>
                 <p className="radar-note">{KIND_NOTES[kind]} A typical pair of players scores 10%.</p>
+                <MatchFeedback playerId={playerId} otherId={other.player_id} otherName={other.full_name} kind={kind} variant={variant} rank={chosen + 1} similarity={focus.similarity} votes={votes} onVote={(key, v) => setVotes((all) => ({ ...all, [key]: v }))} />
                 <PlayerCell player={other} note="Open profile" />
               </div>
             )}
@@ -183,7 +187,7 @@ function FitPanels({ playerId }: { playerId: number }) {
 }
 
 export function PlayerDetail({ detail, loading, error, onBack }: Props) {
-  const { favoriteIds, toggleFavorite, compareWith, byId, go } = useApp();
+  const { favoriteIds, toggleFavorite, compareWith, byId, go, user } = useApp();
   const [section, setSection] = useState<Section>('overview');
   if (!detail) {
     return (
@@ -215,7 +219,7 @@ export function PlayerDetail({ detail, loading, error, onBack }: Props) {
           <button type="button" className="ghost-button accent" onClick={() => setSection('shots')}>Shot chart</button>
           <button type="button" className="ghost-button" onClick={() => go('report', player.id)}>Scouting report</button>
           <button type="button" className="ghost-button" onClick={() => compareWith(player.id)}><CompareIcon />Compare with…</button>
-          <button type="button" className="ghost-button" aria-pressed={favorite} onClick={() => toggleFavorite(player.id)}><HeartIcon filled={favorite} />{favorite ? 'Shortlisted' : 'Shortlist'}</button>
+          {user && <button type="button" className="ghost-button" aria-pressed={favorite} onClick={() => toggleFavorite(player.id)}><HeartIcon filled={favorite} />{favorite ? 'Shortlisted' : 'Shortlist'}</button>}
         </div>
       </div>
 

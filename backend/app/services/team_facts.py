@@ -15,6 +15,7 @@ from app.services.metrics import TEAM_METRICS, Metric, find_metrics
 from app.services.query_planner import has
 from app.services.recommend_service import team_targets
 from app.services.question_reader import LEAST, TOP, WORST, Fact, Query, descending, describe_plan, eligible, group_words, ids_of, slice_games, sum_players, sum_teams, wants_total, where_words
+from app.core.config import ACTIVE_SEASON_SQL
 
 NEED_WORDS = {"tpa": "threes attempted", "fta": "free throws attempted", "fga": "shots", "defended_fga": "shots defended", "minutes": "minutes"}
 ORDINALS = {"first": 1, "1st": 1, "second": 2, "2nd": 2, "third": 3, "3rd": 3, "fourth": 4, "4th": 4, "last": 4, "final": 4}
@@ -434,7 +435,7 @@ def _team_shots_allowed(db, q: Query, tests, name) -> Fact | None:
 
 # ------------------------------------------------------------------ pairs, matchups, lineups
 
-PAIRS = "select * from player_pairs where season = (select max(season) from player_pairs)"
+PAIRS = f"select * from player_pairs where season = {ACTIVE_SEASON_SQL}"
 
 
 def pair_answer(db, q: Query) -> Fact | None:
@@ -489,7 +490,7 @@ def duel(db, q: Query) -> Fact | None:
     passive = re.search(r"guarded by|defended by|against|as (?:his|the|a) defender|when .*(?:guards?|defends?)", q.low, re.I)
     off, guard = (b, a) if not passive and has(r"guard(?:s|ed|ing)?|defend(?:s|ed|ing)?|stop\w*|hold|held", q.low) else (a, b)
     found = rows(db, text(
-        "select * from player_matchups where season = (select max(season) from player_matchups) and ((off_player_id = :a and def_player_id = :b) or (off_player_id = :b and def_player_id = :a))"
+        f"select * from player_matchups where season = {ACTIVE_SEASON_SQL} and ((off_player_id = :a and def_player_id = :b) or (off_player_id = :b and def_player_id = :a))"
     ), {"a": off["player_id"], "b": guard["player_id"]})
     plan = describe_plan(q, "Defensive matchups")
     if not found:

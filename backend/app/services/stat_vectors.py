@@ -12,6 +12,7 @@ from dataclasses import dataclass
 
 import numpy as np
 from sqlalchemy import text
+from app.core.config import ACTIVE_SEASON
 
 FEATURES = [
     "minutes", "points", "rebounds", "assists", "steals", "blocks", "turnovers",
@@ -118,7 +119,7 @@ _cache: dict[str, tuple[float, SeasonVectors]] = {}
 
 
 def latest_season(connection) -> str | None:
-    return connection.execute(text("select max(season) from player_season_stats")).scalar()
+    return ACTIVE_SEASON  # the season the site is about, not the latest loaded
 
 
 def load_season(connection, season: str | None = None) -> SeasonVectors | None:

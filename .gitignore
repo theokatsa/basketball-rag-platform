@@ -16,3 +16,6 @@ install-ollama.ps1
 
 backend/models/basketball-minilm/
 backend/models/checkpoint.pt
+
+# Seasons downloaded for training, kept on this computer (scripts/ingest_season.py --local)
+data/

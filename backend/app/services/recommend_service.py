@@ -11,9 +11,10 @@ from __future__ import annotations
 import numpy as np
 
 from app.services import league_data as data
-from app.services.audience_service import links
+from app.services.audience_service import links, viewers
 from app.services.insight_service import SKILLS, load_profiles, main_position
-from app.services.similarity_service import explain, matrix, table
+from app.services.similarity_service import explain, matrix, role_name, table
+from app.services.stat_vectors import load_season
 from app.services.style_model import similarity
 
 WEIGHTS = {"favorites": 3.0, "compared": 2.0, "viewed": 1.0}
@@ -24,6 +25,9 @@ MIN_GAMES = 20
 AUDIENCE_SHARE = 0.45  # weight of what people open against how players play; a judgement, see docs
 MIN_MATCH = 0.3  # a typical pair of players has 0.1
 STAR_WEIGHT = 0.25  # how much general quality counts next to filling the team's gaps
+STARTER_GAMES, STARTER_MINUTES = 40, 24  # cold start shows regulars, not efficient small samples
+POPULAR_SHARE = 0.35  # cold start: what people open, next to quality
+PER_ROLE = 2
 
 
 def _seeds(favorites: list[int], compared: list[int], viewed: list[int]) -> dict[int, float]:
@@ -49,7 +53,7 @@ def suggest(db, favorites: list[int], compared: list[int], viewed: list[int], li
     ])
     quality = np.array([(folk.at[p, "overall_score"] or 0) / 100 if p in folk.index else 0 for p in ids], dtype=float)
     if not seeds:
-        return {"basis": "popular", "items": _starters(db, ids, vectors, allowed, quality, limit)}
+        return {"basis": "popular", "items": _describe(db, _starters(db, ids, allowed, quality, limit))}
 
     order = sorted(seeds, key=lambda i: -seeds[i])[:20]
     heaviest = seeds[order[0]]
@@ -76,7 +80,12 @@ def suggest(db, favorites: list[int], compared: list[int], viewed: list[int], li
         together = np.minimum(together, 1.5)
     share = AUDIENCE_SHARE if learned else 0.0
     allowed &= (close.max(axis=0) >= MIN_MATCH) | (together > 0.3)
-    score = np.where(allowed, (0.9 - share) * content + share * together + 0.10 * quality, -1.0)
+    # Put style on the same scale as the audience signal (about 1 for the best ten) before mixing.
+    # Raw similarities of a rare player top out near 0.35, so without this the mix was in effect
+    # three quarters audience and popular players crowded out the ones who play alike.
+    best = np.sort(np.where(allowed, content, 0))[-min(10, len(content)):].mean()
+    style = np.minimum(content / best, 1.5) if best > 0 else content
+    score = np.where(allowed, (0.9 - share) * style + share * together + 0.10 * quality, -1.0)
 
     chosen, per_seed = [], {}
     while len(chosen) < limit:
@@ -104,18 +113,36 @@ def suggest(db, favorites: list[int], compared: list[int], viewed: list[int], li
             "player_id": ids[n], "because_of": seed, "similarity": float(close[order.index(seed), n]), "shared": [t["label"].lower().removeprefix("shots: ") for t in shared],
             "also_viewed_with": source.get(n) if together[n] > 0.3 else None, "archetype": table(db).at[ids[n], "archetype"],
         })
-    return {"basis": "interests", "items": items}
+    return {"basis": "interests", "items": _describe(db, items)}
 
 
-def _starters(db, ids, vectors, allowed, quality, limit) -> list[dict]:
-    """Nothing known about the person yet: strong players of different types."""
-    frame = table(db)
-    out, seen = [], set()
-    for n in np.argsort(-quality, kind="stable"):
-        kind = frame.at[ids[n], "archetype"]
-        if not allowed[n] or kind in seen:
+def _describe(db, items: list[dict]) -> list[dict]:
+    """Each player's own strengths and a short role name, instead of the label of his group."""
+    season = load_season(db)
+    for item in items:
+        pid = item["player_id"]
+        item["traits"] = season.traits(pid) if season and pid in season.index else []
+        item["role"] = role_name(item.get("archetype"))
+    return items
+
+
+def _starters(db, ids, allowed, quality, limit) -> list[dict]:
+    """Nothing known about the person yet: regular starters, by quality and by what people open,
+    at most two of each role so the list is not one kind of player."""
+    frame, folk = table(db), data.people(db)
+    seen = viewers(db, 30)
+    popular = np.array([seen.get(p, 0.0) for p in ids], dtype=float)
+    popular = popular / popular.max() if popular.max() > 0 else popular
+    regular = np.array([p in folk.index and folk.at[p, "gp"] >= STARTER_GAMES and (folk.at[p, "mpg"] or 0) >= STARTER_MINUTES for p in ids])
+    score = np.where(allowed & regular, (1 - POPULAR_SHARE) * quality + POPULAR_SHARE * popular, -1.0)
+    out, per_role = [], {}
+    for n in np.argsort(-score, kind="stable"):
+        if score[n] < 0:
+            break
+        kind = frame.at[ids[n], "archetype"] if ids[n] in frame.index else None
+        if per_role.get(kind, 0) >= PER_ROLE:
             continue
-        seen.add(kind)
+        per_role[kind] = per_role.get(kind, 0) + 1
         out.append({"player_id": ids[n], "because_of": None, "similarity": None, "shared": [], "also_viewed_with": None, "archetype": kind})
         if len(out) == limit:
             break

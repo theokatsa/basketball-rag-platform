@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { useApp } from '../AppContext';
 import { BarTrend } from '../components/BarTrend';
 import { LoadError, Loading, PageHead, PlayerCell, RowActions, Segmented, TeamLogo } from '../components/Common';
@@ -12,6 +12,9 @@ import type { TeamSide, TeamSummary, TeamZoneRow } from '../types';
 import { useApi } from '../useApi';
 import { usePersisted } from '../usePersisted';
 import { formatDate, rankLabel } from '../utils';
+
+/** Divider rows above places 1, 7 and 11 of each conference. */
+const ZONES: Record<number, [string, string]> = { 0: ['po', 'Playoffs'], 6: ['pi', 'Play-in tournament'], 10: ['out', 'Out of the postseason'] };
 
 type Metric = { key: string; label: string; get: (t: TeamSummary) => number; digits?: number; suffix?: string; signed?: boolean; lower?: boolean; neutral?: boolean };
 const side = (key: string, label: string, where: 'offense' | 'defense', field: keyof TeamSide, options: Partial<Metric> = {}): Metric => ({ key, label, get: (t) => t[where][field], ...options });
@@ -66,17 +69,20 @@ export function Teams() {
     const rows = data.filter((t) => t.conference === conference).sort((a, b) => b.wins - a.wins || b.margin - a.margin);
     return (
       <section className="panel standings" key={conference}>
-        <div className="panel-header"><h2>{conference}ern Conference</h2></div>
+        <div className="panel-header"><h2>{conference}ern Conference</h2><span className="zone-key"><span className="po"><i />Playoffs</span><span className="pi"><i />Play-in</span></span></div>
         <table>
           <thead><tr><th scope="col">Team</th><th scope="col">W–L</th><th scope="col">GB</th><th scope="col">Off</th><th scope="col">Def</th><th scope="col">Net</th><th scope="col">Last 10</th></tr></thead>
           <tbody>{rows.map((t, i) => (
-            <tr key={t.team_id} style={teamVars(t.team_id)} className={`team-row ${i === 5 || i === 9 ? 'cut' : ''}`} onClick={() => go('team', t.team_id)}>
+            <Fragment key={t.team_id}>
+            {ZONES[i] && <tr className={`zone-label ${ZONES[i][0]}`}><td colSpan={7}><span>{ZONES[i][1]}</span></td></tr>}
+            <tr style={teamVars(t.team_id)} className={`team-row zone-${i < 6 ? 'po' : i < 10 ? 'pi' : 'out'}`} onClick={() => go('team', t.team_id)}>
               <th scope="row"><button type="button" className="player-link"><span className="rank-no">{i + 1}</span><TeamLogo teamId={t.team_id} size={30} /><span>{t.name}</span></button></th>
               <td><b>{t.wins}–{t.losses}</b></td><td>{i ? ((rows[0].wins - t.wins + t.losses - rows[0].losses) / 2).toFixed(1) : '–'}</td>
               <td>{t.offense.off_rating.toFixed(1)}</td><td>{t.defense.off_rating.toFixed(1)}</td><td className={t.net_rating > 0 ? 'pos' : 'neg'}>{show(metric('net'), t.net_rating)}</td><td>{mini(t)}</td>
-            </tr>))}</tbody>
+            </tr>
+            </Fragment>))}</tbody>
         </table>
-        <p className="radar-note">Lines mark sixth place and tenth place. Ties are ordered by point difference, not the league’s tiebreakers.</p>
+        <p className="radar-note">Places 1 to 6 go straight to the playoffs; 7 to 10 play the play-in tournament for the last two places. Ties are ordered by point difference, not the league’s tiebreakers.</p>
       </section>
     );
   };

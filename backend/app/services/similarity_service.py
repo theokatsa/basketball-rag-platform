@@ -15,6 +15,7 @@ from app.services.cache import cached, rows
 from app.services.query_embedding_service import to_literal
 from app.services.question_reader import Query, sum_players
 from app.services.style_model import FEATURES, GROUPS, NAMES, features, load_model, project, qualified, similarity
+from app.core.config import ACTIVE_SEASON_SQL
 
 KINDS = ("overall", "style")
 PERCENT = {"ts", "two_pct", "three_pct", "ft_pct", "three_rate", "ast_share", "tov_rate"}
@@ -31,7 +32,7 @@ def compute(db) -> pd.DataFrame:
 def table(db) -> pd.DataFrame:
     """Stored features and vectors, one row per player."""
     def load():
-        found = rows(db, text("select player_id, qualified, features, overall::text as overall, style::text as style, archetype from player_style_vectors where season = (select max(season) from player_style_vectors)"))
+        found = rows(db, text(f"select player_id, qualified, features, overall::text as overall, style::text as style, archetype from player_style_vectors where season = {ACTIVE_SEASON_SQL}"))
         frame = pd.DataFrame([{"player_id": r["player_id"], "qualified": r["qualified"], "archetype": r["archetype"], "x": np.array([r["features"][n] for n in NAMES]), **{k: np.array(r[k].strip("[]").split(","), dtype=float) for k in KINDS}} for r in found])
         return frame.set_index("player_id", drop=False)
 
@@ -47,6 +48,25 @@ def rows_for_index(db) -> list[tuple]:
         (int(i), bool(frame.qualified.iloc[n]), {name: round(float(v), 6) for name, v in zip(NAMES, x[n])}, to_literal(vectors["overall"][n]), to_literal(vectors["style"][n]), labels[n] if frame.qualified.iloc[n] else None)
         for n, i in enumerate(frame.index)
     ]
+
+
+# The learned groups are named by their three most distinctive features ("Shoots mostly threes, shoots
+# from far, wing threes"), which reads like a list. Short role names for the people reading the page;
+# a group the model renames after retraining keeps its generated name.
+ROLE_NAMES = {
+    "High usage, many shots, scoring": "Shot creator",
+    "Pass first, passing, pull-ups": "Playmaker",
+    "Driving, layups, steals": "Slasher",
+    "Cutting, tip-ins and putbacks, offensive rebounds": "Rim runner",
+    "Efficient inside, corner threes, spot-up shooting": "Stretch big",
+    "Corner threes, heavy minutes, spot-up shooting": "Spot-up wing",
+    "Shoots mostly threes, shoots from far, wing threes": "Floor spacer",
+    "Draws fouls, defensive rebounds, fadeaways": "Interior force",
+}
+
+
+def role_name(archetype: str | None) -> str | None:
+    return ROLE_NAMES.get(archetype, archetype) if archetype else None
 
 
 def archetypes(vectors: np.ndarray, x: np.ndarray) -> list[str]:
@@ -74,7 +94,7 @@ def neighbours(db, player_id: int, kind: str = "overall", limit: int = 10, min_a
     db.execute(text("set local hnsw.ef_search = 100"))
     found = rows(db, text(f"""
         select v.player_id, v.archetype, v.{kind} <-> me.{kind} as distance, d.content, d.title, d.entity, d.kind, d.season, d.player_ids, d.team_ids
-        from (select * from player_style_vectors where player_id = :me order by season desc limit 1) me
+        from (select * from player_style_vectors where player_id = :me and season = {ACTIVE_SEASON_SQL}) me
         join player_style_vectors v on true
         join rag_documents d on d.kind = 'player_season' and d.entity = 'player:' || v.player_id and d.season = v.season
         where {' and '.join(conditions)} order by v.{kind} <-> me.{kind} limit :limit

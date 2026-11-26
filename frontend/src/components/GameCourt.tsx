@@ -90,7 +90,7 @@ export function GameCourt({ game, away, home, colors }: Props) {
             <g className="court-lines" fill="none"><rect width={W} height={H} /><line x1={W / 2} x2={W / 2} y1={0} y2={H} /><circle cx={W / 2} cy={H / 2} r={60} /></g>
             {shots.map((s, i) => {
               const [x, y] = place(s), color = colors[s.nba_team_id === home.nba_team_id ? 1 : 0];
-              return <g key={i} data-i={i} transform={`translate(${x} ${y})`} className={`game-shot ${s.shot_made ? 'made' : 'missed'} ${tip?.index === i ? 'lit' : tip ? 'rest' : ''}`} style={colorVars(color)}><circle r={9} fill="transparent" /><circle r={s.shot_made ? 6 : 4.5} className="mark" /></g>;
+              return <g key={i} data-i={i} transform={`translate(${x} ${y})`} className={`game-shot ${s.shot_made ? 'made' : 'missed'} ${tip?.index === i ? 'lit' : tip ? 'rest' : ''}`} style={colorVars(color)}><circle r={9} fill="transparent" />{s.shot_made ? <circle r={6} className="mark" /> : <path d="M-4.5 -4.5L4.5 4.5M4.5 -4.5L-4.5 4.5" className="mark" />}</g>;
             })}
           </svg>
           {over && person && tip && (
@@ -101,7 +101,7 @@ export function GameCourt({ game, away, home, colors }: Props) {
           )}
         </div>
       </div>
-      <div className="shot-legend"><span><i className="game-key made" />Made</span><span><i className="game-key" />Missed</span><span>Hover a shot for details</span></div>
+      <div className="shot-legend"><span><i className="game-key made" />Made</span><span><i className="game-key miss" aria-hidden="true" />Missed</span><span>Hover a shot for details</span></div>
       <div className="area-table">
         {[away, home].map((t, i) => <div className={`area-team ${i ? 'right' : ''}`} key={t.nba_team_id}><TeamLogo teamId={t.nba_team_id} size={40} /><span><b>{totals[i].all.made}/{totals[i].all.att}, {pct(totals[i].all.made, totals[i].all.att)}</b><small>{totals[i].points} points from the field</small></span></div>)}
         {AREAS.map(([label], k) => <div className="area-row" key={label}>{figure(0, k)}{bar(0, k)}<strong>{label}</strong>{bar(1, k)}{figure(1, k)}</div>)}

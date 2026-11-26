@@ -4,34 +4,14 @@ from sqlalchemy.orm import Session
 
 from app.db import get_db
 from app.schemas.similar_player_schema import (
-    SimilarPlayerPositionOptionResponse,
-    SimilarPlayerReferenceOptionResponse,
     SimilarPlayerResponse,
     SimilarPlayerSearchRequest,
 )
 from app.services.embedding_service import (
-    get_search_positions,
-    search_reference_players,
     search_similar_players,
 )
 
 router = APIRouter(prefix="/search")
-
-
-@router.get("/reference-players", response_model=list[SimilarPlayerReferenceOptionResponse])
-def search_reference_players_route(
-    q: str | None = None,
-    season: str | None = None,
-    limit: int = 10,
-    db: Session = Depends(get_db),
-):
-    safe_limit = max(1, min(limit, 25))
-    return search_reference_players(db, q, season, safe_limit)
-
-
-@router.get("/positions", response_model=list[SimilarPlayerPositionOptionResponse])
-def search_positions_route(db: Session = Depends(get_db)):
-    return get_search_positions(db)
 
 
 @router.post("/similar-players", response_model=list[SimilarPlayerResponse])

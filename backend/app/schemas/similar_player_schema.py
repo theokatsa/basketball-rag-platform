@@ -48,10 +48,3 @@ class SimilarPlayerSearchRequest(BaseModel):
         return self
 
 
-class SimilarPlayerReferenceOptionResponse(BaseModel):
-    player_id: int
-    full_name: str
-
-
-class SimilarPlayerPositionOptionResponse(BaseModel):
-    position: str

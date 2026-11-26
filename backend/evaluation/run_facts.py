@@ -19,6 +19,7 @@ sys.stdout.reconfigure(encoding="utf-8")
 from sqlalchemy import text  # noqa: E402
 
 from app.db import SessionLocal  # noqa: E402
+from evaluation.pinning import key_connection, keys  # noqa: E402
 from app.services import rag_service  # noqa: E402
 from app.services.query_embedding_service import warm_up  # noqa: E402
 from app.services.text_utils import normalize_name  # noqa: E402
@@ -54,11 +55,11 @@ def main():
     args = parser.parse_args()
     warm_up()
     records = []
-    with SessionLocal() as db:
-        names = list(db.execute(text("select p.full_name from players p join player_season_stats s on s.player_id = p.id")).scalars()) + list(db.execute(text("select full_name from teams")).scalars())
+    with SessionLocal() as db, key_connection() as kc:  # keys on 2024-25 only (pinning.py)
+        names = keys(kc, "select p.full_name from players p join player_season_stats s on s.player_id = p.id") + keys(kc, "select full_name from teams")
         rag_service.answer_question(db, "warm up question about points", None, 6)
         for q in (q for q in F if q["split"] == args.split):
-            expected = [str(v) for v in db.execute(text(q["sql"])).scalars()]
+            expected = keys(kc, q["sql"])
             started = time.perf_counter()
             try:
                 result = rag_service.answer_question(db, q["text"], None, 6)

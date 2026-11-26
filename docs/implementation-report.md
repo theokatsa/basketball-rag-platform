@@ -1,5 +1,11 @@
 # Implementation Progress Report
 
+> A snapshot of September 2026, kept as it was. Since then (cleanup of 27 November 2026) the endpoints no
+> page used were removed (`/analytics/*`, `/teams`, `/search/reference-players`, `/search/positions`,
+> `GET`/`POST /players`, `/players/form` and the `/players/*-shot-zones`), and the ingestion scripts were
+> replaced by `backend/scripts/ingest_season.py` (any season, into the database or local files). The
+> current design and results are in `docs/vector-and-rag.md`.
+
 ## Thesis project
 
 **Title:** Design and Implementation of a Sports Analytics Platform using Retrieval-Augmented Generation (RAG) and Vector Databases

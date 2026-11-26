@@ -73,12 +73,6 @@ def walk(x: np.ndarray, restart: float = 0.4, steps: int = 20) -> np.ndarray:
     return p / np.sqrt(c.sum(axis=0) + 1.0)[None, :]
 
 
-def scaled(m: np.ndarray) -> np.ndarray:
-    """Each row as ranks between 0 and 1, so that different scores can be mixed."""
-    order = m.argsort(axis=1).argsort(axis=1).astype(float)
-    return order / (m.shape[1] - 1)
-
-
 def standardised(m: np.ndarray) -> np.ndarray:
     """Each row with mean 0 and spread 1; unlike ranks, a clear winner keeps its lead."""
     return np.clip((m - m.mean(axis=1, keepdims=True)) / (m.std(axis=1, keepdims=True) + 1e-9), -3, 12)

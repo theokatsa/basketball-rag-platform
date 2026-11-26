@@ -13,6 +13,8 @@ import { Explorer } from './pages/Explorer';
 import { Game, Games } from './pages/Games';
 import { Form } from './pages/Form';
 import { Home } from './pages/Home';
+import { HowItWorks } from './pages/HowItWorks';
+import { JudgeSimilar } from './pages/JudgeSimilar';
 import { Lineup } from './pages/Lineup';
 import { Report } from './pages/Report';
 import { Scout } from './pages/Scout';
@@ -23,6 +25,7 @@ import { YoungTalent } from './pages/YoungTalent';
 import { MAX_COMPARE } from './stats';
 import type { GameLog, PlayerDetailData, PlayerProfile, PlayerRecord, ScoutNote, SeasonStat, ShotRecord, SimilarPlayerResult, User, UserState, View } from './types';
 import { useDirectory } from './useDirectory';
+import { forgetPage, PageScope } from './usePersisted';
 import { forget, send } from './useApi';
 import { loadStored, saveStored } from './utils';
 
@@ -34,7 +37,13 @@ const COMPARE_KEY = 'basketball-scouting-compare';
 const HISTORY_LENGTH = 12;
 
 type Route = { view: View; id?: number };
-const PLAIN_VIEWS: View[] = ['home', 'players', 'top', 'teams', 'games', 'login', 'account', 'scout', 'explorer', 'shotlab', 'young', 'form', 'lineup', 'shortlist', 'compare'];
+const FOOTER: [string, [View, string][]][] = [
+  ['Explore', [['players', 'Players'], ['top', 'Top players'], ['teams', 'Teams'], ['games', 'Games']]],
+  ['Analysis', [['scout', 'Scout'], ['explorer', 'Stat Explorer'], ['shotlab', 'Shot Lab'], ['lineup', 'Lineup Builder'], ['form', 'Hot and cold'], ['young', 'Young talent']]],
+  ['Your lists', [['shortlist', 'Shortlist'], ['compare', 'Compare'], ['account', 'Account']]],
+  ['The thesis', [['how', 'How it works'], ['judge', 'Judge similar players']]],
+];
+const PLAIN_VIEWS: View[] = ['home', 'players', 'top', 'teams', 'games', 'login', 'account', 'scout', 'explorer', 'shotlab', 'young', 'form', 'lineup', 'shortlist', 'compare', 'how', 'judge'];
 function parseHash(): Route {
   const [name, id] = window.location.hash.slice(1).split('/');
   if (id && /^\d+$/.test(id) && (name === 'player' || name === 'team' || name === 'report' || name === 'game')) return { view: name, id: Number(id) };
@@ -166,6 +175,15 @@ function App() {
     window.scrollTo({ top: 0 });
   }, []);
   const open = useCallback((id: number) => go('player', id), [go]);
+  const [visit, setVisit] = useState(0);
+  const resetDirectory = useRef(dir.reset);
+  resetDirectory.current = dir.reset;
+  const navigate = useCallback((view: View) => {
+    forgetPage(view);
+    if (view === 'players') resetDirectory.current();
+    setVisit((n) => n + 1); // remounts the page even when it is already open
+    go(view);
+  }, [go]);
   const goBack = () => { if ((window.history.state as { view?: View } | null)?.view) window.history.back(); else go('players'); };
   useEffect(() => {
     const onChange = () => setRoute(parseHash());
@@ -180,7 +198,7 @@ function App() {
   const compareWith = useCallback((id: number) => browse({ title: 'Compare with…', max: MAX_COMPARE, min: 2, confirm: 'Compare players', selected: [id], onDone: (ids) => { setCompareIds(ids); go('compare'); } }), [browse, go]);
 
   const byId = useMemo(() => new Map(dir.players.map((p) => [p.player_id, p])), [dir.players]);
-  const app = useMemo<AppData>(() => ({ players: dir.players, totals: dir.totals, byId, loading: dir.loading, error: dir.error, favoriteIds, compareIds, historyIds, user, toggleFavorite, setCompareIds, compareWith, browse, open, openGame, go, signedIn, signOut }), [dir.players, dir.totals, dir.loading, dir.error, byId, favoriteIds, compareIds, historyIds, user, toggleFavorite, compareWith, browse, open, openGame, go, signedIn, signOut]);
+  const app = useMemo<AppData>(() => ({ players: dir.players, totals: dir.totals, byId, loading: dir.loading, error: dir.error, favoriteIds, compareIds, historyIds, user, toggleFavorite, setCompareIds, compareWith, browse, open, openGame, go, navigate, signedIn, signOut }), [dir.players, dir.totals, dir.loading, dir.error, byId, favoriteIds, compareIds, historyIds, user, toggleFavorite, compareWith, browse, open, openGame, go, navigate, signedIn, signOut]);
   const favoritePlayers = favoriteIds.map((id) => byId.get(id)).filter((p) => p != null);
 
   const renderView = (): ReactNode => {
@@ -201,8 +219,10 @@ function App() {
       case 'form': return <Form />;
       case 'lineup': return <Lineup />;
       case 'report': return <Report key={route.id} id={route.id ?? 0} />;
-      case 'shortlist': return <Shortlist favoritePlayers={favoritePlayers} groups={groups} setGroups={setGroups} notes={notes} setNote={setNote} onToggleFavorite={toggleFavorite} />;
+      case 'shortlist': return !user ? <div className="empty-state"><p>Sign in to keep a shortlist.</p><small><button type="button" className="link-button" onClick={() => go('login')}>Sign in or create an account</button></small></div> : <Shortlist favoritePlayers={favoritePlayers} groups={groups} setGroups={setGroups} notes={notes} setNote={setNote} onToggleFavorite={toggleFavorite} />;
       case 'compare': return <Compare onBack={goBack} />;
+      case 'how': return <HowItWorks />;
+      case 'judge': return <JudgeSimilar />;
       case 'player': return <PlayerDetail key={route.id} detail={detail?.player.id === route.id ? detail : null} loading={detailLoading || detail?.player.id !== route.id} error={detailError} onBack={goBack} />;
     }
   };
@@ -210,7 +230,22 @@ function App() {
     <AppContext.Provider value={app}>
       <div className="app-shell">
         <Nav view={route.view} />
-        <main>{renderView()}</main>
+        <main key={visit}><PageScope.Provider value={route.view}>{renderView()}</PageScope.Provider></main>
+        <footer className="site-foot">
+          <div className="site-foot-main">
+            <button type="button" className="site-foot-brand" onClick={() => navigate('home')}>NBA<small>meets</small><em>Data</em></button>
+            {FOOTER.map(([title, links]) => (
+              <nav key={title} className="site-foot-col" aria-label={title}>
+                <h3>{title}</h3>
+                {links.filter(([view]) => user || view !== 'shortlist').map(([view, label]) => <button type="button" key={view} onClick={() => navigate(view)}>{label}</button>)}
+              </nav>
+            ))}
+          </div>
+          <div className="site-foot-base">
+            <span>2024-25 regular season · statistics from NBA.com · A diploma thesis project, not affiliated with the NBA</span>
+            <button type="button" className="to-top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Back to top ↑</button>
+          </div>
+        </footer>
         {browseRequest && <PlayerBrowser request={browseRequest} onClose={() => setBrowseRequest(null)} />}
       </div>
     </AppContext.Provider>

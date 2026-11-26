@@ -1,10 +1,11 @@
 from sqlalchemy import text
 
 from app.services.cache import cached, rows
+from app.core.config import ACTIVE_SEASON_SQL
 
 EAST = {"ATL", "BOS", "BKN", "CHA", "CHI", "CLE", "DET", "IND", "MIA", "MIL", "NYK", "ORL", "PHI", "TOR", "WAS"}
 COUNTS = ["points", "opponent_points", "fgm", "fga", "tpm", "tpa", "ftm", "fta", "oreb", "dreb", "reb", "ast", "stl", "blk", "tov", "pf"]
-LATEST = "(select max(season) from team_box_scores)"
+LATEST = ACTIVE_SEASON_SQL
 GAME_SCORE = "(b.points + 0.4 * b.fgm - 0.7 * b.fga - 0.4 * (b.fta - b.ftm) + 0.7 * b.oreb + 0.3 * b.dreb + b.stl + 0.7 * b.ast + 0.7 * b.blk - 0.4 * b.pf - b.tov)::float"
 
 
